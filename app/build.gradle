@@ -10,20 +10,27 @@ rootProject.file('local.properties').withInputStream {
 android {
     namespace = 'com.fongmi.android.tv'
 
-    compileSdk libs.versions.compileSdk.get().toInteger()
+   defaultConfig {
+        // 根据 buildType 参数切换包名
+        if (project.hasProperty("buildType") && project.property("buildType") == "tv") {
+            applicationId "ylys.kk.tv"
+        } else {
+            applicationId "ylys.kk.sj"
+        }
+        minSdkVersion xxx
+        targetSdkVersion xxx
+        versionCode xxx
+        versionName "xxx"
+    }
 
-    defaultConfig {
-        applicationId "ylys.nb.com"
-        minSdk libs.versions.minSdk.get().toInteger()
-        targetSdk libs.versions.targetSdk.get().toInteger()
-        versionCode 556
-        versionName "5.5.6"
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/schemas".toString(), "eventBusIndex": "com.fongmi.android.tv.event.EventIndex"]
-            }
+    // 可选：自动给APK文件名加上 sj / tv 标记
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def type = project.hasProperty("buildType") && project.property("buildType") == "tv" ? "tv" : "sj"
+            outputFileName = "${type}-${variant.name}-${variant.versionName}.apk"
         }
     }
+}
 
     flavorDimensions = ["mode", "abi"]
 
