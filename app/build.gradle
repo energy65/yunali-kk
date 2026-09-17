@@ -10,25 +10,12 @@ rootProject.file('local.properties').withInputStream {
 android {
     namespace = 'com.fongmi.android.tv'
 
-   defaultConfig {
-        // 根据 buildType 参数切换包名
-        if (project.hasProperty("buildType") && project.property("buildType") == "tv") {
-            applicationId "ylys.kk.tv"
-        } else {
-            applicationId "ylys.kk.sj"
-        }
+defaultConfig {
+        applicationId "ylys.kk.com"
         minSdkVersion xxx
         targetSdkVersion xxx
         versionCode xxx
         versionName "xxx"
-    }
-
-    // 可选：自动给APK文件名加上 sj / tv 标记
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            def type = project.hasProperty("buildType") && project.property("buildType") == "tv" ? "tv" : "sj"
-            outputFileName = "${type}-${variant.name}-${variant.versionName}.apk"
-        }
     }
 }
 
