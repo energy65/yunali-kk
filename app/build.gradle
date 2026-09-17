@@ -10,14 +10,20 @@ rootProject.file('local.properties').withInputStream {
 android {
     namespace = 'com.fongmi.android.tv'
 
-defaultConfig {
+    compileSdk libs.versions.compileSdk.get().toInteger()
+
+    defaultConfig {
         applicationId "ylys.kk.com"
-        minSdkVersion xxx
-        targetSdkVersion xxx
-        versionCode xxx
-        versionName "xxx"
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
+        versionCode 516
+        versionName "5.1.6"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString(), "eventBusIndex": "com.fongmi.android.tv.event.EventIndex"]
+            }
+        }
     }
-}
 
     flavorDimensions = ["mode", "abi"]
 

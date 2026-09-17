@@ -15,6 +15,7 @@ import android.webkit.ConsoleMessage;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -30,13 +31,19 @@ import com.fongmi.android.tv.server.Server;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.fongmi.android.tv.utils.Util;
+import com.github.catvod.net.OkHttp;
 import com.github.catvod.utils.Json;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class WebHomeActivity extends AppCompatActivity {
 
@@ -47,6 +54,7 @@ public class WebHomeActivity extends AppCompatActivity {
             (function(){try{return JSON.stringify({url:location.href,ready:document.readyState,title:document.title||'',text:(document.body?document.body.innerText:'').replace(/\\s+/g,' ').trim().substring(0,60),html:document.documentElement?document.documentElement.outerHTML.length:0,res:(performance.getEntriesByType?performance.getEntriesByType('resource'):[]).slice(-6).map(function(e){var n=e.name;return (n.length>60?n.substring(0,60)+'...':n)+' '+Math.round(e.duration)+'ms';}).join(' | ')});}catch(e){return '{}';}})()
             """;
     private static boolean active;
+    private static final OkHttpClient CLIENT = new OkHttpClient.Builder().followRedirects(true).followSslRedirects(true).dns(OkHttp.dns()).proxySelector(OkHttp.selector()).proxyAuthenticator(OkHttp.authenticator()).build();
 
     private ActivityWebHomeBinding mBinding;
     private String home;
@@ -127,6 +135,18 @@ public class WebHomeActivity extends AppCompatActivity {
             }
 
             @Override
+            public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                try {
+                    if (!request.isForMainFrame()) return null;
+                    String url = request.getUrl().toString();
+                    if (!url.startsWith("http")) return null;
+                    return fetchMainFrame(url);
+                } catch (Throwable e) {
+                    return null;
+                }
+            }
+
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 if (request.getUrl().toString().startsWith(BROWSER_SCHEME)) {
                     openInBrowser();
@@ -146,6 +166,31 @@ public class WebHomeActivity extends AppCompatActivity {
 
     private String description(CharSequence text) {
         return text == null ? "" : text.toString().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+    }
+
+    private WebResourceResponse fetchMainFrame(String url) throws Exception {
+        Request.Builder builder = new Request.Builder().url(url).header("User-Agent", mBinding.webView.getSettings().getUserAgentString());
+        try (Response response = CLIENT.newCall(builder.build()).execute()) {
+            String body = response.body() != null ? response.body().string() : "";
+            String contentType = response.header("Content-Type", "");
+            String mime = contentType.split(";")[0].trim().toLowerCase(Locale.US);
+            String trimmed = body.trim();
+            boolean looksHtml = trimmed.startsWith("<!DOCTYPE") || trimmed.startsWith("<!doctype") || trimmed.startsWith("<html") || trimmed.startsWith("<HTML");
+            if (looksHtml || mime.isEmpty()) mime = "text/html";
+            String encoding = "UTF-8";
+            int idx = contentType.toLowerCase(Locale.US).indexOf("charset=");
+            if (idx >= 0) {
+                String charset = contentType.substring(idx + 8).trim();
+                if (charset.contains(";")) charset = charset.substring(0, charset.indexOf(';')).trim();
+                charset = charset.replace("\"", "").trim();
+                if (!charset.isEmpty()) encoding = charset;
+            }
+            Map<String, String> headers = new HashMap<>();
+            headers.put("Access-Control-Allow-Origin", "*");
+            WebResourceResponse res = new WebResourceResponse(mime, encoding, new ByteArrayInputStream(body.getBytes(encoding)));
+            res.setResponseHeaders(headers);
+            return res;
+        }
     }
 
     private void scheduleDiagnosis() {
