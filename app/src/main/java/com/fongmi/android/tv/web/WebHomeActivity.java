@@ -31,6 +31,7 @@ import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.fongmi.android.tv.utils.Util;
 import com.github.catvod.utils.Json;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -42,6 +43,9 @@ public class WebHomeActivity extends AppCompatActivity {
     private static final String BRIDGE = "fongmiBridge";
     private static final String BROWSER_SCHEME = "fmbrowser:";
     private static final long DIAG_DELAY_MS = 8000;
+    private static final String DIAG_JS = """
+            (function(){try{return JSON.stringify({url:location.href,ready:document.readyState,title:document.title||'',text:(document.body?document.body.innerText:'').replace(/\\s+/g,' ').trim().substring(0,60),html:document.documentElement?document.documentElement.outerHTML.length:0,res:(performance.getEntriesByType?performance.getEntriesByType('resource'):[]).slice(-6).map(function(e){var n=e.name;return (n.length>60?n.substring(0,60)+'...':n)+' '+Math.round(e.duration)+'ms';}).join(' | ')});}catch(e){return '{}';}})()
+            """;
     private static boolean active;
 
     private ActivityWebHomeBinding mBinding;
@@ -147,12 +151,12 @@ public class WebHomeActivity extends AppCompatActivity {
     private void scheduleDiagnosis() {
         mBinding.webView.postDelayed(() -> {
             if (errorShown || isFinishing() || isDestroyed()) return;
-            mBinding.webView.evaluateJavascript("(function(){try{return JSON.stringify({text:(document.body?document.body.innerText:'').replace(/\\s+/g,' ').trim(),title:document.title||''});}catch(e){return '{}';}})()", value -> {
+            mBinding.webView.evaluateJavascript(DIAG_JS, value -> {
                 String text = parseJsonField(value, "text");
                 if (!TextUtils.isEmpty(text)) return;
                 String title = parseJsonField(value, "title");
                 if (!TextUtils.isEmpty(title)) return;
-                showDiagnosisPage();
+                showDiagnosisPage(value);
             });
         }, DIAG_DELAY_MS);
     }
@@ -160,7 +164,9 @@ public class WebHomeActivity extends AppCompatActivity {
     private String parseJsonField(String json, String key) {
         if (TextUtils.isEmpty(json) || "null".equals(json)) return "";
         try {
-            return Json.safeString(Json.parse(json).isJsonObject() ? Json.parse(json).getAsJsonObject() : new JsonObject(), key);
+            JsonElement element = Json.parse(json);
+            if (element.isJsonPrimitive()) element = Json.parse(element.getAsString());
+            return element.isJsonObject() ? Json.safeString(element.getAsJsonObject(), key) : "";
         } catch (Throwable e) {
             return "";
         }
@@ -171,8 +177,16 @@ public class WebHomeActivity extends AppCompatActivity {
         showPage(body);
     }
 
-    private void showDiagnosisPage() {
-        String body = "<h2>页面内容为空</h2><p>页面已打开但没有渲染出内容。最常见原因是页面内部请求的网络资源无法访问（例如 GitHub 相关域名直连被墙），其次是系统 WebView 版本过低。</p><p>建议用手机浏览器打开同一地址对比：若浏览器也空白，请检查网络或使用代理；若浏览器正常，请到应用商店更新「Android System WebView」。</p>";
+    private void showDiagnosisPage(String detail) {
+        String url = parseJsonField(detail, "url");
+        String ready = parseJsonField(detail, "ready");
+        String html = parseJsonField(detail, "html");
+        String res = parseJsonField(detail, "res");
+        String body = "<h2>页面内容为空</h2>"
+                + "<p>页面已打开但没有渲染出内容。最常见原因是页面内部请求的资源无法访问（例如 GitHub 相关域名直连被墙），其次是系统 WebView 版本过低。</p>"
+                + "<p><b>实际地址：</b>" + description(url) + "<br><b>加载状态：</b>" + description(ready)
+                + "<br><b>HTML大小：</b>" + description(html) + " 字符<br><b>已加载资源：</b>" + (res.isEmpty() ? "无" : description(res)) + "</p>"
+                + "<p>若上方「已加载资源」为空或看不到关键脚本/数据，通常是这些资源在当前网络下不可达。请点下方浏览器对比验证。</p>";
         showPage(body);
     }
 
