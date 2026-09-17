@@ -2,11 +2,14 @@ name: Build APK
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch: # 保留手动触发入口，方便测试
 
 jobs:
   build:
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        build_type: [sj, tv] # 并行构建两个版本
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -40,7 +43,7 @@ jobs:
           curl -L --connect-timeout 120 --retry 3 "https://chaquo.com/python/${PY_ZIP}" -o ${PY_ZIP}
           ls -lh .
 
-      # ===================== 还原签名文件，自动创建父目录 =====================
+      # ===================== 还原签名文件 =====================
       - name: Restore keystore from base64 (node decode fixed)
         env:
           B64KEY: ${{ secrets.SIGNING_KEY }}
@@ -60,8 +63,8 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # ===================== Gradle打包，修复参数换行问题 =====================
-      - name: Build Release APK
+      # ===================== Gradle打包，传入matrix的buildType =====================
+      - name: Build Release APK ${{ matrix.build_type }}
         env:
           GRADLE_OPTS: "-Dorg.gradle.internal.http.connectionTimeout=120000 -Dorg.gradle.internal.http.socketTimeout=120000"
           STORE_FILE: ${{ secrets.SIGNING_STORE_FILE }}
@@ -70,6 +73,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
         run: |
           ./gradlew assembleRelease \
+            -PbuildType=${{ matrix.build_type }} \
             -PstoreFile=${STORE_FILE} \
             -PkeyAlias=${KEY_ALIAS} \
             -PstorePassword=${STORE_PASSWORD} \
@@ -79,8 +83,8 @@ jobs:
       - name: List APK files
         run: ls -R app/build/outputs/apk/
 
-      - name: Upload Release APK
+      - name: Upload Release APK ${{ matrix.build_type }}
         uses: actions/upload-artifact@v4
         with:
-          name: release-apk
+          name: ${{ matrix.build_type }}-release-apk
           path: app/build/outputs/apk/**/*.apk
