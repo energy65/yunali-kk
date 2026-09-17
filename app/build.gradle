@@ -16,8 +16,8 @@ android {
         applicationId "ylys.kk.com"
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdk libs.versions.targetSdk.get().toInteger()
-        versionCode 516
-        versionName "5.1.6"
+        versionCode 260917
+        versionName "26.09.17"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString(), "eventBusIndex": "com.fongmi.android.tv.event.EventIndex"]
