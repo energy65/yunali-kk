@@ -145,10 +145,13 @@ public class CollectFragment extends BaseFragment implements MenuProvider, Colle
 
     private void setCollect(Result result) {
         if (result == null || result.getList().isEmpty()) return;
+        if (result.getVod() == null || result.getVod().getSite() == null) return;
         String siteKey = result.getVod().getSite().getKey();
-        List<Vod> siteList = mSiteResults.computeIfAbsent(siteKey, k -> new ArrayList<>());
-        siteList.addAll(result.getList());
-        if (mCollectAdapter.getPosition() == 0) {
+        if (siteKey == null || siteKey.isEmpty()) return;
+        synchronized (mSiteResults) {
+            mSiteResults.computeIfAbsent(siteKey, k -> new ArrayList<>()).addAll(result.getList());
+        }
+        if (mCollectAdapter.getItemCount() > 0 && mCollectAdapter.getPosition() == 0) {
             if (!mBlockedSites.contains(siteKey)) {
                 mSearchAdapter.addAll(result.getList());
             }
@@ -162,12 +165,16 @@ public class CollectFragment extends BaseFragment implements MenuProvider, Colle
     private void setSearch(Result result) {
         if (result == null) return;
         mScroller.endLoading(result);
+        if (mCollectAdapter.getItemCount() == 0) return;
         boolean same = !result.getList().isEmpty() && mCollectAdapter.getActivated().getSite().equals(result.getVod().getSite());
         if (same) {
             mCollectAdapter.getActivated().getList().addAll(result.getList());
+            if (result.getVod() == null || result.getVod().getSite() == null) return;
             String siteKey = result.getVod().getSite().getKey();
-            List<Vod> siteList = mSiteResults.computeIfAbsent(siteKey, k -> new ArrayList<>());
-            siteList.addAll(result.getList());
+            if (siteKey == null || siteKey.isEmpty()) return;
+            synchronized (mSiteResults) {
+                mSiteResults.computeIfAbsent(siteKey, k -> new ArrayList<>()).addAll(result.getList());
+            }
             if (mCollectAdapter.getPosition() == 0 && !mBlockedSites.contains(siteKey)) {
                 mSearchAdapter.addAll(result.getList());
             }
@@ -178,11 +185,15 @@ public class CollectFragment extends BaseFragment implements MenuProvider, Colle
     }
 
     private void rebuildAllItems() {
+        if (mCollectAdapter.getItemCount() == 0) return;
         Collect allItem = mCollectAdapter.getItem(0);
+        if (allItem == null) return;
         List<Vod> allList = new ArrayList<>();
-        for (Map.Entry<String, List<Vod>> entry : mSiteResults.entrySet()) {
-            if (!mBlockedSites.contains(entry.getKey())) {
-                allList.addAll(entry.getValue());
+        synchronized (mSiteResults) {
+            for (Map.Entry<String, List<Vod>> entry : mSiteResults.entrySet()) {
+                if (!mBlockedSites.contains(entry.getKey())) {
+                    allList.addAll(entry.getValue());
+                }
             }
         }
         allItem.getList().clear();
@@ -234,8 +245,9 @@ public class CollectFragment extends BaseFragment implements MenuProvider, Colle
 
     @Override
     public boolean onLoadMore(String page) {
+        if (mCollectAdapter.getItemCount() == 0) return false;
         Collect activated = mCollectAdapter.getActivated();
-        if ("all".equals(activated.getSite().getKey())) return false;
+        if (activated == null || "all".equals(activated.getSite().getKey())) return false;
         mViewModel.searchContent(activated.getSite(), getKeyword(), false, page);
         activated.setPage(Integer.parseInt(page));
         return true;

@@ -23,12 +23,14 @@ import android.webkit.WebViewClient;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.fongmi.android.tv.App;
 import com.fongmi.android.tv.BuildConfig;
 import com.fongmi.android.tv.api.config.VodConfig;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.databinding.ActivityWebHomeBinding;
 import com.fongmi.android.tv.server.Server;
 import com.fongmi.android.tv.utils.Notify;
+import com.fongmi.android.tv.utils.Task;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.fongmi.android.tv.utils.Util;
 import com.github.catvod.net.OkHttp;
@@ -177,14 +179,7 @@ public class WebHomeActivity extends AppCompatActivity {
             String trimmed = body.trim();
             boolean looksHtml = trimmed.startsWith("<!DOCTYPE") || trimmed.startsWith("<!doctype") || trimmed.startsWith("<html") || trimmed.startsWith("<HTML");
             if (looksHtml || mime.isEmpty()) mime = "text/html";
-            String encoding = "UTF-8";
-            int idx = contentType.toLowerCase(Locale.US).indexOf("charset=");
-            if (idx >= 0) {
-                String charset = contentType.substring(idx + 8).trim();
-                if (charset.contains(";")) charset = charset.substring(0, charset.indexOf(';')).trim();
-                charset = charset.replace("\"", "").trim();
-                if (!charset.isEmpty()) encoding = charset;
-            }
+            String encoding = charsetOf(contentType);
             Map<String, String> headers = new HashMap<>();
             headers.put("Access-Control-Allow-Origin", "*");
             WebResourceResponse res = new WebResourceResponse(mime, encoding, new ByteArrayInputStream(body.getBytes(encoding)));
@@ -285,8 +280,53 @@ public class WebHomeActivity extends AppCompatActivity {
             if ("User-Agent".equalsIgnoreCase(key) || "Cookie".equalsIgnoreCase(key)) continue;
             requestHeaders.put(key, value);
         }
-        if (requestHeaders.isEmpty()) mBinding.webView.loadUrl(home);
-        else mBinding.webView.loadUrl(home, requestHeaders);
+        String ua = mBinding.webView.getSettings().getUserAgentString();
+        String finalUrl = home;
+        Map<String, String> extra = new HashMap<>(requestHeaders);
+        Task.execute(() -> {
+            try {
+                Request.Builder builder = new Request.Builder().url(finalUrl).header("User-Agent", ua);
+                if (!TextUtils.isEmpty(cookie)) builder.header("Cookie", cookie);
+                for (Map.Entry<String, String> entry : extra.entrySet()) builder.header(entry.getKey(), entry.getValue());
+                try (Response response = CLIENT.newCall(builder.build()).execute()) {
+                    String body = response.body() != null ? response.body().string() : "";
+                    String contentType = response.header("Content-Type", "");
+                    String charset = charsetOf(contentType);
+                    String trimmed = body.trim();
+                    boolean looksHtml = trimmed.startsWith("<!DOCTYPE") || trimmed.startsWith("<!doctype") || trimmed.startsWith("<html") || trimmed.startsWith("<HTML");
+                    Log.e("WebHome", "main doc " + contentType + " size=" + body.length() + " html=" + looksHtml);
+                    if (!looksHtml) {
+                        App.post(() -> {
+                            if (isFinishing() || isDestroyed()) return;
+                            mBinding.webView.loadUrl(finalUrl);
+                        });
+                        return;
+                    }
+                    App.post(() -> {
+                        if (isFinishing() || isDestroyed()) return;
+                        mBinding.webView.loadDataWithBaseURL(finalUrl, body, "text/html", charset, finalUrl);
+                    });
+                }
+            } catch (Throwable e) {
+                Log.e("WebHome", "main doc fetch failed", e);
+                App.post(() -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    mBinding.webView.loadUrl(finalUrl);
+                });
+            }
+        });
+    }
+
+    private String charsetOf(String contentType) {
+        String encoding = "UTF-8";
+        int idx = contentType.toLowerCase(Locale.US).indexOf("charset=");
+        if (idx >= 0) {
+            String charset = contentType.substring(idx + 8).trim();
+            if (charset.contains(";")) charset = charset.substring(0, charset.indexOf(';')).trim();
+            charset = charset.replace("\"", "").trim();
+            if (!charset.isEmpty()) encoding = charset;
+        }
+        return encoding;
     }
 
     private String header(Map<String, String> headers, String name) {
