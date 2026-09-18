@@ -1,16 +1,19 @@
 package com.fongmi.android.tv.utils;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.os.StatFs;
-import android.text.TextUtils;
+import android.webkit.CookieManager;
 
-import androidx.core.content.FileProvider;
-
+import com.bumptech.glide.Glide;
 import com.fongmi.android.tv.App;
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.impl.Callback;
 import com.github.catvod.utils.Path;
+
+import androidx.core.content.FileProvider;
+
+import android.content.Intent;
+import android.net.Uri;
+import android.os.StatFs;
+import android.text.TextUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -82,14 +85,40 @@ public class FileUtil {
 
     public static void clearCache(Callback callback) {
         Task.execute(() -> {
+            // 1. 内部缓存目录（含 exo、mpv、js、py、jar、epg、jpa、thunder、Glide 磁盘缓存等）
             Path.clear(Path.cache());
+            // 2. 外部缓存目录
+            File externalCache = App.get().getExternalCacheDir();
+            if (externalCache != null) Path.clear(externalCache);
+            // 3. 壁纸缓存（在 files 目录下）
+            Path.clear(getWallCache());
+            // 4. Glide 磁盘缓存（显式调用更安全，避免文件句柄冲突）
+            try {
+                Glide.get(App.get()).clearDiskCache();
+            } catch (Throwable ignored) {
+            }
+            // 5. WebView 缓存（位于内部缓存目录下的 webviewCache 子目录，已被 Path.clear(Path.cache()) 清理）
+            // 6. WebView Cookie（存储在 app_webview 目录，需通过 CookieManager 清理）
+            try {
+                CookieManager.getInstance().removeAllCookies(null);
+                CookieManager.getInstance().flush();
+            } catch (Throwable ignored) {
+            }
             App.post(callback::success);
         });
     }
 
     public static void getCacheSize(Callback callback) {
         Task.execute(() -> {
-            String usage = byteCountToDisplaySize(getDirectorySize(Path.cache()));
+            long size = 0;
+            // 内部缓存目录
+            size += getDirectorySize(Path.cache());
+            // 外部缓存目录
+            File externalCache = App.get().getExternalCacheDir();
+            if (externalCache != null) size += getDirectorySize(externalCache);
+            // 壁纸缓存
+            size += getDirectorySize(getWallCache());
+            String usage = byteCountToDisplaySize(size);
             App.post(() -> callback.success(usage));
         });
     }
