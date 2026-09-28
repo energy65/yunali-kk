@@ -90,7 +90,7 @@
         app:layout_anchor="@id/pager"
         app:layout_anchorGravity="end|bottom"
         app:layout_behavior="com.fongmi.android.tv.ui.custom.CustomFabBehavior"
-        app:srcCompat="@drawable/ic_fab_filter"
+        app:srcCompat="@drawable/ic_fab_link"
         app:tint="?attr/colorOnSecondaryContainer"
         tools:visibility="visible" />
 

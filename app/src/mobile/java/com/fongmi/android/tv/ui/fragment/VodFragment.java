@@ -19,6 +19,7 @@ import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.api.config.VodConfig;
 import com.fongmi.android.tv.bean.Class;
 import com.fongmi.android.tv.bean.Config;
+import com.fongmi.android.tv.bean.Filter;
 import com.fongmi.android.tv.bean.Result;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.bean.Value;
@@ -98,7 +99,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     protected void initEvent() {
         mBinding.top.setOnClickListener(this::onTop);
         mBinding.logo.setOnClickListener(this::onLogo);
-        mBinding.link.setOnClickListener(this::onFilter);
+        mBinding.link.setOnClickListener(this::onLink);
         mBinding.title.setOnClickListener(this::onSite);
         mBinding.filter.setOnClickListener(this::onFilter);
         mBinding.filter.setOnLongClickListener(this::onLink);
@@ -140,7 +141,8 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     }
 
     private void setFabVisible(int position) {
-        if (mAdapter.getItemCount() == 0) {
+        int count = mAdapter.getItemCount();
+        if (count == 0 || position < 0 || position >= count) {
             mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.link.setVisibility(View.VISIBLE);
             mBinding.filter.setVisibility(View.GONE);
@@ -148,7 +150,7 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
             mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.link.setVisibility(View.GONE);
             mBinding.filter.show();
-        } else if (position == 0 || mAdapter.get(position).getFilters().isEmpty()) {
+        } else {
             mBinding.top.setVisibility(View.INVISIBLE);
             mBinding.filter.setVisibility(View.GONE);
             mBinding.link.show();
@@ -202,7 +204,14 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     }
 
     private void onFilter(View view) {
-        if (mAdapter.getItemCount() > 0) FilterDialog.create().filter(mAdapter.get(mBinding.pager.getCurrentItem()).getFilters()).show(this);
+        int position = mBinding.pager.getCurrentItem();
+        if (position < 0 || position >= mAdapter.getItemCount()) return;
+        List<Filter> filters = mAdapter.get(position).getFilters();
+        if (filters.isEmpty()) {
+            Notify.show(getString(R.string.error_filter_empty));
+            return;
+        }
+        FilterDialog.create().filter(filters).show(this);
     }
 
     private boolean onMenuItemClick(MenuItem item) {
