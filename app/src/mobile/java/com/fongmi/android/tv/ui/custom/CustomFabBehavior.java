@@ -35,6 +35,7 @@ public class CustomFabBehavior extends FloatingActionButton.Behavior {
                 onHide(child);
             }
         } else {
+            if (child.getVisibility() == View.GONE) return;
             if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
                 onHide(child);
             } else if (dyConsumed < 0 && child.getVisibility() == View.INVISIBLE) {
