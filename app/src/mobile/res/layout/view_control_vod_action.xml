@@ -19,6 +19,11 @@
             android:text="@string/detail_episode" />
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/fullscreen"
+            style="@style/Control"
+            android:text="@string/play_fullscreen" />
+
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/parse"
             style="@style/Control"
             android:text="@string/parse"
