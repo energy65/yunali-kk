@@ -1,0 +1,485 @@
+﻿To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.6.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :app:preBuild UP-TO-DATE
+> Task :chaquo:preBuild UP-TO-DATE
+> Task :catvod:preBuild UP-TO-DATE
+> Task :quickjs:preBuild UP-TO-DATE
+> Task :catvod:preReleaseBuild UP-TO-DATE
+> Task :chaquo:preArmeabi_v7aReleaseBuild UP-TO-DATE
+> Task :quickjs:preReleaseBuild UP-TO-DATE
+> Task :app:preLeanbackArmeabi_v7aReleaseBuild UP-TO-DATE
+> Task :chaquo:generateArmeabi_v7aReleaseResources UP-TO-DATE
+> Task :catvod:generateReleaseResources UP-TO-DATE
+> Task :quickjs:generateReleaseResources UP-TO-DATE
+> Task :quickjs:packageReleaseResources UP-TO-DATE
+> Task :catvod:packageReleaseResources UP-TO-DATE
+> Task :chaquo:packageArmeabi_v7aReleaseResources UP-TO-DATE
+> Task :catvod:processReleaseNavigationResources UP-TO-DATE
+> Task :chaquo:processArmeabi_v7aReleaseNavigationResources UP-TO-DATE
+> Task :quickjs:processReleaseNavigationResources UP-TO-DATE
+> Task :quickjs:parseReleaseLocalResources UP-TO-DATE
+> Task :catvod:parseReleaseLocalResources UP-TO-DATE
+> Task :chaquo:parseArmeabi_v7aReleaseLocalResources UP-TO-DATE
+> Task :catvod:generateReleaseRFile UP-TO-DATE
+> Task :quickjs:generateReleaseRFile UP-TO-DATE
+> Task :quickjs:javaPreCompileRelease UP-TO-DATE
+> Task :catvod:compileReleaseKotlin NO-SOURCE
+> Task :catvod:javaPreCompileRelease UP-TO-DATE
+> Task :chaquo:extractArmeabi_v7aReleasePythonBuildPackages UP-TO-DATE
+> Task :chaquo:generateArmeabi_v7aReleaseRFile
+> Task :catvod:compileReleaseJavaWithJavac UP-TO-DATE
+> Task :catvod:bundleLibCompileToJarRelease
+> Task :quickjs:compileReleaseKotlin NO-SOURCE
+
+> Task :chaquo:installArmeabi_v7aReleasePythonRequirements
+Chaquopy: Installing for armeabi-v7a
+
+> Task :quickjs:compileReleaseJavaWithJavac
+
+> Task :quickjs:bundleLibCompileToJarRelease
+.\gradlew.bat : ע: X:\quickjs\src\main\java\com\fongmi\quickjs\method\Global.javaʹ�û򸲸����ѹ�ʱ�� API��
+At line:15 char:7130
++ ... cation X:\; .\gradlew.bat compileLeanbackArmeabi_v7aReleaseJavaWithJa ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ע: X:\quickjs\s...����ѹ�ʱ�� API��:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+
+> Task :chaquo:installArmeabi_v7aReleasePythonRequirements
+Looking in indexes: https://pypi.org/simple, https://chaquo.com/pypi-13.1
+
+> Task :app:dataBindingMergeDependencyArtifactsLeanbackArmeabi_v7aRelease
+> Task :app:generateLeanbackArmeabi_v7aReleaseResources
+
+> Task :app:mergeLeanbackArmeabi_v7aReleaseResources
+X:\app\src\main\res\values\strings.xml:229:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:14:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:18:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:19:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:12:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:11:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:15:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:15:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:15:4: Multiple substitutions specified in non-positional format of string resource string/detail_title. Did you mean to add the formatted="false" attribute?
+X:\app\src\main\res\values\strings.xml:13:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:198:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:208:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:6:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:114:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:37:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:64:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:63:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values\strings.xml:44:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+C:\Users\Administrator\.gradle\caches\9.6.1\transforms\cc7c392c468128bc906f48156df058ee\transformed\materialdesigncolors-1.0.0\res\values\values.xml:280:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+C:\Users\Administrator\.gradle\caches\9.6.1\transforms\b423002b65af44eefaad0f09eae2ec57\transformed\preference-1.2.1\res\values\values.xml:23:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:228:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:14:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:18:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:19:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:12:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:11:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:15:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:15:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:15:4: Multiple substitutions specified in non-positional format of string resource string/detail_title. Did you mean to add the formatted="false" attribute?
+X:\app\src\main\res\values-zh-rCN\strings.xml:13:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:197:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:228:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:207:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:14:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:18:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:19:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:12:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:11:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:15:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:15:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:15:4: Multiple substitutions specified in non-positional format of string resource string/detail_title. Did you mean to add the formatted="false" attribute?
+X:\app\src\main\res\values-zh-rTW\strings.xml:13:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:197:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:6:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:207:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:114:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:6:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:37:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:64:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:63:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:44:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:114:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:37:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:64:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rCN\strings.xml:144:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+C:\Users\Administrator\.gradle\caches\9.6.1\transforms\b423002b65af44eefaad0f09eae2ec57\transformed\preference-1.2.1\res\values-zh-rCN\values-zh-rCN.xml:7:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:63:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:44:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+X:\app\src\main\res\values-zh-rTW\strings.xml:144:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+C:\Users\Administrator\.gradle\caches\9.6.1\transforms\b423002b65af44eefaad0f09eae2ec57\transformed\preference-1.2.1\res\values-zh-rTW\values-zh-rTW.xml:7:4: Ignoring element '{http://schemas.android.com/apk/res-auto}g' with unknown namespace 'http://schemas.android.com/apk/res-auto'.
+
+> Task :app:packageLeanbackArmeabi_v7aReleaseResources
+> Task :app:processLeanbackArmeabi_v7aReleaseNavigationResources
+> Task :app:generateLeanbackArmeabi_v7aReleaseBuildConfig
+> Task :app:javaPreCompileLeanbackArmeabi_v7aRelease
+> Task :app:parseLeanbackArmeabi_v7aReleaseLocalResources
+> Task :app:generateLeanbackArmeabi_v7aReleaseRFile
+
+> Task :chaquo:installArmeabi_v7aReleasePythonRequirements
+Collecting lxml (from -r requirements.txt (line 1))
+  Using cached https://chaquo.com/pypi-13.1/lxml/lxml-5.3.0-0-cp310-cp310-android_24_armeabi_v7a.whl (1.3 MB)
+Collecting ujson (from -r requirements.txt (line 2))
+  Using cached https://chaquo.com/pypi-13.1/ujson/ujson-5.11.0-0-cp310-cp310-android_24_armeabi_v7a.whl (62 kB)
+Collecting pyquery (from -r requirements.txt (line 3))
+  Using cached pyquery-2.1.0-py3-none-any.whl.metadata (9.5 kB)
+Collecting requests (from -r requirements.txt (line 4))
+  Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting cachetools (from -r requirements.txt (line 5))
+  Using cached cachetools-7.1.6-py3-none-any.whl.metadata (5.5 kB)
+Collecting pycryptodome (from -r requirements.txt (line 6))
+  Using cached https://chaquo.com/pypi-13.1/pycryptodome/pycryptodome-3.21.0-0-cp310-cp310-android_24_armeabi_v7a.whl (1.6 MB)
+Collecting beautifulsoup4 (from -r requirements.txt (line 7))
+  Using cached beautifulsoup4-4.15.0-py3-none-any.whl.metadata (3.8 kB)
+Collecting chaquopy-libxslt>=1.1.32 (from lxml->-r requirements.txt (line 1))
+  Using cached https://chaquo.com/pypi-13.1/chaquopy-libxslt/chaquopy_libxslt-1.1.32-2-py3-none-android_16_armeabi_v7a.whl (170 kB)
+Collecting chaquopy-libxml2>=2.9.8 (from lxml->-r requirements.txt (line 1))
+  Using cached https://chaquo.com/pypi-13.1/chaquopy-libxml2/chaquopy_libxml2-2.9.8-2-py3-none-android_16_armeabi_v7a.whl (705 kB)
+Collecting chaquopy-libcxx>=180000 (from ujson->-r requirements.txt (line 2))
+  Using cached https://chaquo.com/pypi-13.1/chaquopy-libcxx/chaquopy_libcxx-180000-0-py3-none-android_24_armeabi_v7a.whl (355 kB)
+Collecting cssselect>=1.5.0 (from pyquery->-r requirements.txt (line 3))
+  Using cached cssselect-1.5.0-py3-none-any.whl.metadata (2.4 kB)
+Collecting charset_normalizer<4,>=2 (from requests->-r requirements.txt (line 4))
+  Using cached charset_normalizer-3.4.9-py3-none-any.whl.metadata (41 kB)
+Collecting idna<4,>=2.5 (from requests->-r requirements.txt (line 4))
+  Using cached idna-3.18-py3-none-any.whl.metadata (6.1 kB)
+Collecting urllib3<3,>=1.26 (from requests->-r requirements.txt (line 4))
+  Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Collecting certifi>=2023.5.7 (from requests->-r requirements.txt (line 4))
+  Using cached certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Collecting soupsieve>=1.6.1 (from beautifulsoup4->-r requirements.txt (line 7))
+  Using cached soupsieve-2.9.1-py3-none-any.whl.metadata (4.6 kB)
+Collecting typing-extensions>=4.0.0 (from beautifulsoup4->-r requirements.txt (line 7))
+  Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Using cached pyquery-2.1.0-py3-none-any.whl (22 kB)
+Using cached requests-2.34.2-py3-none-any.whl (73 kB)
+Using cached charset_normalizer-3.4.9-py3-none-any.whl (64 kB)
+Using cached idna-3.18-py3-none-any.whl (65 kB)
+Using cached urllib3-2.7.0-py3-none-any.whl (131 kB)
+Using cached cachetools-7.1.6-py3-none-any.whl (16 kB)
+Using cached beautifulsoup4-4.15.0-py3-none-any.whl (109 kB)
+Using cached certifi-2026.7.22-py3-none-any.whl (136 kB)
+Using cached cssselect-1.5.0-py3-none-any.whl (20 kB)
+Using cached soupsieve-2.9.1-py3-none-any.whl (37 kB)
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Installing collected packages: chaquopy-libxml2, chaquopy-libcxx, urllib3, ujson, typing-extensions, soupsieve, pycryptodome, idna, cssselect, charset_normalizer, chaquopy-libxslt, certifi, cachetools, requests, lxml, beautifulsoup4, pyquery
+
+Successfully installed beautifulsoup4-4.15.0 cachetools-7.1.6 certifi-2026.7.22 chaquopy-libcxx-180000 chaquopy-libxml2-2.9.8 chaquopy-libxslt-1.1.32 charset_normalizer-3.4.9 cssselect-1.5.0 idna-3.18 lxml-5.3.0 pycryptodome-3.21.0 pyquery-2.1.0 requests-2.34.2 soupsieve-2.9.1 typing-extensions-4.16.0 ujson-5.11.0 urllib3-2.7.0
+
+> Task :chaquo:mergeArmeabi_v7aReleasePythonSources
+> Task :chaquo:generateArmeabi_v7aReleasePythonProxies
+> Task :chaquo:compileArmeabi_v7aReleaseKotlin NO-SOURCE
+> Task :chaquo:javaPreCompileArmeabi_v7aRelease FROM-CACHE
+> Task :app:dataBindingGenBaseClassesLeanbackArmeabi_v7aRelease
+
+> Task :chaquo:compileArmeabi_v7aReleaseJavaWithJavac
+ע: X:\chaquo\src\main\java\com\fongmi\chaquo\Platform.javaʹ�û򸲸����ѹ�ʱ�� API��
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+
+> Task :chaquo:bundleLibCompileToJarArmeabi_v7aRelease
+> Task :app:compileLeanbackArmeabi_v7aReleaseKotlin NO-SOURCE
+
+> Task :app:compileLeanbackArmeabi_v7aReleaseJavaWithJavac
+ע: [1] Wrote GeneratedAppGlideModule with: [com.bumptech.glide.integration.okhttp3.OkHttpLibraryGlideModule, com.bumpte
+ch.glide.integration.avif.AvifGlideModule]
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:93: ����: �Ҳ�������
+        return player.getCurrentMediaChapters();
+                     ^
+  ����:   ���� getCurrentMediaChapters()
+  λ��: ����ΪPlayer�ı��� player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:97: ����: �Ҳ�������
+        return player.getCurrentMediaEditions();
+                     ^
+  ����:   ���� getCurrentMediaEditions()
+  λ��: ����ΪPlayer�ı��� player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:258: ����: �Ҳ�������
+        player.selectChapter(chapter);
+              ^
+  ����:   ���� selectChapter(MediaChapter)
+  λ��: ����ΪPlayer�ı��� player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:262: ����: �Ҳ�������
+        player.selectEdition(edition);
+              ^
+  ����:   ���� selectEdition(MediaEdition)
+  λ��: ����ΪPlayer�ı��� player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:348: ����: �Ҳ�������
+        return player.isCommandAvailable(Player.COMMAND_GET_TEXT_OFFSET) ? player.getTextOffsetMs() : 0;
+                                               ^
+  ����:   ���� COMMAND_GET_TEXT_OFFSET
+  λ��: �ӿ� Player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:348: ����: �Ҳ�������
+        return player.isCommandAvailable(Player.COMMAND_GET_TEXT_OFFSET) ? player.getTextOffsetMs() : 0;
+                                                                                 ^
+  ����:   ���� getTextOffsetMs()
+  λ��: ����ΪPlayer�ı��� player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:352: ����: �Ҳ�������
+        if (player.isCommandAvailable(Player.COMMAND_SET_TEXT_OFFSET)) player.setTextOffsetMs(offsetMs);
+                                            ^
+  ����:   ���� COMMAND_SET_TEXT_OFFSET
+  λ��: �ӿ� Player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:352: ����: �Ҳ�������
+        if (player.isCommandAvailable(Player.COMMAND_SET_TEXT_OFFSET)) player.setTextOffsetMs(offsetMs);
+                                                                             ^
+  ����:   ���� setTextOffsetMs(long)
+  λ��: ����ΪPlayer�ı��� player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:356: ����: �Ҳ�������
+        return player.isCommandAvailable(Player.COMMAND_GET_AUDIO_OFFSET) ? player.getAudioOffsetMs() : 0;
+                                               ^
+  ����:   ���� COMMAND_GET_AUDIO_OFFSET
+  λ��: �ӿ� Player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:356: ����: �Ҳ�������
+        return player.isCommandAvailable(Player.COMMAND_GET_AUDIO_OFFSET) ? player.getAudioOffsetMs() : 0;
+                                                                                  ^
+  ����:   ���� getAudioOffsetMs()
+  λ��: ����ΪPlayer�ı��� player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:360: ����: �Ҳ�������
+        if (player.isCommandAvailable(Player.COMMAND_SET_AUDIO_OFFSET)) player.setAudioOffsetMs(offsetMs);
+                                            ^
+  ����:   ���� COMMAND_SET_AUDIO_OFFSET
+  λ��: �ӿ� Player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:360: ����: �Ҳ�������
+        if (player.isCommandAvailable(Player.COMMAND_SET_AUDIO_OFFSET)) player.setAudioOffsetMs(offsetMs);
+                                                                              ^
+  ����:   ���� setAudioOffsetMs(long)
+  λ��: ����ΪPlayer�ı��� player
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:550: ����: �������Ḳ�ǻ�ʵ�ֳ����͵ķ���
+        @Override
+        ^
+X:\app\src\main\java\com\fongmi\android\tv\player\PlayerManager.java:555: ����: �������Ḳ�ǻ�ʵ�ֳ����͵ķ���
+        @Override
+        ^
+X:\app\src\main\java\com\fongmi\android\tv\player\exo\ExoUtil.java:47: ����: �Ҳ�������
+        if (errorCode == PlaybackException.ERROR_CODE_PARSING_MANIFEST_UNSUPPORTED || errorCode == PlaybackException.ER
+ROR_CODE_PARSING_MANIFEST_MALFORMED) return MimeTypes.APPLICATION_OCTET_STREAM;
+                                                                                                                       
+                                                     ^
+  ����:   ���� APPLICATION_OCTET_STREAM
+  λ��: �� MimeTypes
+X:\app\src\main\java\com\fongmi\android\tv\player\exo\ExoUtil.java:87: ����: �Ҳ�������
+        return factory.setFfmpegAudioPrefer(audioPrefer).setFfmpegVideoPrefer(videoPrefer).setEnableDecoderFallback(tru
+e).setEnableDv7HevcFallback(PlayerSetting.isDv7HevcFallback()).setExtensionRendererMode(renderMode);
+                      ^
+  ����:   ���� setFfmpegAudioPrefer(boolean)
+  λ��: ����ΪDefaultRenderersFactory�ı��� factory
+X:\app\src\main\java\com\fongmi\android\tv\player\media\MediaItemFactory.java:22: ����: �Ҳ�������
+        return buildUpon(spec).setDecode(decode).build();
+                              ^
+  ����:   ���� setDecode(int)
+  λ��: �� Builder
+X:\app\src\main\java\com\fongmi\android\tv\player\media\MediaItemFactory.java:31: ����: �Ҳ�������
+                .setAdblock(Setting.isAdblock())
+                ^
+  ����:   ���� setAdblock(boolean)
+  λ��: �� Builder
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:132: ����: �Ҳ�������
+        return getPlayerView().isDebugViewVisible();
+                              ^
+  ����:   ���� isDebugViewVisible()
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:136: ����: �Ҳ�������
+        getPlayerView().toggleDebugView();
+                       ^
+  ����:   ���� toggleDebugView()
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:140: ����: �Ҳ�������
+        getPlayerView().hideDebugView();
+                       ^
+  ����:   ���� hideDebugView()
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:354: ����: �Ҳ�������
+        getPlayerView().setRender(PlayerSetting.getRender());
+                       ^
+  ����:   ���� setRender(int)
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:361: ����: �Ҳ�������
+        playerView.setRender(PlayerSetting.getRender());
+                  ^
+  ����:   ���� setRender(int)
+  λ��: ����ΪPlayerView�ı��� playerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:362: ����: �Ҳ�������
+        playerView.setDanmakuOkHttpClient(OkHttp.player());
+                  ^
+  ����:   ���� setDanmakuOkHttpClient(OkHttpClient)
+  λ��: ����ΪPlayerView�ı��� playerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:363: ����: �Ҳ�������
+        playerView.setDanmakuEnabled(DanmakuSetting.isShow());
+                  ^
+  ����:   ���� setDanmakuEnabled(boolean)
+  λ��: ����ΪPlayerView�ı��� playerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:364: ����: �Ҳ�������
+        playerView.setDanmakuConfig(DanmakuSetting.getConfig());
+                  ^
+  ����:   ���� setDanmakuConfig(DanmakuConfig)
+  λ��: ����ΪPlayerView�ı��� playerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:368: ����: �Ҳ�������
+        if (PlayerSetting.getSubtitlePosition() != 0) playerView.getSubtitleView().setBottomPosition(PlayerSetting.getS
+ubtitlePosition());
+                                                                                  ^
+  ����:   ���� setBottomPosition(float)
+  λ��: �� SubtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:380: ����: �Ҳ�������
+        getPlayerView().setDanmakuSource(player().getSelectedDanmakuUri());
+                       ^
+  ����:   ���� setDanmakuSource(Uri)
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:459: ����: �Ҳ�������
+            if (isOwner()) getPlayerView().setDanmakuSource(uri);
+                                          ^
+  ����:   ���� setDanmakuSource(Uri)
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:464: ����: �Ҳ�������
+            if (isOwner()) getPlayerView().setDanmakuConfig(config);
+                                          ^
+  ����:   ���� setDanmakuConfig(DanmakuConfig)
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:469: ����: �Ҳ�������
+            if (isOwner()) getPlayerView().setDanmakuEnabled(enabled);
+                                          ^
+  ����:   ���� setDanmakuEnabled(boolean)
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\activity\PlaybackActivity.java:474: ����: �Ҳ�������
+            if (isOwner()) getPlayerView().sendDanmaku(text);
+                                          ^
+  ����:   ���� sendDanmaku(String)
+  λ��: �� PlayerView
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\ChapterAdapter.java:41: ����: �Ҳ�������
+        for (int i = 0; i < mItems.size(); i++) if (mItems.get(i).selected) return i;
+                                                                 ^
+  ����:   ���� selected
+  λ��: �� MediaChapter
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\ChapterAdapter.java:59: ����: �Ҳ�������
+        holder.binding.text.setSelected(item.selected);
+                                            ^
+  ����:   ���� selected
+  λ��: ����ΪMediaChapter�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\ChapterAdapter.java:64: ����: �Ҳ�������
+        if (item.timeUs == C.TIME_UNSET) return item.label;
+                ^
+  ����:   ���� timeUs
+  λ��: ����ΪMediaChapter�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\ChapterAdapter.java:64: ����: �Ҳ�������
+        if (item.timeUs == C.TIME_UNSET) return item.label;
+                                                    ^
+  ����:   ���� label
+  λ��: ����ΪMediaChapter�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\ChapterAdapter.java:65: ����: �Ҳ�������
+        return item.label + " [" + Util.timeMs(item.timeUs / 1000) + "]";
+                   ^
+  ����:   ���� label
+  λ��: ����ΪMediaChapter�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\ChapterAdapter.java:65: ����: �Ҳ�������
+        return item.label + " [" + Util.timeMs(item.timeUs / 1000) + "]";
+                                                   ^
+  ����:   ���� timeUs
+  λ��: ����ΪMediaChapter�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\EditionAdapter.java:41: ����: �Ҳ�������
+        for (int i = 0; i < mItems.size(); i++) if (mItems.get(i).selected) return i;
+                                                                 ^
+  ����:   ���� selected
+  λ��: �� MediaEdition
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\EditionAdapter.java:59: ����: �Ҳ�������
+        holder.binding.text.setSelected(item.selected);
+                                            ^
+  ����:   ���� selected
+  λ��: ����ΪMediaEdition�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\EditionAdapter.java:64: ����: �Ҳ�������
+        if (item.durationUs == C.TIME_UNSET) return item.label;
+                ^
+  ����:   ���� durationUs
+  λ��: ����ΪMediaEdition�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\EditionAdapter.java:64: ����: �Ҳ�������
+        if (item.durationUs == C.TIME_UNSET) return item.label;
+                                                        ^
+  ����:   ���� label
+  λ��: ����ΪMediaEdition�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\EditionAdapter.java:65: ����: �Ҳ�������
+        return item.label + " [" + Util.timeMs(item.durationUs / 1000) + "]";
+                   ^
+  ����:   ���� label
+  λ��: ����ΪMediaEdition�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\adapter\EditionAdapter.java:65: ����: �Ҳ�������
+        return item.label + " [" + Util.timeMs(item.durationUs / 1000) + "]";
+                                                   ^
+  ����:   ���� durationUs
+  λ��: ����ΪMediaEdition�ı��� item
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:77: ����: �Ҳ�������
+        subtitleView.addPosition(0.005f);
+                    ^
+  ����:   ���� addPosition(float)
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:78: ����: �Ҳ�������
+        PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
+                                                      ^
+  ����:   ���� getPosition()
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:83: ����: �Ҳ�������
+        subtitleView.subPosition(0.005f);
+                    ^
+  ����:   ���� subPosition(float)
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:84: ����: �Ҳ�������
+        PlayerSetting.putSubtitlePosition(subtitleView.getPosition());
+                                                      ^
+  ����:   ���� getPosition()
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:89: ����: �Ҳ�������
+        subtitleView.addTextSize(0.002f);
+                    ^
+  ����:   ���� addTextSize(float)
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:90: ����: �Ҳ�������
+        PlayerSetting.putSubtitleTextSize(subtitleView.getTextSize());
+                                                      ^
+  ����:   ���� getTextSize()
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:95: ����: �Ҳ�������
+        subtitleView.subTextSize(0.002f);
+                    ^
+  ����:   ���� subTextSize(float)
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:96: ����: �Ҳ�������
+        PlayerSetting.putSubtitleTextSize(subtitleView.getTextSize());
+                                                      ^
+  ����:   ���� getTextSize()
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+X:\app\src\main\java\com\fongmi\android\tv\ui\dialog\SubtitleDialog.java:103: ����: �Ҳ�������
+        subtitleView.reset();
+                    ^
+  ����:   ���� reset()
+  λ��: ����ΪSubtitleView�ı��� subtitleView
+ע: ĳЩ�����ļ�ʹ�û򸲸����ѹ�ʱ�� API��
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:deprecation ���±��롣
+ע: ĳЩ�����ļ�ʹ����δ�����򲻰�ȫ�Ĳ�����
+ע: �й���ϸ��Ϣ, ��ʹ�� -Xlint:unchecked ���±��롣
+53 ������
+
+> Task :app:compileLeanbackArmeabi_v7aReleaseJavaWithJavac FAILED
+
+
+[Incubating] Problems report is available at: file:///X:/build/reports/problems/problems-report.html
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileLeanbackArmeabi_v7aReleaseJavaWithJavac' (registered by plugin 'com.android.inte
+rnal.application').
+> Compilation failed; see the compiler output below.
+  ע: [1] Wrote GeneratedAppGlideModule with: [com.bumptech.glide.integration.okhttp3.OkHttpLibraryGlideModule, com.bump
+tech.glide.integration.avif.AvifGlideModule]
+  53 ������
+
+* Try:
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.6.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 1m 13s
+39 actionable tasks: 20 executed, 1 from cache, 18 up-to-date

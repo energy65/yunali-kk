@@ -1,0 +1,4 @@
+'鎵嬫満\婧愬姏\TV-fongmi\TV-fongmi\' is not recognized as an internal or external command,
+operable program or batch file.
+错误: 找不到或无法加载主类 org.gradle.wrapper.GradleWrapperMain
+原因: java.lang.ClassNotFoundException: org.gradle.wrapper.GradleWrapperMain
