@@ -3,7 +3,9 @@ package com.fongmi.android.tv.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,20 +20,27 @@ import androidx.viewbinding.ViewBinding;
 import androidx.viewpager.widget.ViewPager;
 
 import com.fongmi.android.tv.App;
+import com.fongmi.android.tv.api.config.LiveConfig;
 import com.fongmi.android.tv.api.config.VodConfig;
 import com.fongmi.android.tv.bean.Class;
+import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.bean.Result;
+import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.databinding.ActivityVodBinding;
 import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
+import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
+import com.fongmi.android.tv.utils.ImgUtil;
 import com.fongmi.android.tv.utils.KeyUtil;
 import com.fongmi.android.tv.utils.ResUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 public class VodActivity extends BaseActivity implements TypeAdapter.OnClickListener {
@@ -56,6 +65,14 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
         return getIntent().getStringExtra("key");
     }
 
+    private Site getHome() {
+        return VodConfig.get().getHome();
+    }
+
+    private Config getConfig() {
+        return VodConfig.get().getConfig();
+    }
+
     private Result getResult() {
         return getIntent().getParcelableExtra("result");
     }
@@ -75,13 +92,18 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        setToolbar();
         setRecyclerView();
         setTypes();
         setPager();
+        setNavigation();
     }
 
     @Override
     protected void initEvent() {
+        mBinding.logo.setOnClickListener(this::onLogo);
+        mBinding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
+        mBinding.navigation.setOnItemSelectedListener(this::onNavigationItemSelected);
         mBinding.pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -95,6 +117,37 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
                 onChildSelected(child);
             }
         });
+    }
+
+    private void setToolbar() {
+        List<String> items = Arrays.asList(getHome().getName(), getConfig().getName(), getString(R.string.app_name));
+        Optional<String> optional = items.stream().filter(s -> !TextUtils.isEmpty(s)).findFirst();
+        optional.ifPresent(s -> mBinding.title.setText(s));
+        ImgUtil.logo(mBinding.logo);
+    }
+
+    private void setNavigation() {
+        mBinding.navigation.getMenu().findItem(R.id.vod).setVisible(true);
+        mBinding.navigation.getMenu().findItem(R.id.setting).setVisible(true);
+        mBinding.navigation.getMenu().findItem(R.id.live).setVisible(LiveConfig.hasUrl());
+        mBinding.navigation.setSelectedItemId(R.id.vod);
+    }
+
+    private void onLogo(View view) {
+        HistoryDialog.create().vod().readOnly().show(this);
+    }
+
+    private boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.keep) KeepActivity.start(this);
+        else if (item.getItemId() == R.id.search) SearchActivity.start(this);
+        else if (item.getItemId() == R.id.history) HistoryDialog.create().vod().readOnly().show(this);
+        return true;
+    }
+
+    private boolean onNavigationItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.live) LiveActivity.start(this);
+        else if (item.getItemId() == R.id.setting) SettingActivity.start(this);
+        return true;
     }
 
     private void setRecyclerView() {
