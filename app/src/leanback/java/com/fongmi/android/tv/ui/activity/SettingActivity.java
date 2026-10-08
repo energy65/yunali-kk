@@ -26,13 +26,9 @@ import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.dialog.ConfigDialog;
 import com.fongmi.android.tv.ui.dialog.DohDialog;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
-<<<<<<< HEAD
-import com.fongmi.android.tv.ui.dialog.RestoreDialog;
-=======
 import com.fongmi.android.tv.ui.dialog.LiveDialog;
 import com.fongmi.android.tv.ui.dialog.RestoreDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
->>>>>>> 86f4032e1b30b792e042d805844f349ae1671298
 import com.fongmi.android.tv.utils.FileUtil;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.PermissionUtil;
@@ -112,13 +108,10 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         mBinding.version.setOnClickListener(this::onVersion);
         mBinding.wall.setOnLongClickListener(this::onWallEdit);
         mBinding.incognito.setOnClickListener(this::setIncognito);
-<<<<<<< HEAD
-=======
         mBinding.vodHome.setOnClickListener(this::onVodHome);
         mBinding.vodHistory.setOnClickListener(this::onVodHistory);
         mBinding.liveHome.setOnClickListener(this::onLiveHome);
         mBinding.liveHistory.setOnClickListener(this::onLiveHistory);
->>>>>>> 86f4032e1b30b792e042d805844f349ae1671298
         mBinding.wallDefault.setOnClickListener(this::setWallDefault);
         mBinding.wallRefresh.setOnClickListener(this::setWallRefresh);
         mBinding.wallRefresh.setOnLongClickListener(this::onWallHistory);
@@ -173,8 +166,6 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         ConfigDialog.create().vod().show(this);
     }
 
-<<<<<<< HEAD
-=======
     private void onVodHome(View view) {
         SiteDialog.create().search().show(this);
     }
@@ -183,13 +174,10 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         HistoryDialog.create().vod().show(this);
     }
 
->>>>>>> 86f4032e1b30b792e042d805844f349ae1671298
     private void onLive(View view) {
         ConfigDialog.create().live().show(this);
     }
 
-<<<<<<< HEAD
-=======
     private void onLiveHome(View view) {
         LiveDialog.create().show(this);
     }
@@ -198,7 +186,6 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         HistoryDialog.create().live().show(this);
     }
 
->>>>>>> 86f4032e1b30b792e042d805844f349ae1671298
     private void onWall(View view) {
         ConfigDialog.create().wall().show(this);
     }
