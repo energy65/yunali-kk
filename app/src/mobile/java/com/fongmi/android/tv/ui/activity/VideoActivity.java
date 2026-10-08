@@ -369,10 +369,7 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         mBinding.control.action.edition.setOnClickListener(view -> onEdition());
         mBinding.control.action.chapter.setOnClickListener(view -> onChapter());
         mBinding.control.action.episodes.setOnClickListener(view -> onEpisodes());
-<<<<<<< HEAD
-=======
         mBinding.control.action.fullscreen.setOnClickListener(view -> onFullscreen());
->>>>>>> 86f4032e1b30b792e042d805844f349ae1671298
         mBinding.control.action.text.setOnLongClickListener(view -> onTextLong());
         mBinding.control.action.ending.setOnLongClickListener(view -> onEndingReset());
         mBinding.control.action.opening.setOnLongClickListener(view -> onOpeningReset());
@@ -1060,14 +1057,11 @@ public class VideoActivity extends PlaybackActivity implements Clock.Callback, C
         return enter;
     }
 
-<<<<<<< HEAD
-=======
     private void onFullscreen() {
         if (isFullscreen()) exitFullscreen();
         else enterFullscreen();
     }
 
->>>>>>> 86f4032e1b30b792e042d805844f349ae1671298
     private void enterFullscreen() {
         if (isFullscreen()) return;
         setFullscreen(true);
