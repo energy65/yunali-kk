@@ -16,15 +16,15 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <supports-screens
+        android:anyDensity="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true" />
+
     <application android:banner="@mipmap/ic_banner">
-
-        <meta-data
-            android:name="design_width_in_dp"
-            android:value="960" />
-
-        <meta-data
-            android:name="design_height_in_dp"
-            android:value="540" />
 
         <activity
             android:name=".ui.activity.HomeActivity"
@@ -32,7 +32,8 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
-            android:theme="@style/Theme.Splash">
+            android:theme="@style/Theme.Splash"
+            android:windowSoftInputMode="adjustPan">
 
             <meta-data
                 android:name="android.app.searchable"
@@ -51,7 +52,9 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
 
@@ -98,20 +101,29 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.CastActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|uiMode|orientation"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:screenOrientation="sensorLandscape">
-            <intent-filter>
-                <action android:name="${applicationId}.cast" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+            android:name=".ui.activity.SearchActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout"
+            android:screenOrientation="sensorLandscape"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".ui.activity.VodActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:name=".ui.activity.FileActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.activity.FolderActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.activity.HistoryActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
+            android:name=".ui.activity.KeepActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout"
             android:screenOrientation="sensorLandscape" />
 
         <activity
@@ -123,77 +135,40 @@
             android:screenOrientation="sensorLandscape" />
 
         <activity
+            android:name=".ui.activity.ScanActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout"
+            android:screenOrientation="sensorLandscape" />
+
+        <activity
             android:name=".ui.activity.VideoActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|uiMode|orientation|keyboard|keyboardHidden|navigation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|uiMode|orientation"
             android:launchMode="singleTop"
             android:parentActivityName=".ui.activity.HomeActivity"
             android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.KeepActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.PushActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.SearchActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape"
-            android:windowSoftInputMode="stateHidden" />
-
-        <activity
-            android:name=".ui.activity.CollectActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.FileActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.SettingActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.SettingPlayerActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.SettingDecodeActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.SettingPreloadActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <activity
-            android:name=".ui.activity.SettingDanmakuActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="sensorLandscape" />
-
-        <service
-            android:name=".service.DLNARendererService"
-            android:exported="false"
-            android:foregroundServiceType="mediaPlayback" />
 
         <receiver
             android:name=".receiver.BootReceiver"
             android:exported="true"
             android:priority="999">
+
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".receiver.ShortcutReceiver"
+            android:exported="false" />
+
+        <service
+            android:name=".service.DLNACastService"
+            android:exported="false" />
+
+        <service
+            android:name=".service.DLNARendererService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
 
     </application>
 </manifest>
