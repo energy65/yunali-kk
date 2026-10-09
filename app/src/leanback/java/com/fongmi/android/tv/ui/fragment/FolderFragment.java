@@ -14,7 +14,7 @@ import com.fongmi.android.tv.bean.Cache;
 import com.fongmi.android.tv.bean.Class;
 import com.fongmi.android.tv.bean.Filter;
 import com.fongmi.android.tv.databinding.FragmentFolderBinding;
-import com.fongmi.android.tv.ui.activity.VodActivity;
+import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 
 import java.util.HashMap;
@@ -46,8 +46,8 @@ public class FolderFragment extends BaseFragment {
         return (TypeFragment) getChildFragmentManager().findFragmentById(R.id.container);
     }
 
-    private VodActivity getParent() {
-        return (VodActivity) getActivity();
+    private BaseActivity getParent() {
+        return (BaseActivity) getActivity();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class FolderFragment extends BaseFragment {
     public void openFolder(String typeId, HashMap<String, String> extend) {
         TypeFragment next = TypeFragment.newInstance(getKey(), typeId, mType.getStyle(), extend, mType.isFolder());
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        Optional.ofNullable(getParent()).ifPresent(VodActivity::closeFilter);
+        Optional.ofNullable(getParent()).ifPresent(BaseActivity::closeFilter);
         Optional.ofNullable(getChild()).ifPresent(ft::hide);
         ft.add(R.id.container, next);
         ft.addToBackStack(null);
