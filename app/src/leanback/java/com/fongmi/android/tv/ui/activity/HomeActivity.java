@@ -39,6 +39,7 @@ import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.impl.Callback;
 import com.fongmi.android.tv.impl.ConfigListener;
+import com.fongmi.android.tv.impl.SiteListener;
 import com.fongmi.android.tv.model.SiteViewModel;
 import com.fongmi.android.tv.player.extractor.Source;
 import com.fongmi.android.tv.server.Server;
@@ -48,6 +49,7 @@ import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.dialog.ConfigDialog;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
+import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.ImgUtil;
@@ -65,7 +67,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickListener, ConfigListener {
+public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickListener, ConfigListener, SiteListener {
 
     private ActivityHomeBinding mBinding;
     private SiteViewModel mViewModel;
@@ -213,8 +215,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     }
 
     private void onVodConfig() {
-        if (Config.getAll(0).isEmpty()) ConfigDialog.create().vod().show(this);
-        else HistoryDialog.create().vod().readOnly().show(this);
+        SiteDialog.create().search().show(this);
     }
 
     private boolean onMenuItemClick(MenuItem item) {
@@ -260,6 +261,11 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
         } else {
             VodConfig.load(config, getCallback());
         }
+    }
+
+    @Override
+    public void setSite(Site item) {
+        VodConfig.get().setHome(item);
     }
 
     private void homeContent() {

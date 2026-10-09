@@ -29,9 +29,11 @@ import com.fongmi.android.tv.bean.Result;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.databinding.ActivityVodBinding;
 import com.fongmi.android.tv.event.RefreshEvent;
+import com.fongmi.android.tv.impl.SiteListener;
 import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
+import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.ImgUtil;
 import com.fongmi.android.tv.utils.KeyUtil;
@@ -44,7 +46,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class VodActivity extends BaseActivity implements TypeAdapter.OnClickListener {
+public class VodActivity extends BaseActivity implements TypeAdapter.OnClickListener, SiteListener {
 
     private ActivityVodBinding mBinding;
     private TypeAdapter mAdapter;
@@ -136,7 +138,13 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     }
 
     private void onLogo(View view) {
-        HistoryDialog.create().vod().readOnly().show(this);
+        SiteDialog.create().search().show(this);
+    }
+
+    @Override
+    public void setSite(Site item) {
+        VodConfig.get().setHome(item);
+        getActivity().finish();
     }
 
     private boolean onMenuItemClick(MenuItem item) {
