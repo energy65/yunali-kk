@@ -3,6 +3,7 @@ package com.fongmi.android.tv.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.viewbinding.ViewBinding;
@@ -76,6 +77,14 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         mBinding.version.setVisibility(View.GONE);
         setCacheText();
         setOtherText();
+        setNavigation();
+    }
+
+    private void setNavigation() {
+        mBinding.navigation.getMenu().findItem(R.id.vod).setVisible(true);
+        mBinding.navigation.getMenu().findItem(R.id.setting).setVisible(true);
+        mBinding.navigation.getMenu().findItem(R.id.live).setVisible(LiveConfig.hasUrl());
+        mBinding.navigation.setSelectedItemId(R.id.setting);
     }
 
     private void setOtherText() {
@@ -96,6 +105,7 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
     @Override
     protected void initEvent() {
         mBinding.vod.setOnClickListener(this::onVod);
+        mBinding.navigation.setOnItemSelectedListener(this::onNavigationItemSelected);
         mBinding.live.setOnClickListener(this::onLive);
         mBinding.doh.setOnClickListener(this::setDoh);
         mBinding.wall.setOnClickListener(this::onWall);
@@ -164,6 +174,12 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
 
     private void onVod(View view) {
         ConfigDialog.create().vod().show(this);
+    }
+
+    private boolean onNavigationItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.vod) getActivity().finish();
+        else if (item.getItemId() == R.id.live) LiveActivity.start(this);
+        return true;
     }
 
     private void onVodHome(View view) {

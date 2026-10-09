@@ -38,6 +38,7 @@ import com.fongmi.android.tv.event.ConfigEvent;
 import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.impl.Callback;
+import com.fongmi.android.tv.impl.ConfigListener;
 import com.fongmi.android.tv.model.SiteViewModel;
 import com.fongmi.android.tv.player.extractor.Source;
 import com.fongmi.android.tv.server.Server;
@@ -45,6 +46,7 @@ import com.fongmi.android.tv.service.DLNARendererService;
 import com.fongmi.android.tv.service.PlaybackService;
 import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
+import com.fongmi.android.tv.ui.dialog.ConfigDialog;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.FileChooser;
@@ -63,7 +65,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickListener {
+public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickListener, ConfigListener {
 
     private ActivityHomeBinding mBinding;
     private SiteViewModel mViewModel;
@@ -206,13 +208,18 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     };
 
     private void onLogo(View view) {
-        HistoryDialog.create().vod().readOnly().show(this);
+        onVodConfig();
+    }
+
+    private void onVodConfig() {
+        if (Config.getAll(0).isEmpty()) ConfigDialog.create().vod().show(this);
+        else HistoryDialog.create().vod().readOnly().show(this);
     }
 
     private boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.keep) KeepActivity.start(this);
         else if (item.getItemId() == R.id.search) SearchActivity.start(this);
-        else if (item.getItemId() == R.id.history) HistoryDialog.create().vod().readOnly().show(this);
+        else if (item.getItemId() == R.id.history) onVodConfig();
         return true;
     }
 
@@ -243,6 +250,15 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
                 homeContent();
             }
         };
+    }
+
+    @Override
+    public void setConfig(Config config) {
+        if (config.getUrl().startsWith("file")) {
+            PermissionUtil.requestFile(this, allGranted -> VodConfig.load(config, getCallback()));
+        } else {
+            VodConfig.load(config, getCallback());
+        }
     }
 
     private void homeContent() {
