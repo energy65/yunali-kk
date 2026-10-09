@@ -75,6 +75,10 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     private Result mResult;
     private View mOldView;
 
+    public Result getResult() {
+        return mResult;
+    }
+
     private Site getHome() {
         return VodConfig.get().getHome();
     }

@@ -78,7 +78,7 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
         return VodConfig.get().getConfig();
     }
 
-    private Result getResult() {
+    public Result getResult() {
         return getIntent().getParcelableExtra("result");
     }
 

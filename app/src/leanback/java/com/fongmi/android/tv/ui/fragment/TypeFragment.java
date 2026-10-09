@@ -29,6 +29,8 @@ import com.fongmi.android.tv.bean.Vod;
 import com.fongmi.android.tv.databinding.FragmentTypeBinding;
 import com.fongmi.android.tv.model.SiteViewModel;
 import com.fongmi.android.tv.ui.activity.CollectActivity;
+import com.fongmi.android.tv.ui.activity.HomeActivity;
+import com.fongmi.android.tv.ui.activity.VodActivity;
 import com.fongmi.android.tv.ui.activity.VideoActivity;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 import com.fongmi.android.tv.ui.custom.CustomRowPresenter;
@@ -78,6 +80,10 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
 
     private boolean isFolder() {
         return getArguments().getBoolean("folder");
+    }
+
+    private boolean isHome() {
+        return "home".equals(getTypeId());
     }
 
     private Style getStyle() {
@@ -159,7 +165,14 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         mLast = null;
         checkFilter();
         mScroller.reset();
-        getVideo(getTypeId(), "1");
+        if (isHome()) setAdapter(getHomeResult());
+        else getVideo(getTypeId(), "1");
+    }
+
+    private Result getHomeResult() {
+        if (getActivity() instanceof HomeActivity) return ((HomeActivity) getActivity()).getResult();
+        if (getActivity() instanceof VodActivity) return ((VodActivity) getActivity()).getResult();
+        return Result.empty();
     }
 
     private void getVideo(String typeId, String page) {
@@ -184,7 +197,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
     }
 
     private void checkMore() {
-        if (mScroller.isDisable() || mAdapter.size() >= 5) return;
+        if (isHome() || mScroller.isDisable() || mAdapter.size() >= 5) return;
         mScroller.checkMore();
     }
 
@@ -245,7 +258,8 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
     }
 
     public void onRefresh() {
-        getVideo();
+        if (isHome()) setAdapter(getHomeResult());
+        else getVideo();
     }
 
     @Override
@@ -270,6 +284,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
 
     @Override
     public boolean onLoadMore(String page) {
+        if (isHome()) return false;
         getVideo(getTypeId(), page);
         return true;
     }
