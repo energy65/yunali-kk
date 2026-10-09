@@ -32,7 +32,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
     }
 
     public Class get(int position) {
-        return mItems.get(position);
+        return position >= 0 && position < mItems.size() ? mItems.get(position) : null;
     }
 
     public int indexOf(Class item) {

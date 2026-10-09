@@ -222,7 +222,7 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     @Override
     protected void onBackInvoked() {
         if (isFilterVisible()) updateFilter();
-        else if (getFragment().canBack()) getFragment().goBack();
+        else if (mAdapter.getItemCount() > 0 && getFragment().canBack()) getFragment().goBack();
         else super.onBackInvoked();
     }
 
