@@ -105,7 +105,7 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     @Override
     protected void initEvent() {
         mBinding.logo.setOnClickListener(this::onLogo);
-        mBinding.title.setOnClickListener(this::onLogo);
+        mBinding.title.setOnClickListener(this::onSite);
         mBinding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
         mBinding.navigation.setOnItemSelectedListener(this::onNavigationItemSelected);
         mBinding.pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -138,6 +138,10 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     }
 
     private void onLogo(View view) {
+        getFragment().onRefresh();
+    }
+
+    private void onSite(View view) {
         SiteDialog.create().search().show(this);
     }
 

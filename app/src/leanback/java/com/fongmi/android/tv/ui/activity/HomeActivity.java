@@ -124,7 +124,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     @Override
     protected void initEvent() {
         mBinding.logo.setOnClickListener(this::onLogo);
-        mBinding.title.setOnClickListener(this::onLogo);
+        mBinding.title.setOnClickListener(this::onSite);
         mBinding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
         mBinding.navigation.setOnItemSelectedListener(this::onNavigationItemSelected);
         mBinding.pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -211,17 +211,17 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     };
 
     private void onLogo(View view) {
-        onVodConfig();
+        homeContent();
     }
 
-    private void onVodConfig() {
+    private void onSite(View view) {
         SiteDialog.create().search().show(this);
     }
 
     private boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.keep) KeepActivity.start(this);
         else if (item.getItemId() == R.id.search) SearchActivity.start(this);
-        else if (item.getItemId() == R.id.history) onVodConfig();
+        else if (item.getItemId() == R.id.history) HistoryDialog.create().vod().readOnly().show(this);
         return true;
     }
 
