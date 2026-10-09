@@ -29,6 +29,7 @@ import com.fongmi.android.tv.bean.Result;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.databinding.ActivityVodBinding;
 import com.fongmi.android.tv.event.RefreshEvent;
+import com.fongmi.android.tv.impl.Callback;
 import com.fongmi.android.tv.impl.SiteListener;
 import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
@@ -37,6 +38,7 @@ import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.ImgUtil;
 import com.fongmi.android.tv.utils.KeyUtil;
+import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.ResUtil;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -138,7 +140,17 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     }
 
     private void onLogo(View view) {
-        getFragment().onRefresh();
+        VodConfig.get().init().load(new Callback() {
+            @Override
+            public void success() {
+                getActivity().finish();
+            }
+
+            @Override
+            public void error(String msg) {
+                Notify.show(msg);
+            }
+        });
     }
 
     private void onSite(View view) {

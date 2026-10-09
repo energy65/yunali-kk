@@ -211,7 +211,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     };
 
     private void onLogo(View view) {
-        homeContent();
+        VodConfig.get().init().load(getCallback());
     }
 
     private void onSite(View view) {
