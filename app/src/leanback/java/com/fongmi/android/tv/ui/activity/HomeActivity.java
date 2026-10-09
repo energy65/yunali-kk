@@ -122,6 +122,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     @Override
     protected void initEvent() {
         mBinding.logo.setOnClickListener(this::onLogo);
+        mBinding.title.setOnClickListener(this::onLogo);
         mBinding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
         mBinding.navigation.setOnItemSelectedListener(this::onNavigationItemSelected);
         mBinding.pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
