@@ -154,7 +154,7 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     }
 
     private void onSite(View view) {
-        SiteDialog.create().search().show(this);
+        SiteDialog.create().show(this);
     }
 
     @Override

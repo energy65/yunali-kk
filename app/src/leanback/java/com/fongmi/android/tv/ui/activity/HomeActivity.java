@@ -215,7 +215,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     }
 
     private void onSite(View view) {
-        SiteDialog.create().search().show(this);
+        SiteDialog.create().show(this);
     }
 
     private boolean onMenuItemClick(MenuItem item) {
