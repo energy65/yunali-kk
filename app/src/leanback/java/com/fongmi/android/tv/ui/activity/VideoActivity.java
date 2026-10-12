@@ -1241,6 +1241,10 @@ public class VideoActivity extends PlaybackActivity implements VodPlaybackHost, 
         if (isPlaying) {
             hideCenter();
             showControl(getFocus2());
+            if (isFullscreen()) {
+                mBinding.widget.size.setText(player().getSizeText());
+                mBinding.widget.top.setVisibility(View.VISIBLE);
+            }
         } else if (isPaused()) {
             showInfo();
         }
