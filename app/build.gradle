@@ -44,13 +44,6 @@ android {
         }
     }
 
-    sourceSets {
-        leanback {
-            java.srcDir 'src/mobile/java'
-            res.srcDir 'src/mobile/res'
-        }
-    }
-
     buildFeatures {
         buildConfig = true
         viewBinding = true
@@ -154,8 +147,8 @@ dependencies {
     implementation libs.permissionx
     implementation libs.simple.xml
     implementation libs.textdrawable
-    leanbackImplementation libs.biometric
-    leanbackImplementation libs.zxing.android.embedded
+    leanbackImplementation libs.leanback
+    leanbackImplementation libs.androidautosize
     mobileImplementation libs.biometric
     mobileImplementation libs.zxing.android.embedded
     annotationProcessor libs.room.compiler

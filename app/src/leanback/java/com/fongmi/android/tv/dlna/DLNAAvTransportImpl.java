@@ -6,9 +6,8 @@ import android.content.Intent;
 import androidx.media3.common.Player;
 
 import com.fongmi.android.tv.App;
-import com.fongmi.android.tv.api.SiteApi;
 import com.fongmi.android.tv.player.PlayerManager;
-import com.fongmi.android.tv.ui.activity.VideoActivity;
+import com.fongmi.android.tv.ui.activity.CastActivity;
 import com.google.gson.reflect.TypeToken;
 
 import org.jupnp.model.types.UnsignedIntegerFourBytes;
@@ -248,10 +247,8 @@ public class DLNAAvTransportImpl extends AbstractAVTransportService {
     }
 
     private void startCastActivity(CastAction action) {
-        Intent intent = new Intent(context, VideoActivity.class);
-        intent.putExtra("key", SiteApi.PUSH);
-        intent.putExtra("id", action.getCurrentURI());
-        intent.putExtra("name", action.getCurrentURI());
+        Intent intent = new Intent(context, CastActivity.class);
+        intent.putExtra(CastAction.KEY_EXTRA, action);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(intent);
     }
