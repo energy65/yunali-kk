@@ -1036,6 +1036,7 @@ public class VideoActivity extends PlaybackActivity implements VodPlaybackHost, 
         mBinding.widget.center.setVisibility(View.VISIBLE);
         mBinding.widget.duration.setText(player().getDurationTime());
         mBinding.widget.position.setText(player().getPositionTime(0));
+        mBinding.widget.size.setText(player().getSizeText());
     }
 
     private void hideInfo() {
