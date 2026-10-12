@@ -197,7 +197,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
 
     private void setAdapter(Result result) {
         mAdapter.addAll((mResult = result).getTypes());
-        mBinding.pager.getAdapter().notifyDataSetChanged();
+        mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
     }
 
     private void onChildSelected(@Nullable RecyclerView.ViewHolder child) {
@@ -274,7 +274,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
 
     private void homeContent() {
         mAdapter.addAll((mResult = Result.empty()).getTypes());
-        mBinding.pager.getAdapter().notifyDataSetChanged();
+        mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
         mViewModel.homeContent();
     }
 
