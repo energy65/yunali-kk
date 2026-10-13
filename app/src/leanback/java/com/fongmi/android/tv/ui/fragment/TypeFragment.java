@@ -32,6 +32,7 @@ import com.fongmi.android.tv.ui.activity.CollectActivity;
 import com.fongmi.android.tv.ui.activity.HomeActivity;
 import com.fongmi.android.tv.ui.activity.VodActivity;
 import com.fongmi.android.tv.ui.activity.VideoActivity;
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 import com.fongmi.android.tv.ui.custom.CustomRowPresenter;
 import com.fongmi.android.tv.ui.custom.CustomScroller;
@@ -158,6 +159,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         adapter.notifyArrayItemRangeChanged(0, adapter.size());
         if (item.isSelected()) mExtends.put(key, item.getV());
         else mExtends.remove(key);
+        Setting.putSiteFilter(getKey(), getTypeId(), mExtends);
         onRefresh();
     }
 

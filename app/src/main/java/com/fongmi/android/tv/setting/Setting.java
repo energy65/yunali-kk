@@ -6,7 +6,9 @@ import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.utils.Prefers;
 import com.google.gson.reflect.TypeToken;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class Setting {
@@ -168,5 +170,20 @@ public class Setting {
 
     public static void putBlockedTags(Set<String> blockedTags) {
         Prefers.put("blocked_tags", App.gson().toJson(blockedTags));
+    }
+
+    // 站点分类筛选条件持久化: 进入同分类时自动应用上次选择
+    public static Map<String, String> getSiteFilter(String siteKey, String typeId) {
+        String json = Prefers.getString("site_filter_" + siteKey + "_" + typeId);
+        if (json.isEmpty()) return new HashMap<>();
+        try {
+            return App.gson().fromJson(json, new TypeToken<Map<String, String>>() {}.getType());
+        } catch (Exception e) {
+            return new HashMap<>();
+        }
+    }
+
+    public static void putSiteFilter(String siteKey, String typeId, Map<String, String> extend) {
+        Prefers.put("site_filter_" + siteKey + "_" + typeId, App.gson().toJson(extend));
     }
 }

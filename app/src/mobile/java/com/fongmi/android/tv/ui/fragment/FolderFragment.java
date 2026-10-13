@@ -15,9 +15,11 @@ import com.fongmi.android.tv.bean.Filter;
 import com.fongmi.android.tv.bean.Result;
 import com.fongmi.android.tv.bean.Value;
 import com.fongmi.android.tv.databinding.FragmentFolderBinding;
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class FolderFragment extends BaseFragment {
@@ -68,6 +70,13 @@ public class FolderFragment extends BaseFragment {
     private HashMap<String, String> getExtend() {
         HashMap<String, String> extend = new HashMap<>();
         for (Filter filter : mType.getFilters()) if (filter.getInit() != null) extend.put(filter.getKey(), filter.setSelected(filter.getInit()));
+        Map<String, String> saved = Setting.getSiteFilter(getKey(), mType.getTypeId());
+        for (Filter filter : mType.getFilters()) {
+            String v = saved.get(filter.getKey());
+            if (v != null) {
+                extend.put(filter.getKey(), filter.setSelected(v));
+            }
+        }
         return extend;
     }
 

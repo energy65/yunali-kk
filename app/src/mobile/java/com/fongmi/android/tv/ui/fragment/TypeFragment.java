@@ -24,6 +24,7 @@ import com.fongmi.android.tv.model.SiteViewModel;
 import com.fongmi.android.tv.ui.activity.SearchActivity;
 import com.fongmi.android.tv.ui.activity.VideoActivity;
 import com.fongmi.android.tv.ui.adapter.VodAdapter;
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 import com.fongmi.android.tv.ui.custom.CustomScroller;
 import com.fongmi.android.tv.utils.Notify;
@@ -172,6 +173,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
     public void setFilter(String key, Value value) {
         if (value.isSelected()) mExtends.put(key, value.getV());
         else mExtends.remove(key);
+        Setting.putSiteFilter(getKey(), getTypeId(), mExtends);
         onRefresh();
     }
 
