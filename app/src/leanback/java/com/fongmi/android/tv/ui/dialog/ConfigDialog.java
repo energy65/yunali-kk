@@ -140,7 +140,7 @@ public class ConfigDialog extends BaseAlertDialog {
         if (text.isEmpty()) Config.delete(url, type);
         if (name.isEmpty()) ((ConfigListener) requireActivity()).setConfig(Config.find(text, type));
         else ((ConfigListener) requireActivity()).setConfig(Config.find(text, name, type));
-        dismiss();
+        if (text.isEmpty()) dismiss();
     }
 
     private void onNegative(View view) {
@@ -171,6 +171,5 @@ public class ConfigDialog extends BaseAlertDialog {
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null || result.getData().getData() == null) return;
         ((ConfigListener) requireActivity()).setConfig(Config.find("file:/" + FileChooser.getPathFromUri(result.getData().getData()).replace(Path.rootPath(), ""), type));
-        dismiss();
     });
 }

@@ -63,7 +63,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickListener, ConfigListener, SiteListener {
@@ -73,6 +75,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     private TypeAdapter mAdapter;
     private Result mResult;
     private View mOldView;
+    private final Map<String, Result> mHomeCache = new HashMap<>();
 
     public Result getResult() {
         return mResult;
@@ -197,6 +200,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     private void setAdapter(Result result) {
         Cache.clear();
         Cache.put(result);
+        if (!result.getTypes().isEmpty()) mHomeCache.put(VodConfig.getHome().getKey(), result);
         mAdapter.addAll((mResult = result).getTypes());
         mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
     }
@@ -274,8 +278,13 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     }
 
     private void homeContent() {
-        mAdapter.addAll((mResult = Result.empty()).getTypes());
-        mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
+        Result cached = mHomeCache.get(VodConfig.getHome().getKey());
+        if (cached != null && !cached.getTypes().isEmpty()) {
+            setAdapter(cached);
+        } else {
+            mAdapter.addAll((mResult = Result.empty()).getTypes());
+            mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
+        }
         mViewModel.homeContent();
     }
 
@@ -308,6 +317,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     public void onConfigEvent(ConfigEvent event) {
         switch (event.type()) {
             case VOD:
+                mHomeCache.clear();
                 RefreshEvent.history();
                 RefreshEvent.home();
                 setToolbar();

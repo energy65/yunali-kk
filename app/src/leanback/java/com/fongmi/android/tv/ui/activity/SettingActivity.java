@@ -46,6 +46,7 @@ import java.util.List;
 public class SettingActivity extends BaseActivity implements ConfigListener, DohDialog.Listener {
 
     private ActivitySettingBinding mBinding;
+    private ConfigDialog mConfigDialog;
     private String[] size;
 
     public static void start(Activity activity) {
@@ -162,6 +163,7 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
             public void success() {
                 Notify.dismiss();
                 setCacheText();
+                dismissConfigDialog();
             }
 
             @Override
@@ -172,8 +174,13 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         };
     }
 
+    private void dismissConfigDialog() {
+        if (mConfigDialog != null) mConfigDialog.dismiss();
+        mConfigDialog = null;
+    }
+
     private void onVod(View view) {
-        ConfigDialog.create().vod().show(this);
+        (mConfigDialog = ConfigDialog.create().vod()).show(this);
     }
 
     private boolean onNavigationItemSelected(MenuItem item) {
@@ -191,7 +198,7 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
     }
 
     private void onLive(View view) {
-        ConfigDialog.create().live().show(this);
+        (mConfigDialog = ConfigDialog.create().live()).show(this);
     }
 
     private void onLiveHome(View view) {
@@ -203,11 +210,11 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
     }
 
     private void onWall(View view) {
-        ConfigDialog.create().wall().show(this);
+        (mConfigDialog = ConfigDialog.create().wall()).show(this);
     }
 
     private boolean onWallEdit(View view) {
-        ConfigDialog.create().wall().edit().show(this);
+        (mConfigDialog = ConfigDialog.create().wall().edit()).show(this);
         return true;
     }
 
