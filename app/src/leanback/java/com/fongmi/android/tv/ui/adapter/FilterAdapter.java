@@ -54,7 +54,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
 
     private void select(Value item) {
         for (Value value : mItems) value.setSelected(item);
-        notifyDataSetChanged();
+        notifyItemRangeChanged(0, mItems.size());
         mListener.onItemClick(mKey, item);
     }
 

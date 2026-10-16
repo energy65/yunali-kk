@@ -2,6 +2,7 @@ package com.fongmi.android.tv.ui.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,33 +15,41 @@ import androidx.viewbinding.ViewBinding;
 
 import com.fongmi.android.tv.Product;
 import com.fongmi.android.tv.api.config.VodConfig;
+import com.fongmi.android.tv.bean.Filter;
 import com.fongmi.android.tv.bean.Result;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.bean.Style;
 import com.fongmi.android.tv.bean.Value;
 import com.fongmi.android.tv.bean.Vod;
 import com.fongmi.android.tv.databinding.FragmentTypeBinding;
+import com.fongmi.android.tv.databinding.ViewFilterBinding;
 import com.fongmi.android.tv.model.SiteViewModel;
 import com.fongmi.android.tv.ui.activity.SearchActivity;
 import com.fongmi.android.tv.ui.activity.VideoActivity;
+import com.fongmi.android.tv.ui.adapter.ValueAdapter;
 import com.fongmi.android.tv.ui.adapter.VodAdapter;
+import com.fongmi.android.tv.impl.FilterListener;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 import com.fongmi.android.tv.ui.custom.CustomScroller;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.ResUtil;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
-public class TypeFragment extends BaseFragment implements CustomScroller.Callback, VodAdapter.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class TypeFragment extends BaseFragment implements CustomScroller.Callback, VodAdapter.OnClickListener, SwipeRefreshLayout.OnRefreshListener, FilterListener {
 
     private HashMap<String, String> mExtends;
     private FragmentTypeBinding mBinding;
     private CustomScroller mScroller;
     private SiteViewModel mViewModel;
     private VodAdapter mAdapter;
+    private List<Filter> mFilters;
 
-    public static TypeFragment newInstance(String key, String typeId, Style style, HashMap<String, String> extend, boolean folder, int y) {
+    public static TypeFragment newInstance(String key, String typeId, Style style, HashMap<String, String> extend, ArrayList<Filter> filters, boolean folder, int y) {
         Bundle args = new Bundle();
         args.putInt("y", y);
         args.putString("key", key);
@@ -48,6 +57,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         args.putBoolean("folder", folder);
         args.putParcelable("style", style);
         args.putSerializable("extend", extend);
+        args.putParcelableArrayList("filters", filters);
         TypeFragment fragment = new TypeFragment();
         fragment.setArguments(args);
         return fragment;
@@ -85,6 +95,11 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         return VodConfig.get().getSite(getKey());
     }
 
+    private List<Filter> getFilters() {
+        List<Filter> filters = getArguments().getParcelableArrayList("filters");
+        return filters == null ? Collections.emptyList() : filters;
+    }
+
     private FolderFragment getParent() {
         return (FolderFragment) getParentFragment();
     }
@@ -99,8 +114,10 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         mBinding.progressLayout.showProgress();
         mScroller = new CustomScroller(this);
         mExtends = getExtend();
+        mFilters = getFilters();
         setRecyclerView();
         setViewModel();
+        setFilters();
         getVideo();
     }
 
@@ -125,6 +142,19 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         mViewModel = new ViewModelProvider(this).get(SiteViewModel.class);
         mViewModel.getResult().observe(getViewLifecycleOwner(), this::setAdapter);
         mViewModel.getAction().observe(getViewLifecycleOwner(), result -> Notify.show(result.getMsg()));
+    }
+
+    private void setFilters() {
+        for (Filter filter : mFilters) {
+            ViewFilterBinding binding = ViewFilterBinding.inflate(getLayoutInflater(), mBinding.filter, false);
+            binding.name.setText(filter.getName());
+            binding.recycler.setHasFixedSize(true);
+            binding.recycler.setItemAnimator(null);
+            binding.recycler.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false));
+            binding.recycler.setAdapter(new ValueAdapter(this, filter));
+            mBinding.filter.addView(binding.getRoot());
+        }
+        mBinding.filter.setVisibility(mFilters.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
     private void getHome() {
@@ -170,6 +200,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         mBinding.recycler.smoothScrollToPosition(0);
     }
 
+    @Override
     public void setFilter(String key, Value value) {
         if (value.isSelected()) mExtends.put(key, value.getV());
         else mExtends.remove(key);

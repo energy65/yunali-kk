@@ -156,7 +156,9 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         ViewFilterBinding binding = ViewFilterBinding.inflate(getLayoutInflater(), mBinding.filter, false);
         binding.name.setText(filter.getName());
         binding.recycler.setHasFixedSize(true);
-        binding.recycler.setHorizontalSpacing(ResUtil.dp2px(8));
+        binding.recycler.setItemAnimator(null);
+        binding.recycler.setNumRows(1);
+        binding.recycler.setHorizontalSpacing(ResUtil.dp2px(10));
         binding.recycler.setRowHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         binding.recycler.setAdapter(new FilterAdapter(filter, this::setClick));
         return binding.getRoot();

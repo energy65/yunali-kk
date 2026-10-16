@@ -18,6 +18,7 @@ import com.fongmi.android.tv.databinding.FragmentFolderBinding;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -64,7 +65,7 @@ public class FolderFragment extends BaseFragment {
     @Override
     protected void initView() {
         mType = getType();
-        getChildFragmentManager().beginTransaction().replace(R.id.container, TypeFragment.newInstance(getKey(), mType.getTypeId(), mType.getStyle(), getExtend(), mType.isFolder(), getY())).commit();
+        getChildFragmentManager().beginTransaction().replace(R.id.container, TypeFragment.newInstance(getKey(), mType.getTypeId(), mType.getStyle(), getExtend(), new ArrayList<>(mType.getFilters()), mType.isFolder(), getY())).commit();
     }
 
     private HashMap<String, String> getExtend() {
@@ -81,7 +82,7 @@ public class FolderFragment extends BaseFragment {
     }
 
     public void openFolder(String typeId, HashMap<String, String> extend) {
-        TypeFragment next = TypeFragment.newInstance(getKey(), typeId, mType.getStyle(), extend, mType.isFolder(), getY());
+        TypeFragment next = TypeFragment.newInstance(getKey(), typeId, mType.getStyle(), extend, new ArrayList<>(mType.getFilters()), mType.isFolder(), getY());
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         Optional.ofNullable(getChild()).ifPresent(ft::hide);
         ft.add(R.id.container, next);
