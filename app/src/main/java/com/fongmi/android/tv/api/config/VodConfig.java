@@ -13,6 +13,7 @@ import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.event.ConfigEvent;
 import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.impl.Callback;
+import com.fongmi.android.tv.utils.Task;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.github.catvod.bean.Doh;
 import com.github.catvod.bean.Header;
@@ -295,7 +296,7 @@ public class VodConfig extends BaseConfig {
         home = site;
         home.setSelected(true);
         config.setHome(home.getKey());
-        if (save) config.save();
+        if (save) Task.execute(config::save);
         getSites().forEach(item -> item.setSelected(home));
     }
 

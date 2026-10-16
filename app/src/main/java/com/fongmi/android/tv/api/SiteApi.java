@@ -15,6 +15,7 @@ import com.fongmi.android.tv.bean.Vod;
 import com.fongmi.android.tv.player.extractor.Source;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.fongmi.android.tv.utils.Sniffer;
+import com.fongmi.android.tv.utils.Task;
 import com.github.catvod.crawler.Spider;
 import com.github.catvod.crawler.SpiderDebug;
 import com.github.catvod.net.OkHttp;
@@ -28,6 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import okhttp3.Call;
 import okhttp3.Response;
@@ -48,6 +52,16 @@ public class SiteApi {
         return site.getType() == 3;
     }
 
+    private static String await(Future<String> future) throws Exception {
+        try {
+            return future.get();
+        } catch (ExecutionException e) {
+            Throwable cause = e.getCause();
+            if (cause instanceof Exception) throw (Exception) cause;
+            throw e;
+        }
+    }
+
     private static String ac(int type) {
         return type == 0 ? "videolist" : "detail";
     }
@@ -57,8 +71,9 @@ public class SiteApi {
         if (isSpider(site)) {
             Spider spider = site.recent().spider();
             boolean crash = Prefers.getBoolean("crash");
-            String home = crash ? "" : spider.homeContent(true);
+            Future<String> future = crash ? null : Task.largeExecutor().submit((Callable<String>) () -> spider.homeContent(true));
             String video = crash ? "" : spider.homeVideoContent();
+            String home = crash ? "" : await(future);
             Prefers.put("crash", false);
             SpiderDebug.log("home", home);
             SpiderDebug.log("homeVideo", video);

@@ -12,6 +12,7 @@ import androidx.viewbinding.ViewBinding;
 
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.api.config.VodConfig;
+import com.fongmi.android.tv.api.loader.BaseLoader;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.databinding.DialogSiteBinding;
 import com.fongmi.android.tv.impl.SiteListener;
@@ -19,6 +20,7 @@ import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.adapter.SiteAdapter;
 import com.fongmi.android.tv.ui.custom.SpaceItemDecoration;
 import com.fongmi.android.tv.utils.Notify;
+import com.fongmi.android.tv.utils.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -99,6 +101,16 @@ public class SiteDialog extends BaseAlertDialog implements SiteAdapter.OnClickLi
         setMode();
         initSearch();
         initTags();
+        preheatJars();
+    }
+
+    private void preheatJars() {
+        Set<String> jars = new LinkedHashSet<>();
+        for (Site site : VodConfig.get().getSites()) {
+            if (site.getType() != 3 || site.getJar().isEmpty()) continue;
+            String jar = site.getJar();
+            if (jars.add(jar)) Task.submitLarge(() -> BaseLoader.get().parseJar(jar, false));
+        }
     }
 
     private void initSearch() {
