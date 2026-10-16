@@ -200,7 +200,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     private void setAdapter(Result result) {
         Cache.clear();
         Cache.put(result);
-        if (!result.getTypes().isEmpty()) mHomeCache.put(VodConfig.getHome().getKey(), result);
+        if (!result.getTypes().isEmpty()) mHomeCache.put(VodConfig.get().getHome().getKey(), result);
         mAdapter.addAll((mResult = result).getTypes());
         mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
     }
@@ -278,7 +278,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     }
 
     private void homeContent() {
-        Result cached = mHomeCache.get(VodConfig.getHome().getKey());
+        Result cached = mHomeCache.get(VodConfig.get().getHome().getKey());
         if (cached != null && !cached.getTypes().isEmpty()) {
             setAdapter(cached);
         } else {
