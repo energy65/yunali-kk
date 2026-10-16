@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.api.config.LiveConfig;
 import com.fongmi.android.tv.api.config.VodConfig;
 import com.fongmi.android.tv.api.config.WallConfig;
+import com.fongmi.android.tv.bean.Cache;
 import com.fongmi.android.tv.bean.Class;
 import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.bean.Result;
@@ -53,7 +53,6 @@ import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.ImgUtil;
-import com.fongmi.android.tv.utils.KeyUtil;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.PermissionUtil;
 import com.fongmi.android.tv.utils.ResUtil;
@@ -196,6 +195,8 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     }
 
     private void setAdapter(Result result) {
+        Cache.clear();
+        Cache.put(result);
         mAdapter.addAll((mResult = result).getTypes());
         mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
     }
@@ -287,23 +288,20 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
         });
     }
 
-    private boolean isFilterVisible() {
-        return Optional.ofNullable(getType()).map(Class::getFilter).orElse(false);
-    }
-
-    private void updateFilter() {
-        Optional.ofNullable(getType()).ifPresent(this::updateFilter);
-    }
-
-    private void updateFilter(Class item) {
-        item.setFilter(!item.getFilter());
-        getFragment().toggleFilter(item.getFilter());
-        mAdapter.notifyItemRangeChanged(mAdapter.indexOf(item), 1);
+    @Override
+    public void onItemClick(Class item) {
     }
 
     @Override
-    public void closeFilter() {
-        if (isFilterVisible()) updateFilter();
+    public void onRefresh(Class item) {
+        getFragment().onRefresh();
+    }
+
+    @Override
+    protected void onBackInvoked() {
+        if (mAdapter.getItemCount() > 0 && getFragment().canBack()) getFragment().goBack();
+        else if (PlaybackService.isRunning()) moveTaskToBack(true);
+        else super.onBackInvoked();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -369,30 +367,6 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
                 Notify.show(msg);
             }
         };
-    }
-
-    @Override
-    public void onItemClick(Class item) {
-        updateFilter(item);
-    }
-
-    @Override
-    public void onRefresh(Class item) {
-        getFragment().onRefresh();
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (KeyUtil.isMenuKey(event)) updateFilter();
-        return super.dispatchKeyEvent(event);
-    }
-
-    @Override
-    protected void onBackInvoked() {
-        if (isFilterVisible()) updateFilter();
-        else if (mAdapter.getItemCount() > 0 && getFragment().canBack()) getFragment().goBack();
-        else if (PlaybackService.isRunning()) moveTaskToBack(true);
-        else super.onBackInvoked();
     }
 
     @Override

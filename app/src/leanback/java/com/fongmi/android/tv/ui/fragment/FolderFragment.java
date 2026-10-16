@@ -15,7 +15,6 @@ import com.fongmi.android.tv.bean.Class;
 import com.fongmi.android.tv.bean.Filter;
 import com.fongmi.android.tv.databinding.FragmentFolderBinding;
 import com.fongmi.android.tv.setting.Setting;
-import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 
 import java.util.HashMap;
@@ -48,10 +47,6 @@ public class FolderFragment extends BaseFragment {
         return (TypeFragment) getChildFragmentManager().findFragmentById(R.id.container);
     }
 
-    private BaseActivity getParent() {
-        return (BaseActivity) getActivity();
-    }
-
     @Override
     protected ViewBinding getBinding(@NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
         return mBinding = FragmentFolderBinding.inflate(inflater, container, false);
@@ -73,15 +68,10 @@ public class FolderFragment extends BaseFragment {
     public void openFolder(String typeId, HashMap<String, String> extend) {
         TypeFragment next = TypeFragment.newInstance(getKey(), typeId, mType.getStyle(), extend, mType.isFolder());
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        Optional.ofNullable(getParent()).ifPresent(BaseActivity::closeFilter);
         Optional.ofNullable(getChild()).ifPresent(ft::hide);
         ft.add(R.id.container, next);
         ft.addToBackStack(null);
         ft.commit();
-    }
-
-    public void toggleFilter(boolean visible) {
-        Optional.ofNullable(getChild()).ifPresent(f -> f.toggleFilter(visible));
     }
 
     public void onRefresh() {

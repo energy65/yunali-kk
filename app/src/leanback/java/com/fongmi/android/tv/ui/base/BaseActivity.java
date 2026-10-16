@@ -115,9 +115,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         finish();
     }
 
-    public void closeFilter() {
-    }
-
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);

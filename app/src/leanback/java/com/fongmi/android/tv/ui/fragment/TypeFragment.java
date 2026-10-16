@@ -3,13 +3,12 @@ package com.fongmi.android.tv.ui.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.ArrayObjectAdapter;
-import androidx.leanback.widget.FocusHighlight;
-import androidx.leanback.widget.HorizontalGridView;
 import androidx.leanback.widget.ItemBridgeAdapter;
 import androidx.leanback.widget.ListRow;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,17 +26,18 @@ import com.fongmi.android.tv.bean.Style;
 import com.fongmi.android.tv.bean.Value;
 import com.fongmi.android.tv.bean.Vod;
 import com.fongmi.android.tv.databinding.FragmentTypeBinding;
+import com.fongmi.android.tv.databinding.ViewFilterBinding;
 import com.fongmi.android.tv.model.SiteViewModel;
 import com.fongmi.android.tv.ui.activity.CollectActivity;
 import com.fongmi.android.tv.ui.activity.HomeActivity;
 import com.fongmi.android.tv.ui.activity.VodActivity;
 import com.fongmi.android.tv.ui.activity.VideoActivity;
+import com.fongmi.android.tv.ui.adapter.FilterAdapter;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 import com.fongmi.android.tv.ui.custom.CustomRowPresenter;
 import com.fongmi.android.tv.ui.custom.CustomScroller;
 import com.fongmi.android.tv.ui.custom.CustomSelector;
-import com.fongmi.android.tv.ui.presenter.FilterPresenter;
 import com.fongmi.android.tv.ui.presenter.VodPresenter;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.ResUtil;
@@ -57,7 +57,6 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
     private SiteViewModel mViewModel;
     private List<Filter> mFilters;
     private boolean headerVisible;
-    private boolean filterVisible;
 
     public static TypeFragment newInstance(String key, String typeId, Style style, HashMap<String, String> extend, boolean folder) {
         Bundle args = new Bundle();
@@ -134,7 +133,6 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         CustomSelector selector = new CustomSelector();
         selector.addPresenter(Vod.class, new VodPresenter(this, Style.list()));
         selector.addPresenter(ListRow.class, new CustomRowPresenter(16), VodPresenter.class);
-        selector.addPresenter(ListRow.class, new CustomRowPresenter(8, FocusHighlight.ZOOM_FACTOR_NONE, HorizontalGridView.FOCUS_SCROLL_ALIGNED), FilterPresenter.class);
         mBinding.recycler.setAdapter(new ItemBridgeAdapter(mAdapter = new ArrayObjectAdapter(selector)));
         mBinding.recycler.setHeader(getActivity(), R.id.recycler);
         mBinding.recycler.setVerticalSpacing(ResUtil.dp2px(16));
@@ -148,15 +146,23 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
 
     private void setFilters() {
         for (Filter filter : mFilters) {
-            if (mExtends.containsKey(filter.getKey())) {
-                filter.setSelected(mExtends.get(filter.getKey()));
-            }
+            if (mExtends.containsKey(filter.getKey())) filter.setSelected(mExtends.get(filter.getKey()));
+            mBinding.filter.addView(getFilterView(filter));
         }
+        mBinding.filter.setVisibility(mFilters.isEmpty() ? View.GONE : View.VISIBLE);
     }
 
-    private void setClick(ArrayObjectAdapter adapter, String key, Value item) {
-        for (int i = 0; i < adapter.size(); i++) ((Value) adapter.get(i)).setSelected(item);
-        adapter.notifyArrayItemRangeChanged(0, adapter.size());
+    private View getFilterView(Filter filter) {
+        ViewFilterBinding binding = ViewFilterBinding.inflate(getLayoutInflater(), mBinding.filter, false);
+        binding.name.setText(filter.getName());
+        binding.recycler.setHasFixedSize(true);
+        binding.recycler.setHorizontalSpacing(ResUtil.dp2px(8));
+        binding.recycler.setRowHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        binding.recycler.setAdapter(new FilterAdapter(filter, this::setClick));
+        return binding.getRoot();
+    }
+
+    private void setClick(String key, Value item) {
         if (item.isSelected()) mExtends.put(key, item.getV());
         else mExtends.remove(key);
         Setting.putSiteFilter(getKey(), getTypeId(), mExtends);
@@ -165,7 +171,7 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
 
     private void getVideo() {
         mLast = null;
-        checkFilter();
+        clearVideo();
         mScroller.reset();
         if (isHome()) setAdapter(getHomeResult());
         else getVideo(getTypeId(), "1");
@@ -225,38 +231,11 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         mAdapter.addAll(mAdapter.size(), rows);
     }
 
-    private ListRow getRow(Filter filter) {
-        FilterPresenter presenter = new FilterPresenter(filter.getKey());
-        ArrayObjectAdapter adapter = new ArrayObjectAdapter(presenter);
-        presenter.setOnClickListener((key, item) -> setClick(adapter, key, item));
-        adapter.setItems(filter.getValue(), null);
-        return new ListRow(adapter);
-    }
-
-    private void showFilter() {
-        List<ListRow> rows = new ArrayList<>();
-        for (Filter filter : mFilters) rows.add(getRow(filter));
-        mBinding.recycler.postDelayed(() -> mBinding.recycler.scrollToPosition(0), 48);
-        mAdapter.addAll(0, rows);
-    }
-
-    private void hideFilter() {
-        mAdapter.removeItems(0, mFilters.size());
-    }
-
-    public void toggleFilter(boolean visible) {
-        if (mFilters.isEmpty()) return;
-        this.filterVisible = visible;
-        if (visible) showFilter();
-        else hideFilter();
-    }
-
-    private void checkFilter() {
-        int adapterSize = mAdapter.size();
-        int filterSize = filterVisible ? mFilters.size() : 0;
-        if (adapterSize > filterSize) mAdapter.removeItems(filterSize, mAdapter.size() - filterSize);
-        if (adapterSize == 0) mBinding.progressLayout.showProgress();
-        else mBinding.swipeLayout.setRefreshing(true);
+    private void clearVideo() {
+        boolean hasVideo = mAdapter.size() > 0;
+        if (hasVideo) mAdapter.removeItems(0, mAdapter.size());
+        if (hasVideo) mBinding.swipeLayout.setRefreshing(true);
+        else mBinding.progressLayout.showProgress();
     }
 
     public void onRefresh() {

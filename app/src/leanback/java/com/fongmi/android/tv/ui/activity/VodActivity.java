@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,7 @@ import com.fongmi.android.tv.App;
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.api.config.LiveConfig;
 import com.fongmi.android.tv.api.config.VodConfig;
+import com.fongmi.android.tv.bean.Cache;
 import com.fongmi.android.tv.bean.Class;
 import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.bean.Result;
@@ -37,7 +37,6 @@ import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.ImgUtil;
-import com.fongmi.android.tv.utils.KeyUtil;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.ResUtil;
 
@@ -60,6 +59,7 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
 
     public static void start(Activity activity, String key, Result result) {
         if (result == null || result.getTypes().isEmpty()) return;
+        Cache.put(result);
         Intent intent = new Intent(activity, VodActivity.class);
         intent.putExtra("key", key);
         intent.putExtra("result", result);
@@ -205,24 +205,6 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
         }
     };
 
-    private boolean isFilterVisible() {
-        return Optional.ofNullable(getType()).map(Class::getFilter).orElse(false);
-    }
-
-    private void updateFilter() {
-        Optional.ofNullable(getType()).ifPresent(this::updateFilter);
-    }
-
-    private void updateFilter(Class item) {
-        item.setFilter(!item.getFilter());
-        getFragment().toggleFilter(item.getFilter());
-        mAdapter.notifyItemRangeChanged(mAdapter.indexOf(item), 1);
-    }
-
-    public void closeFilter() {
-        if (isFilterVisible()) updateFilter();
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRefreshEvent(RefreshEvent event) {
         if (event.getType() == RefreshEvent.Type.CATEGORY) getFragment().onRefresh();
@@ -230,7 +212,6 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
 
     @Override
     public void onItemClick(Class item) {
-        updateFilter(item);
     }
 
     @Override
@@ -239,15 +220,8 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if (KeyUtil.isMenuKey(event)) updateFilter();
-        return super.dispatchKeyEvent(event);
-    }
-
-    @Override
     protected void onBackInvoked() {
-        if (isFilterVisible()) updateFilter();
-        else if (mAdapter.getItemCount() > 0 && getFragment().canBack()) getFragment().goBack();
+        if (mAdapter.getItemCount() > 0 && getFragment().canBack()) getFragment().goBack();
         else super.onBackInvoked();
     }
 
