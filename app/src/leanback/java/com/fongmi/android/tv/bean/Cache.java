@@ -21,7 +21,7 @@ public class Cache {
         cache = new HashMap<>();
     }
 
-    public void put(Result result) {
+    public static void put(Result result) {
         if (result == null) return;
         result.getTypes().forEach(type -> get().cache.put(type.getTypeId(), type.getFilters()));
     }
