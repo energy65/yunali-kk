@@ -52,4 +52,9 @@
         <item name="titleTextColor">@color/white</item>
     </style>
 
+    <style name="ToolbarTheme" parent="ThemeOverlay.Material3.Toolbar">
+        <item name="selectableItemBackground">@drawable/selector_focused_red</item>
+        <item name="selectableItemBackgroundBorderless">@drawable/selector_focused_red</item>
+    </style>
+
 </resources>
