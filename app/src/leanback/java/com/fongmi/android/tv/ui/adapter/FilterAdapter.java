@@ -57,7 +57,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         holder.binding.text.setText(item.getN());
         holder.binding.text.setSelected(item.isSelected());
         holder.binding.text.setOnClickListener(v -> select(item));
-        holder.binding.text.setOnKeyListener((v, event) -> {
+        holder.binding.text.setOnKeyListener((v, keyCode, event) -> {
             if (mControl == null || !KeyUtil.isActionDown(event)) return false;
             if (KeyUtil.isBackKey(event)) {
                 mControl.onBack();
