@@ -50,7 +50,7 @@
             android:paddingStart="24dp"
             android:paddingTop="0dp"
             android:paddingEnd="24dp"
-            android:paddingBottom="12dp"
+            android:paddingBottom="6dp"
             app:focusOutEnd="false"
             app:focusOutFront="false" />
 

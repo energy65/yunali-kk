@@ -4,16 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:minHeight="40dp"
+    android:minHeight="34dp"
     android:orientation="horizontal">
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="12dp"
         android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
     <androidx.leanback.widget.HorizontalGridView
         android:id="@+id/recycler"
