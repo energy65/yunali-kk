@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fongmi.android.tv.bean.Filter;
 import com.fongmi.android.tv.bean.Value;
 import com.fongmi.android.tv.databinding.AdapterFilterBinding;
+import com.fongmi.android.tv.utils.KeyUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     private final OnClickListener mListener;
     private final String mKey;
     private final List<Value> mItems;
+    private OnControlListener mControl;
 
     public static FilterAdapter create(Filter filter, OnClickListener listener) {
         return new FilterAdapter(filter, listener);
@@ -27,6 +29,11 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         mListener = listener;
         mKey = filter.getKey();
         mItems = new ArrayList<>(filter.getValue());
+    }
+
+    public FilterAdapter control(OnControlListener control) {
+        mControl = control;
+        return this;
     }
 
     public String getKey() {
@@ -50,6 +57,15 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
         holder.binding.text.setText(item.getN());
         holder.binding.text.setSelected(item.isSelected());
         holder.binding.text.setOnClickListener(v -> select(item));
+        holder.binding.text.setOnKeyListener((v, event) -> {
+            if (mControl == null || !KeyUtil.isActionDown(event)) return false;
+            if (KeyUtil.isBackKey(event)) {
+                mControl.onBack();
+                return true;
+            }
+            if (KeyUtil.isUpKey(event)) mControl.onUp();
+            return false;
+        });
     }
 
     private void select(Value item) {
@@ -61,6 +77,13 @@ public class FilterAdapter extends RecyclerView.Adapter<FilterAdapter.ViewHolder
     public interface OnClickListener {
 
         void onItemClick(String key, Value item);
+    }
+
+    public interface OnControlListener {
+
+        void onBack();
+
+        void onUp();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

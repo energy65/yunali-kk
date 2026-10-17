@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,6 @@ import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.impl.Callback;
 import com.fongmi.android.tv.impl.ConfigListener;
-import com.fongmi.android.tv.impl.SiteListener;
 import com.fongmi.android.tv.model.SiteViewModel;
 import com.fongmi.android.tv.player.extractor.Source;
 import com.fongmi.android.tv.server.Server;
@@ -47,12 +47,14 @@ import com.fongmi.android.tv.service.DLNARendererService;
 import com.fongmi.android.tv.service.PlaybackService;
 import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
+import com.fongmi.android.tv.ui.custom.CustomTitleView;
 import com.fongmi.android.tv.ui.dialog.ConfigDialog;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.ImgUtil;
+import com.fongmi.android.tv.utils.KeyUtil;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.PermissionUtil;
 import com.fongmi.android.tv.utils.ResUtil;
@@ -68,7 +70,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickListener, ConfigListener, SiteListener {
+public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickListener, ConfigListener, CustomTitleView.Listener {
 
     private ActivityHomeBinding mBinding;
     private SiteViewModel mViewModel;
@@ -130,7 +132,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     @Override
     protected void initEvent() {
         mBinding.logo.setOnClickListener(this::onLogo);
-        mBinding.title.setOnClickListener(this::onSite);
+        mBinding.title.setListener(this);
         mBinding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
         mBinding.navigation.setOnItemSelectedListener(this::onNavigationItemSelected);
         mBinding.pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -171,6 +173,8 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
         List<String> items = Arrays.asList(getHome().getName(), getConfig().getName(), getString(R.string.app_name));
         Optional<String> optional = items.stream().filter(s -> !TextUtils.isEmpty(s)).findFirst();
         optional.ifPresent(s -> mBinding.title.setText(s));
+        mBinding.title.setSelected(true);
+        App.post(() -> mBinding.title.setFocusable(true), 500);
         ImgUtil.logo(mBinding.logo);
     }
 
@@ -223,8 +227,24 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
         VodConfig.get().init().load(getCallback());
     }
 
-    private void onSite(View view) {
+    @Override
+    public void showDialog() {
         SiteDialog.create().show(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        homeContent();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (KeyUtil.isMenuKey(event)) showDialog();
+        if (KeyUtil.isActionDown(event) && KeyUtil.isDownKey(event) && getCurrentFocus() == mBinding.title) {
+            View child = mBinding.recycler.getChildAt(0);
+            return child != null && child.requestFocus();
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     private boolean onMenuItemClick(MenuItem item) {

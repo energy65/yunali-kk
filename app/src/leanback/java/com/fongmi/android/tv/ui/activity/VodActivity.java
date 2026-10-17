@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +31,14 @@ import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.databinding.ActivityVodBinding;
 import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.impl.Callback;
-import com.fongmi.android.tv.impl.SiteListener;
 import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
+import com.fongmi.android.tv.ui.custom.CustomTitleView;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.ImgUtil;
+import com.fongmi.android.tv.utils.KeyUtil;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.ResUtil;
 
@@ -47,7 +49,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class VodActivity extends BaseActivity implements TypeAdapter.OnClickListener, SiteListener {
+public class VodActivity extends BaseActivity implements TypeAdapter.OnClickListener, CustomTitleView.Listener {
 
     private ActivityVodBinding mBinding;
     private TypeAdapter mAdapter;
@@ -107,7 +109,7 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
     @Override
     protected void initEvent() {
         mBinding.logo.setOnClickListener(this::onLogo);
-        mBinding.title.setOnClickListener(this::onSite);
+        mBinding.title.setListener(this);
         mBinding.toolbar.setOnMenuItemClickListener(this::onMenuItemClick);
         mBinding.navigation.setOnItemSelectedListener(this::onNavigationItemSelected);
         mBinding.pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -129,6 +131,8 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
         List<String> items = Arrays.asList(getHome().getName(), getConfig().getName(), getString(R.string.app_name));
         Optional<String> optional = items.stream().filter(s -> !TextUtils.isEmpty(s)).findFirst();
         optional.ifPresent(s -> mBinding.title.setText(s));
+        mBinding.title.setSelected(true);
+        App.post(() -> mBinding.title.setFocusable(true), 500);
         ImgUtil.logo(mBinding.logo);
     }
 
@@ -137,6 +141,26 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
         mBinding.navigation.getMenu().findItem(R.id.setting).setVisible(true);
         mBinding.navigation.getMenu().findItem(R.id.live).setVisible(LiveConfig.hasUrl());
         mBinding.navigation.setSelectedItemId(R.id.vod);
+    }
+
+    @Override
+    public void showDialog() {
+        SiteDialog.create().show(this);
+    }
+
+    @Override
+    public void onRefresh() {
+        getFragment().onRefresh();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (KeyUtil.isMenuKey(event)) showDialog();
+        if (KeyUtil.isActionDown(event) && KeyUtil.isDownKey(event) && getCurrentFocus() == mBinding.title) {
+            View child = mBinding.recycler.getChildAt(0);
+            return child != null && child.requestFocus();
+        }
+        return super.dispatchKeyEvent(event);
     }
 
     private void onLogo(View view) {
@@ -151,10 +175,6 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
                 Notify.show(msg);
             }
         });
-    }
-
-    private void onSite(View view) {
-        SiteDialog.create().show(this);
     }
 
     @Override

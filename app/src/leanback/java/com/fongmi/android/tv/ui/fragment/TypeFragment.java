@@ -160,8 +160,25 @@ public class TypeFragment extends BaseFragment implements CustomScroller.Callbac
         binding.recycler.setNumRows(1);
         binding.recycler.setHorizontalSpacing(ResUtil.dp2px(10));
         binding.recycler.setRowHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        binding.recycler.setAdapter(new FilterAdapter(filter, this::setClick));
+        binding.recycler.setAdapter(new FilterAdapter(filter, this::setClick).control(new FilterAdapter.OnControlListener() {
+            @Override
+            public void onBack() {
+                focusTop();
+            }
+
+            @Override
+            public void onUp() {
+                mBinding.recycler.showHeader();
+            }
+        }));
         return binding.getRoot();
+    }
+
+    private void focusTop() {
+        mBinding.recycler.showHeader();
+        mBinding.recycler.scrollToPosition(0);
+        View tabs = requireActivity().findViewById(R.id.recycler);
+        if (tabs != null) tabs.post(tabs::requestFocus);
     }
 
     private void setClick(String key, Value item) {
