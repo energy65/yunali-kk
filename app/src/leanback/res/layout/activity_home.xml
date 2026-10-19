@@ -62,11 +62,18 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.fongmi.android.tv.ui.custom.CustomViewPager
-        android:id="@+id/pager"
+    <com.fongmi.android.tv.ui.custom.ProgressLayout
+        android:id="@+id/progressLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <com.fongmi.android.tv.ui.custom.CustomViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.fongmi.android.tv.ui.custom.ProgressLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"

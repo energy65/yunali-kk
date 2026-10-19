@@ -60,6 +60,7 @@ import com.fongmi.android.tv.utils.PermissionUtil;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.fongmi.android.tv.utils.UrlUtil;
 import com.github.catvod.net.OkHttp;
+import com.github.catvod.utils.Prefers;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -126,6 +127,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
         setPager();
         setNavigation();
         setViewModel();
+        mBinding.progressLayout.showProgress();
         initConfig();
     }
 
@@ -204,9 +206,38 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     private void setAdapter(Result result) {
         Cache.clear();
         Cache.put(result);
-        if (!result.getTypes().isEmpty()) mHomeCache.put(VodConfig.get().getHome().getKey(), result);
-        mAdapter.addAll((mResult = result).getTypes());
-        mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
+        if (result.getTypes().isEmpty()) {
+            if (mAdapter.getItemCount() == 0) mBinding.progressLayout.showEmpty();
+            return;
+        }
+        String key = getHome().getKey();
+        mHomeCache.put(key, result);
+        saveCache(key, result);
+        mBinding.progressLayout.showContent();
+        if (typeKey(mResult).equals(typeKey(result))) {
+            mResult = result;
+        } else {
+            mAdapter.addAll((mResult = result).getTypes());
+            mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
+        }
+    }
+
+    private String typeKey(Result result) {
+        StringBuilder builder = new StringBuilder();
+        for (Class type : result.getTypes()) builder.append(type.getTypeId()).append(',');
+        return builder.toString();
+    }
+
+    private String cacheKey(String key) {
+        return "home_" + VodConfig.get().getConfig().getId() + "_" + key;
+    }
+
+    private void saveCache(String key, Result result) {
+        Prefers.put(cacheKey(key), result.toString());
+    }
+
+    private Result loadCache(String key) {
+        return Result.fromJson(Prefers.getString(cacheKey(key)));
     }
 
     private void onChildSelected(@Nullable RecyclerView.ViewHolder child) {
@@ -298,10 +329,16 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     }
 
     private void homeContent() {
-        Result cached = mHomeCache.get(VodConfig.get().getHome().getKey());
-        if (cached != null && !cached.getTypes().isEmpty()) {
+        String key = getHome().getKey();
+        Result cached = mHomeCache.get(key);
+        if (cached == null || cached.getTypes().isEmpty()) {
+            cached = loadCache(key);
+            if (!cached.getTypes().isEmpty()) mHomeCache.put(key, cached);
+        }
+        if (!cached.getTypes().isEmpty()) {
             setAdapter(cached);
         } else {
+            mBinding.progressLayout.showProgress();
             mAdapter.addAll((mResult = Result.empty()).getTypes());
             mBinding.pager.setAdapter(new PageAdapter(getSupportFragmentManager()));
         }
