@@ -22,8 +22,6 @@ import java.util.List;
 @Entity(indices = @Index(value = {"url", "type"}, unique = true))
 public class Config {
 
-    private static final String DEFAULT_VOD_URL = "https://v4.gh-proxy.org/https://raw.githubusercontent.com/energy65/yl-zy/refs/heads/main/yl-cf.json";
-
     @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     private int id;
@@ -91,7 +89,7 @@ public class Config {
 
     public static Config vod() {
         Config item = AppDatabase.get().getConfigDao().findOne(0);
-        return item == null ? create(0, DEFAULT_VOD_URL) : item;
+        return item == null ? create(0) : item;
     }
 
     public static Config live() {
