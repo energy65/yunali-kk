@@ -104,7 +104,7 @@ androidComponents {
         def modeName = mode == 'mobile' ? '手机版' : 'TV版'
         def abiName = abi == 'arm64_v8a' ? '64位' : '32位'
         variant.outputs.each { output ->
-            output.outputFileName.set("源力影视_${modeName}_${abiName}.apk")
+            output.outputFileName.set("源力壳子_${modeName}_${abiName}.apk")
         }
     }
 }
