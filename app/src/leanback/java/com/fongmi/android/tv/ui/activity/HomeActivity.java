@@ -127,7 +127,8 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
         setPager();
         setNavigation();
         setViewModel();
-        mBinding.progressLayout.showProgress();
+        // 优化：先用缓存立即展示首页，不等网络加载
+        homeContent();
         initConfig();
     }
 

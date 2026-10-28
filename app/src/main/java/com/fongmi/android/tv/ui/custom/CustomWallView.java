@@ -47,7 +47,7 @@ public class CustomWallView extends FrameLayout implements DefaultLifecycleObser
             R.drawable.wallpaper_21, R.drawable.wallpaper_22, R.drawable.wallpaper_23, R.drawable.wallpaper_24
     };
     private static final int[] WALL_COLORS = {0,
-            0xFF4A148C, 0xFF6A1B9A, 0xFF880E4F, 0xFFC2185B,
+            0xFF1A237E, 0xFF6A1B9A, 0xFF880E4F, 0xFFC2185B,
             0xFFC62828, 0xFFE64A19, 0xFFEF6C00, 0xFFF9A825,
             0xFFFDD835, 0xFFC0CA33, 0xFF7CB342, 0xFF43A047,
             0xFF2E7D32, 0xFF00897B, 0xFF00ACC1, 0xFF039BE5,
