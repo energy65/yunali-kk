@@ -96,6 +96,7 @@ public class SettingFragment extends BaseFragment implements ConfigListener, The
         mBinding.themeColorText.setText(getThemeText());
         mBinding.dohText.setText(getDohList()[getDohIndex()]);
         mBinding.incognitoText.setText(Setting.getSwitch(Setting.isIncognito()));
+        mBinding.adultFilterText.setText(Setting.getSwitch(Setting.isAdultFilter()));
         mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.select_size))[PlayerSetting.getSize()]);
     }
 
@@ -127,6 +128,7 @@ public class SettingFragment extends BaseFragment implements ConfigListener, The
         mBinding.version.setOnClickListener(this::onVersion);
         mBinding.wall.setOnLongClickListener(this::onWallEdit);
         mBinding.incognito.setOnClickListener(this::setIncognito);
+        mBinding.adultFilter.setOnClickListener(this::setAdultFilter);
         mBinding.themeColor.setOnClickListener(this::onThemeColor);
         mBinding.wallDefault.setOnClickListener(this::setWallDefault);
         mBinding.wallRefresh.setOnClickListener(this::setWallRefresh);
@@ -252,6 +254,11 @@ public class SettingFragment extends BaseFragment implements ConfigListener, The
     private void setIncognito(View view) {
         Setting.putIncognito(!Setting.isIncognito());
         mBinding.incognitoText.setText(Setting.getSwitch(Setting.isIncognito()));
+    }
+
+    private void setAdultFilter(View view) {
+        Setting.putAdultFilter(!Setting.isAdultFilter());
+        mBinding.adultFilterText.setText(Setting.getSwitch(Setting.isAdultFilter()));
     }
 
     private void setSize(View view) {

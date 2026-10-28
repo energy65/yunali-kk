@@ -91,6 +91,7 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
     private void setOtherText() {
         mBinding.dohText.setText(getDohList()[getDohIndex()]);
         mBinding.incognitoText.setText(Setting.getSwitch(Setting.isIncognito()));
+        mBinding.adultFilterText.setText(Setting.getSwitch(Setting.isAdultFilter()));
         mBinding.sizeText.setText((size = ResUtil.getStringArray(R.array.select_size))[PlayerSetting.getSize()]);
     }
 
@@ -119,6 +120,7 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         mBinding.version.setOnClickListener(this::onVersion);
         mBinding.wall.setOnLongClickListener(this::onWallEdit);
         mBinding.incognito.setOnClickListener(this::setIncognito);
+        mBinding.adultFilter.setOnClickListener(this::setAdultFilter);
         mBinding.vodHome.setOnClickListener(this::onVodHome);
         mBinding.vodHistory.setOnClickListener(this::onVodHistory);
         mBinding.liveHome.setOnClickListener(this::onLiveHome);
@@ -249,6 +251,11 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
     private void setIncognito(View view) {
         Setting.putIncognito(!Setting.isIncognito());
         mBinding.incognitoText.setText(Setting.getSwitch(Setting.isIncognito()));
+    }
+
+    private void setAdultFilter(View view) {
+        Setting.putAdultFilter(!Setting.isAdultFilter());
+        mBinding.adultFilterText.setText(Setting.getSwitch(Setting.isAdultFilter()));
     }
 
     private void setSize(View view) {

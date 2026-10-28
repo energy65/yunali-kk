@@ -14,6 +14,7 @@ import com.fongmi.android.tv.gson.HeaderAdapter;
 import com.fongmi.android.tv.gson.MsgAdapter;
 import com.fongmi.android.tv.gson.UrlAdapter;
 import com.fongmi.android.tv.setting.DanmakuSetting;
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.utils.Util;
 import com.github.catvod.utils.Trans;
 import com.google.gson.annotations.JsonAdapter;
@@ -40,6 +41,8 @@ public class Result implements Parcelable {
     @ElementList(entry = "ty", required = false, inline = true)
     @SerializedName("class")
     private List<Class> types;
+
+    private transient boolean filtered;
 
     @Path("list")
     @ElementList(entry = "video", required = false, inline = true)
@@ -172,7 +175,21 @@ public class Result implements Parcelable {
     }
 
     public List<Class> getTypes() {
+        if (types != null && !filtered) {
+            if (Setting.isAdultFilter()) types = filterAdult(types);
+            filtered = true;
+        }
         return types == null ? Collections.emptyList() : types;
+    }
+
+    private List<Class> filterAdult(List<Class> input) {
+        List<Class> safe = new ArrayList<>();
+        for (Class type : input) if (!isAdult(type.getTypeName())) safe.add(type);
+        return safe;
+    }
+
+    private boolean isAdult(String name) {
+        return name != null && (name.contains("成人") || name.contains("伦理"));
     }
 
     public void setTypes(List<Class> types) {

@@ -136,6 +136,14 @@ public class Setting {
         Prefers.put("adblock", adblock);
     }
 
+    public static boolean isAdultFilter() {
+        return Prefers.getBoolean("adult_filter", true);
+    }
+
+    public static void putAdultFilter(boolean filter) {
+        Prefers.put("adult_filter", filter);
+    }
+
     public static boolean isZhuyin() {
         return Prefers.getBoolean("zhuyin");
     }

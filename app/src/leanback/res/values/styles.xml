@@ -2,6 +2,14 @@
 
     <style name="Theme.Base" parent="Theme.Material3.Dark.NoActionBar">
         <item name="colorPrimary">@color/white</item>
+        <item name="android:windowBackground">@color/dark_blue_bg</item>
+        <item name="android:colorBackground">@color/dark_blue_bg</item>
+        <item name="colorSurface">@color/dark_blue_surface</item>
+        <item name="colorSurfaceContainerLowest">@color/dark_blue_bg</item>
+        <item name="colorSurfaceContainerLow">@color/dark_blue_surface</item>
+        <item name="colorSurfaceContainer">@color/dark_blue_surface</item>
+        <item name="colorSurfaceContainerHigh">@color/dark_blue_surface</item>
+        <item name="colorSurfaceContainerHighest">@color/dark_blue_surface</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
@@ -10,14 +18,14 @@
 
     <style name="Theme.Splash" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/Theme.App</item>
-        <item name="windowSplashScreenBackground">#141218</item>
+        <item name="windowSplashScreenBackground">@color/dark_blue_bg</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
     </style>
 
     <style name="Theme.App" parent="Theme.Base" />
 
     <style name="Theme.Crash" parent="Theme.Base">
-        <item name="android:windowBackground">@color/grey_800</item>
+        <item name="android:windowBackground">@color/dark_blue_bg</item>
         <item name="android:windowDisablePreview">true</item>
     </style>
 
