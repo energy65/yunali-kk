@@ -4,6 +4,27 @@
         <item name="android:statusBarColor">@color/transparent</item>
         <item name="android:navigationBarColor">@color/transparent</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.App.Bold</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.App.Bold</item>
+    </style>
+
+    <style name="TextAppearance.App.Bold" parent="TextAppearance.Material3.BodyLarge">
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="Theme.Splash" parent="Theme.SplashScreen">

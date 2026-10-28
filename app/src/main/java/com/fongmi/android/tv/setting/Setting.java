@@ -14,7 +14,7 @@ import java.util.Set;
 public class Setting {
 
     private static final int MIN_WALL = 0;
-    private static final int MAX_WALL = 4;
+    private static final int MAX_WALL = 24;
     private static final int MIN_WALL_TYPE = 0;
     private static final int MAX_WALL_TYPE = 2;
     private static final int MIN_SITE_MODE = 0;

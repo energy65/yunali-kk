@@ -38,8 +38,22 @@ import pl.droidsonroids.gif.GifDrawable;
 
 public class CustomWallView extends FrameLayout implements DefaultLifecycleObserver {
 
-    private static final int[] WALL_PAPERS = {0, R.drawable.wallpaper_1, R.drawable.wallpaper_2, R.drawable.wallpaper_3, R.drawable.wallpaper_4};
-    private static final int[] WALL_COLORS = {0, 0xFF40C090, 0xFF4870E0, 0xFF48B0C0, 0xFF404040};
+    private static final int[] WALL_PAPERS = {0,
+            R.drawable.wallpaper_1, R.drawable.wallpaper_2, R.drawable.wallpaper_3, R.drawable.wallpaper_4,
+            R.drawable.wallpaper_5, R.drawable.wallpaper_6, R.drawable.wallpaper_7, R.drawable.wallpaper_8,
+            R.drawable.wallpaper_9, R.drawable.wallpaper_10, R.drawable.wallpaper_11, R.drawable.wallpaper_12,
+            R.drawable.wallpaper_13, R.drawable.wallpaper_14, R.drawable.wallpaper_15, R.drawable.wallpaper_16,
+            R.drawable.wallpaper_17, R.drawable.wallpaper_18, R.drawable.wallpaper_19, R.drawable.wallpaper_20,
+            R.drawable.wallpaper_21, R.drawable.wallpaper_22, R.drawable.wallpaper_23, R.drawable.wallpaper_24
+    };
+    private static final int[] WALL_COLORS = {0,
+            0xFF4A148C, 0xFF6A1B9A, 0xFF880E4F, 0xFFC2185B,
+            0xFFC62828, 0xFFE64A19, 0xFFEF6C00, 0xFFF9A825,
+            0xFFFDD835, 0xFFC0CA33, 0xFF7CB342, 0xFF43A047,
+            0xFF2E7D32, 0xFF00897B, 0xFF00ACC1, 0xFF039BE5,
+            0xFF1E88E5, 0xFF1565C0, 0xFF283593, 0xFF5E35B1,
+            0xFF37474F, 0xFF455A64, 0xFF5D4037, 0xFF212121
+    };
     private static final int TYPE_RES = 0;
     private static final int TYPE_GIF = 1;
     private static final int TYPE_VIDEO = 2;
