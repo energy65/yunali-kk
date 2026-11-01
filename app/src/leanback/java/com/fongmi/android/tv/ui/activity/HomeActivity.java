@@ -49,7 +49,6 @@ import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.custom.CustomTitleView;
 import com.fongmi.android.tv.ui.dialog.ConfigDialog;
-import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.ui.fragment.FolderFragment;
 import com.fongmi.android.tv.utils.FileChooser;
@@ -282,7 +281,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     private boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.keep) KeepActivity.start(this);
         else if (item.getItemId() == R.id.search) SearchActivity.start(this);
-        else if (item.getItemId() == R.id.history) HistoryDialog.create().vod().readOnly().show(this);
+        else if (item.getItemId() == R.id.history) HistoryActivity.start(this);
         return true;
     }
 

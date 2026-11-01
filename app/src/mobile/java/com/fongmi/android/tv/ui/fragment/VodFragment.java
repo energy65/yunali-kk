@@ -39,7 +39,6 @@ import com.fongmi.android.tv.ui.activity.SearchActivity;
 import com.fongmi.android.tv.ui.adapter.TypeAdapter;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 import com.fongmi.android.tv.ui.dialog.FilterDialog;
-import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.dialog.LinkDialog;
 import com.fongmi.android.tv.ui.dialog.ReceiveDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
@@ -172,7 +171,25 @@ public class VodFragment extends BaseFragment implements ConfigListener, SiteLis
     }
 
     private void onLogo(View view) {
-        HistoryDialog.create().vod().readOnly().show(this);
+        showProgress();
+        hideContent();
+        VodConfig.get().init().load(new Callback() {
+            @Override
+            public void success() {
+                showContent();
+                setTitle();
+                setLogo();
+                homeContent();
+            }
+
+            @Override
+            public void error(String msg) {
+                hideProgress();
+                showContent();
+                Notify.dismiss();
+                Notify.show(msg);
+            }
+        });
     }
 
     private void onSite(View view) {
