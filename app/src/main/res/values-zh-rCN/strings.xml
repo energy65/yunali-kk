@@ -148,6 +148,9 @@
     <string name="backup_success">备份成功</string>
     <string name="backup_fail">备份失败</string>
 
+    <!-- Config -->
+    <string name="config_refreshed">点播接口已刷新</string>
+
     <!-- Player -->
     <string name="player">播放核心</string>
     <string name="player_engine">播放引擎</string>

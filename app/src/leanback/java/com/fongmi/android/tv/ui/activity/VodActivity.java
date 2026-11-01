@@ -166,6 +166,7 @@ public class VodActivity extends BaseActivity implements TypeAdapter.OnClickList
         VodConfig.get().init().load(new Callback() {
             @Override
             public void success() {
+                Notify.show(getString(R.string.config_refreshed));
                 getActivity().finish();
             }
 

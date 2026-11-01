@@ -149,6 +149,9 @@
     <string name="backup_success">Backup successful</string>
     <string name="backup_fail">Backup failed</string>
 
+    <!-- Config -->
+    <string name="config_refreshed">VOD config refreshed</string>
+
     <!-- Player -->
     <string name="player">Player</string>
     <string name="player_engine">Engine</string>

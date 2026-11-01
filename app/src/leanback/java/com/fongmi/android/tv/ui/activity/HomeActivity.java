@@ -208,6 +208,7 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
         Cache.put(result);
         if (result.getTypes().isEmpty()) {
             if (mAdapter.getItemCount() == 0) mBinding.progressLayout.showEmpty();
+            else mBinding.progressLayout.showContent();
             return;
         }
         String key = getHome().getKey();
@@ -255,7 +256,22 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     };
 
     private void onLogo(View view) {
-        VodConfig.get().init().load(getCallback());
+        mBinding.progressLayout.showProgress();
+        VodConfig.get().init().load(new Callback() {
+            @Override
+            public void success() {
+                Notify.show(getString(R.string.config_refreshed));
+                checkAction(getIntent());
+                homeContent();
+            }
+
+            @Override
+            public void error(String msg) {
+                Notify.show(TextUtils.isEmpty(msg) ? getString(R.string.error_config_get) : msg);
+                checkAction(getIntent());
+                homeContent();
+            }
+        });
     }
 
     @Override
