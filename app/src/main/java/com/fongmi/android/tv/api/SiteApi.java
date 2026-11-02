@@ -13,6 +13,7 @@ import com.fongmi.android.tv.bean.Result;
 import com.fongmi.android.tv.bean.Site;
 import com.fongmi.android.tv.bean.Vod;
 import com.fongmi.android.tv.player.extractor.Source;
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.fongmi.android.tv.utils.Sniffer;
 import com.fongmi.android.tv.utils.Task;
@@ -81,7 +82,7 @@ public class SiteApi {
             List<Vod> list = Result.fromJson(video).getList();
             if (!list.isEmpty()) result.setList(list);
             setTypes(site, result);
-            return result;
+            return filterAdult(result);
         } else if (site.getType() == 4) {
             ArrayMap<String, String> params = new ArrayMap<>();
             params.put("filter", "true");
@@ -89,7 +90,7 @@ public class SiteApi {
             SpiderDebug.log("home", homeContent);
             Result result = Result.fromJson(homeContent);
             setTypes(site, result);
-            return result;
+            return filterAdult(result);
         } else {
             try (Response response = OkHttp.newCall(site.getApi(), site.getHeader()).execute()) {
                 String homeContent = response.body().string();
@@ -97,7 +98,7 @@ public class SiteApi {
                 Result result = Result.fromType(site.getType(), homeContent);
                 fetchPic(site, result);
                 setTypes(site, result);
-                return result;
+                return filterAdult(result);
             }
         }
     }
@@ -109,7 +110,7 @@ public class SiteApi {
         if (isSpider(site)) {
             String categoryContent = site.recent().spider().categoryContent(tid, page, filter, extend);
             SpiderDebug.log("category", categoryContent);
-            return Result.fromJson(categoryContent);
+            return filterAdult(Result.fromJson(categoryContent));
         } else {
             ArrayMap<String, String> params = new ArrayMap<>();
             if (site.getType() == 1 && !extend.isEmpty()) params.put("f", App.gson().toJson(extend));
@@ -119,7 +120,7 @@ public class SiteApi {
             params.put("pg", page);
             String categoryContent = call(site, params);
             SpiderDebug.log("category", categoryContent);
-            return Result.fromType(site.getType(), categoryContent);
+            return filterAdult(Result.fromType(site.getType(), categoryContent));
         }
     }
 
@@ -209,7 +210,7 @@ public class SiteApi {
             SpiderDebug.log("search", searchContent);
             Result result = Result.fromJson(searchContent);
             for (Vod vod : result.getList()) vod.setSite(site);
-            return result;
+            return filterAdult(result);
         } else {
             ArrayMap<String, String> params = new ArrayMap<>();
             params.put("wd", keyword);
@@ -220,7 +221,7 @@ public class SiteApi {
             SpiderDebug.log("search", searchContent);
             Result result = fetchPic(site, Result.fromType(site.getType(), searchContent));
             for (Vod vod : result.getList()) vod.setSite(site);
-            return result;
+            return filterAdult(result);
         }
     }
 
@@ -247,6 +248,13 @@ public class SiteApi {
             result.setList(Result.fromType(site.getType(), response.body().string()).getList());
             return result;
         }
+    }
+
+    private static Result filterAdult(@NonNull Result result) {
+        List<Vod> list = result.getList();
+        if (!Setting.isAdultFilter() || list.isEmpty()) return result;
+        list.removeIf(item -> Result.isAdult(item.getName()));
+        return result;
     }
 
     private static void setTypes(@NonNull Site site, @NonNull Result result) {

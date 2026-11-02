@@ -188,8 +188,21 @@ public class Result implements Parcelable {
         return safe;
     }
 
-    private boolean isAdult(String name) {
-        return name != null && (name.contains("成人") || name.contains("伦理"));
+    private static final String[] ADULT_KEYWORDS = {
+            "成人", "伦理", "倫理", "三级", "三級", "情色", "色情",
+            "麻豆", "果冻传媒", "蜜桃传媒", "天美传媒", "精东传媒", "星空传媒",
+            "无码", "無碼", "人妻", "熟女", "巨乳", "爆乳",
+            "女优", "女優", "强奸", "強姦", "乱伦", "亂倫",
+            "制服诱惑", "福利姬", "偷拍", "换脸",
+            "欲", "慾", "淫", "骚", "騷", "艳", "艷",
+            "诱惑", "誘惑", "勾引", "偷情", "一夜情", "饥渴", "飢渴",
+            "销魂", "銷魂", "春药", "春藥", "迷奸", "迷姦", "春色"
+    };
+
+    public static boolean isAdult(String name) {
+        if (name == null) return false;
+        for (String keyword : ADULT_KEYWORDS) if (name.contains(keyword)) return true;
+        return false;
     }
 
     public void setTypes(List<Class> types) {
