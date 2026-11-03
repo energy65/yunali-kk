@@ -24,7 +24,9 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.ViewHolder> {
 
     public void addAll(List<Class> items) {
         mItems.clear();
-        mItems.addAll(items);
+        for (Class item : items) {
+            if (!"猜你喜欢".equals(item.getTypeName())) mItems.add(item);
+        }
         notifyDataSetChanged();
     }
 
