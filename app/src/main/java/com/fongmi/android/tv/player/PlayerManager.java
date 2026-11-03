@@ -221,7 +221,7 @@ public class PlayerManager implements ParseCallback {
     }
 
     public int getEngine() {
-        return PlayerSetting.ENGINE_EXO;
+        return PlayerSetting.getEngine();
     }
 
     public void setEngine(int targetEngine) {
