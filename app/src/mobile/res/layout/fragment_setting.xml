@@ -34,32 +34,39 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/vod"
+                    android:id="@+id/configManage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_item"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="@string/setting_vod"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/vodUrl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="middle"
-                        android:gravity="end"
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        tools:text="https://" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/setting_config_manage"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/configSummary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="middle"
+                            android:singleLine="true"
+                            android:text="@string/setting_config_summary"
+                            android:textColor="@color/white_70"
+                            android:textSize="12sp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -67,65 +74,27 @@
                     android:id="@+id/vodHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/shape_item"
-                    android:padding="7dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_setting_home" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/vodHistory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/shape_item"
-                    android:padding="7dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_setting_history" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/live"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/shape_item"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="@string/setting_live"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/liveUrl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="middle"
-                        android:gravity="end"
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        tools:text="https://" />
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/liveHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/shape_item"
-                    android:padding="7dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_setting_home" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -133,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_item"
-                    android:padding="7dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_setting_history" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -146,32 +115,39 @@
                 android:orientation="horizontal">
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/wall"
+                    android:id="@+id/themeSetting"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:background="@drawable/shape_item"
                     android:orientation="horizontal">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:text="@string/setting_wall"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/wallUrl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="middle"
-                        android:gravity="end"
-                        android:singleLine="true"
-                        android:textColor="@color/white"
-                        android:textSize="16sp"
-                        tools:text="https://" />
+                        <com.google.android.material.textview.MaterialTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/setting_theme_settings"
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/themeSummary"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:ellipsize="middle"
+                            android:singleLine="true"
+                            android:text="@string/setting_theme_summary"
+                            android:textColor="@color/white_70"
+                            android:textSize="12sp" />
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -179,9 +155,9 @@
                     android:id="@+id/wallDefault"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@drawable/shape_item"
-                    android:padding="7dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_setting_home" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -189,7 +165,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/shape_item"
-                    android:padding="7dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_setting_refresh" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
@@ -306,33 +282,6 @@
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     tools:text="Medium" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/themeColor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/shape_item"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/setting_theme_color"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/themeColorText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    tools:text="Auto" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

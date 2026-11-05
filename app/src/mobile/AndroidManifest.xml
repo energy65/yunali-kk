@@ -128,6 +128,15 @@
             android:parentActivityName=".ui.activity.HomeActivity"
             android:supportsPictureInPicture="true" />
 
+        <activity
+            android:name=".ui.activity.ConfigManageActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".ui.activity.ThemeSettingActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation" />
+
         <receiver
             android:name=".receiver.ShortcutReceiver"
             android:exported="false" />

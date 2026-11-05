@@ -14,17 +14,14 @@ import com.fongmi.android.tv.Updater;
 import com.fongmi.android.tv.api.config.LiveConfig;
 import com.fongmi.android.tv.api.config.VodConfig;
 import com.fongmi.android.tv.api.config.WallConfig;
-import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.databinding.ActivitySettingBinding;
 import com.fongmi.android.tv.db.AppDatabase;
 import com.fongmi.android.tv.event.ConfigEvent;
 import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.impl.Callback;
-import com.fongmi.android.tv.impl.ConfigListener;
 import com.fongmi.android.tv.setting.PlayerSetting;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseActivity;
-import com.fongmi.android.tv.ui.dialog.ConfigDialog;
 import com.fongmi.android.tv.ui.dialog.DohDialog;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
 import com.fongmi.android.tv.ui.dialog.LiveDialog;
@@ -37,16 +34,12 @@ import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.bean.Doh;
 import com.github.catvod.net.OkHttp;
 
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingActivity extends BaseActivity implements ConfigListener, DohDialog.Listener {
+public class SettingActivity extends BaseActivity implements DohDialog.Listener {
 
     private ActivitySettingBinding mBinding;
-    private ConfigDialog mConfigDialog;
     private String[] size;
 
     public static void start(Activity activity) {
@@ -70,10 +63,7 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        mBinding.wall.requestFocus();
-        mBinding.vodUrl.setText(VodConfig.getDesc());
-        mBinding.liveUrl.setText(LiveConfig.getDesc());
-        mBinding.wallUrl.setText(WallConfig.getDesc());
+        mBinding.configManage.requestFocus();
         mBinding.versionText.setText(BuildConfig.VERSION_NAME);
         mBinding.version.setVisibility(View.GONE);
         setCacheText();
@@ -106,11 +96,10 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
 
     @Override
     protected void initEvent() {
-        mBinding.vod.setOnClickListener(this::onVod);
+        mBinding.configManage.setOnClickListener(v -> ConfigManageActivity.start(this));
+        mBinding.themeSetting.setOnClickListener(v -> ThemeSettingActivity.start(this));
         mBinding.navigation.setOnItemSelectedListener(this::onNavigationItemSelected);
-        mBinding.live.setOnClickListener(this::onLive);
         mBinding.doh.setOnClickListener(this::setDoh);
-        mBinding.wall.setOnClickListener(this::onWall);
         mBinding.size.setOnClickListener(this::setSize);
         mBinding.cache.setOnClickListener(this::onCache);
         mBinding.backup.setOnClickListener(this::onBackup);
@@ -118,7 +107,6 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         mBinding.danmaku.setOnClickListener(this::onDanmaku);
         mBinding.restore.setOnClickListener(this::onRestore);
         mBinding.version.setOnClickListener(this::onVersion);
-        mBinding.wall.setOnLongClickListener(this::onWallEdit);
         mBinding.incognito.setOnClickListener(this::setIncognito);
         mBinding.adultFilter.setOnClickListener(this::setAdultFilter);
         mBinding.vodHome.setOnClickListener(this::onVodHome);
@@ -128,30 +116,6 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         mBinding.wallDefault.setOnClickListener(this::setWallDefault);
         mBinding.wallRefresh.setOnClickListener(this::setWallRefresh);
         mBinding.wallRefresh.setOnLongClickListener(this::onWallHistory);
-    }
-
-    @Override
-    public void setConfig(Config config) {
-        if (config.getUrl().startsWith("file")) {
-            PermissionUtil.requestFile(this, allGranted -> load(config));
-        } else {
-            load(config);
-        }
-    }
-
-    private void load(Config config) {
-        switch (config.getType()) {
-            case 0:
-                VodConfig.load(config, getCallback());
-                break;
-            case 1:
-                LiveConfig.load(config, getCallback());
-                break;
-            case 2:
-                Setting.putWall(0);
-                WallConfig.load(config, getCallback());
-                break;
-        }
     }
 
     private Callback getCallback() {
@@ -165,7 +129,6 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
             public void success() {
                 Notify.dismiss();
                 setCacheText();
-                dismissConfigDialog();
             }
 
             @Override
@@ -174,15 +137,6 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
                 Notify.show(msg);
             }
         };
-    }
-
-    private void dismissConfigDialog() {
-        if (mConfigDialog != null) mConfigDialog.dismiss();
-        mConfigDialog = null;
-    }
-
-    private void onVod(View view) {
-        (mConfigDialog = ConfigDialog.create().vod()).show(this);
     }
 
     private boolean onNavigationItemSelected(MenuItem item) {
@@ -199,25 +153,12 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         HistoryDialog.create().vod().show(this);
     }
 
-    private void onLive(View view) {
-        (mConfigDialog = ConfigDialog.create().live()).show(this);
-    }
-
     private void onLiveHome(View view) {
         LiveDialog.create().show(this);
     }
 
     private void onLiveHistory(View view) {
         HistoryDialog.create().live().show(this);
-    }
-
-    private void onWall(View view) {
-        (mConfigDialog = ConfigDialog.create().wall()).show(this);
-    }
-
-    private boolean onWallEdit(View view) {
-        (mConfigDialog = ConfigDialog.create().wall().edit()).show(this);
-        return true;
     }
 
     private void onPlayer(View view) {
@@ -319,21 +260,6 @@ public class SettingActivity extends BaseActivity implements ConfigListener, Doh
         VodConfig.get().init().load(getCallback());
         LiveConfig.get().init().load();
         WallConfig.get().init().load();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onConfigEvent(ConfigEvent event) {
-        switch (event.type()) {
-            case COMMON:
-                mBinding.wallUrl.setText(WallConfig.getDesc());
-                break;
-            case VOD:
-                mBinding.vodUrl.setText(VodConfig.getDesc());
-                break;
-            case LIVE:
-                mBinding.liveUrl.setText(LiveConfig.getDesc());
-                break;
-        }
     }
 
 }

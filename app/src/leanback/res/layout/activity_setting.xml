@@ -26,7 +26,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/vod"
+                android:id="@+id/configManage"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -34,26 +34,25 @@
                 android:background="@drawable/selector_item"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/setting_vod"
+                    android:text="@string/setting_config_manage"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/vodUrl"
+                    android:id="@+id/configSummary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:ellipsize="middle"
-                    android:gravity="end"
                     android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    tools:text="https://" />
+                    android:text="@string/setting_config_summary"
+                    android:textColor="@color/white_70"
+                    android:textSize="14sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -78,52 +77,11 @@
                 android:padding="8dp"
                 android:src="@drawable/ic_setting_history" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/live"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/selector_item"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="horizontal">
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/setting_live"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/liveUrl"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="middle"
-                    android:gravity="end"
-                    android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    tools:text="https://" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/liveHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:background="@drawable/selector_item"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -150,7 +108,7 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/wall"
+                android:id="@+id/themeSetting"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -158,26 +116,25 @@
                 android:background="@drawable/selector_item"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/setting_wall"
+                    android:text="@string/setting_theme_settings"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/wallUrl"
+                    android:id="@+id/themeSummary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:ellipsize="middle"
-                    android:gravity="end"
                     android:singleLine="true"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    tools:text="https://" />
+                    android:text="@string/setting_theme_summary"
+                    android:textColor="@color/white_70"
+                    android:textSize="14sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 

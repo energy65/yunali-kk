@@ -141,6 +141,45 @@
     <string name="setting_off">關</string>
     <string name="setting_on">開</string>
 
+    <!-- Config manage & theme -->
+    <string name="setting_config_manage">設定管理</string>
+    <string name="setting_theme_settings">主題設定</string>
+    <string name="setting_config_summary">點播 · 直播</string>
+    <string name="setting_theme_summary">桌布 · 主題</string>
+    <string name="config_manage_title">設定管理</string>
+    <string name="config_vod_tab">點播設定</string>
+    <string name="config_live_tab">直播設定</string>
+    <string name="config_add">新增設定</string>
+    <string name="config_empty">尚無設定，點擊右上角新增</string>
+    <string name="config_current">目前：%s</string>
+    <string name="config_none">未設定</string>
+    <string name="config_in_use">使用中</string>
+    <string name="config_follow">跟隨點播設定</string>
+    <string name="config_follow_on">已跟隨點播設定</string>
+    <string name="config_follow_tip">直播與點播使用相同設定來源</string>
+    <string name="config_tip">點擊設定項目啟用，長按可編輯或刪除</string>
+    <string name="config_switched">已切換到：%s</string>
+    <string name="config_name_hint">設定名稱（選填）</string>
+    <string name="config_url_hint">設定位址</string>
+    <string name="config_choose_file">從檔案選擇</string>
+    <string name="config_url_empty">設定位址不能為空</string>
+    <string name="config_delete_title">刪除設定</string>
+    <string name="config_delete_message">確定刪除「%s」？</string>
+    <string name="config_delete_active">使用中的設定無法刪除</string>
+    <string name="config_exists">該位址已存在</string>
+    <string name="config_follow_vod_tip">請先設定點播設定</string>
+    <string name="config_edit">編輯</string>
+    <string name="config_delete">刪除</string>
+    <string name="wall_section">桌布設定</string>
+    <string name="wall_current">目前桌布</string>
+    <string name="wall_built_in">內建桌布</string>
+    <string name="wall_refresh">重新整理桌布</string>
+    <string name="wall_custom">自訂桌布</string>
+    <string name="wall_need_source">請先設定桌布來源</string>
+    <string name="wall_custom_tip">輸入圖片 / GIF / 影片桌布位址</string>
+    <string name="theme_section">主題設定</string>
+    <string name="theme_tip">自動時跟隨桌布取色，關閉時使用預設配色</string>
+
     <!-- Backup & Restore -->
     <string name="restore_select">選擇備份</string>
     <string name="restore_success">還原成功</string>

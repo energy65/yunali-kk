@@ -142,6 +142,45 @@
     <string name="setting_off">Off</string>
     <string name="setting_on">On</string>
 
+    <!-- Config manage & theme -->
+    <string name="setting_config_manage">Config management</string>
+    <string name="setting_theme_settings">Theme settings</string>
+    <string name="setting_config_summary">VOD · Live</string>
+    <string name="setting_theme_summary">Wallpaper · Theme</string>
+    <string name="config_manage_title">Config management</string>
+    <string name="config_vod_tab">VOD config</string>
+    <string name="config_live_tab">Live config</string>
+    <string name="config_add">Add config</string>
+    <string name="config_empty">No config yet. Tap "Add config" at top right.</string>
+    <string name="config_current">Current: %s</string>
+    <string name="config_none">Not set</string>
+    <string name="config_in_use">In use</string>
+    <string name="config_follow">Follow VOD config</string>
+    <string name="config_follow_on">Following VOD config</string>
+    <string name="config_follow_tip">Live uses the same source as VOD</string>
+    <string name="config_tip">Tap to enable, long press to edit or delete</string>
+    <string name="config_switched">Switched to %s</string>
+    <string name="config_name_hint">Config name (optional)</string>
+    <string name="config_url_hint">Config URL</string>
+    <string name="config_choose_file">Choose from file</string>
+    <string name="config_url_empty">Config URL cannot be empty</string>
+    <string name="config_delete_title">Delete config</string>
+    <string name="config_delete_message">Delete "%s"?</string>
+    <string name="config_delete_active">Cannot delete the config in use</string>
+    <string name="config_exists">This URL already exists</string>
+    <string name="config_follow_vod_tip">Please set VOD config first</string>
+    <string name="config_edit">Edit</string>
+    <string name="config_delete">Delete</string>
+    <string name="wall_section">Wallpaper settings</string>
+    <string name="wall_current">Current wallpaper</string>
+    <string name="wall_built_in">Built-in wallpaper</string>
+    <string name="wall_refresh">Refresh wallpaper</string>
+    <string name="wall_custom">Custom wallpaper</string>
+    <string name="wall_need_source">Please set a wallpaper source first</string>
+    <string name="wall_custom_tip">Enter an image / GIF / video wallpaper URL</string>
+    <string name="theme_section">Theme settings</string>
+    <string name="theme_tip">Auto picks color from wallpaper; Off uses the default palette</string>
+
     <!-- Backup & Restore -->
     <string name="restore_select">Select backup</string>
     <string name="restore_success">Restore successful</string>

@@ -15,8 +15,11 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.custom.CustomWallView;
 import com.fongmi.android.tv.utils.Util;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,6 +33,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        enableDynamicColor();
         super.onCreate(savedInstanceState);
         setContentView(getBinding().getRoot());
         EventBus.getDefault().register(this);
@@ -70,6 +74,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void notifyItemChanged(RecyclerView view, RecyclerView.Adapter<?> adapter) {
         view.post(() -> adapter.notifyDataSetChanged());
+    }
+
+    private void enableDynamicColor() {
+        int color = Setting.getDynamicColor();
+        if (color != 0) DynamicColors.applyToActivityIfAvailable(this, new DynamicColorsOptions.Builder().setContentBasedSource(color).build());
     }
 
     private void setBackCallback() {

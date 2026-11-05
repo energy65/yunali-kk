@@ -141,7 +141,47 @@
     <string name="setting_off">关</string>
     <string name="setting_on">开</string>
 
+    <!-- Config manage & theme -->
+    <string name="setting_config_manage">配置管理</string>
+    <string name="setting_theme_settings">主题设置</string>
+    <string name="setting_config_summary">点播 · 直播</string>
+    <string name="setting_theme_summary">壁纸 · 主题</string>
+    <string name="config_manage_title">配置管理</string>
+    <string name="config_vod_tab">点播配置</string>
+    <string name="config_live_tab">直播配置</string>
+    <string name="config_add">添加配置</string>
+    <string name="config_empty">暂无配置，点击右上角添加</string>
+    <string name="config_current">当前：%s</string>
+    <string name="config_none">未设置</string>
+    <string name="config_in_use">使用中</string>
+    <string name="config_follow">跟随点播配置</string>
+    <string name="config_follow_on">已跟随点播配置</string>
+    <string name="config_follow_tip">直播与点播使用同一配置源</string>
+    <string name="config_tip">点击配置项启用，长按可编辑或删除</string>
+    <string name="config_switched">已切换到：%s</string>
+    <string name="config_name_hint">配置名称（可选）</string>
+    <string name="config_url_hint">配置地址</string>
+    <string name="config_choose_file">从文件选择</string>
+    <string name="config_url_empty">配置地址不能为空</string>
+    <string name="config_delete_title">删除配置</string>
+    <string name="config_delete_message">确定删除“%s”？</string>
+    <string name="config_delete_active">使用中的配置无法删除</string>
+    <string name="config_exists">该地址已存在</string>
+    <string name="config_follow_vod_tip">请先设置点播配置</string>
+    <string name="config_edit">编辑</string>
+    <string name="config_delete">删除</string>
+    <string name="wall_section">壁纸设置</string>
+    <string name="wall_current">当前壁纸</string>
+    <string name="wall_built_in">内置壁纸</string>
+    <string name="wall_refresh">刷新壁纸</string>
+    <string name="wall_custom">自定义壁纸</string>
+    <string name="wall_need_source">请先设置壁纸来源</string>
+    <string name="wall_custom_tip">输入图片 / GIF / 视频壁纸地址</string>
+    <string name="theme_section">主题设置</string>
+    <string name="theme_tip">自动时跟随壁纸取色，关闭时使用默认配色</string>
+
     <!-- Backup & Restore -->
+
     <string name="restore_select">选择备份</string>
     <string name="restore_success">恢复成功</string>
     <string name="restore_fail">恢复失败</string>
