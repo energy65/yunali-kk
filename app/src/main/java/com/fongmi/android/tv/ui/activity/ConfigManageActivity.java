@@ -199,7 +199,7 @@ public class ConfigManageActivity extends BaseActivity {
         dialogBinding.name.setText(config == null ? "" : config.getName());
         dialogBinding.url.setText(config == null ? "" : config.getUrl());
         dialogBinding.choose.setOnClickListener(v -> onChoose());
-        dialogBinding.scan.setOnClickListener(v -> onScan());
+        dialogBinding.scan.setOnClickListener(v -> toPushDialog());
         dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(config == null ? R.string.config_add : R.string.config_edit)
                 .setView(dialogBinding.getRoot())
@@ -211,10 +211,14 @@ public class ConfigManageActivity extends BaseActivity {
     }
 
     private void showPushDialog(Config config) {
+        showPushDialog(config, null, null);
+    }
+
+    private void showPushDialog(Config config, String name, String url) {
         editing = config;
         pushBinding = DialogConfigPushBinding.inflate(getLayoutInflater());
-        pushBinding.name.setText(config == null ? "" : config.getName());
-        pushBinding.url.setText(config == null ? "" : config.getUrl());
+        pushBinding.name.setText(name != null ? name : config == null ? "" : config.getName());
+        pushBinding.url.setText(url != null ? url : config == null ? "" : config.getUrl());
         Server.get().start();
         pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(3), 200, 0));
         pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
@@ -225,6 +229,15 @@ public class ConfigManageActivity extends BaseActivity {
                 .create();
         dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> onPushSave()));
         dialog.show();
+    }
+
+    private void toPushDialog() {
+        String name = dialogBinding.name.getText().toString().trim();
+        String url = dialogBinding.url.getText().toString().trim();
+        if (dialog != null) dialog.dismiss();
+        dialog = null;
+        dialogBinding = null;
+        showPushDialog(editing, name, url);
     }
 
     private void onPushSave() {
@@ -274,10 +287,6 @@ public class ConfigManageActivity extends BaseActivity {
         PermissionUtil.requestFile(this, allGranted -> FileChooser.from(launcher).show());
     }
 
-    private void onScan() {
-        PermissionUtil.requestCamera(this, allGranted -> scanLauncher.launch(new Intent(this, ScanActivity.class)));
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onServerEvent(ServerEvent event) {
         if (event.type() != ServerEvent.Type.SETTING) return;
@@ -313,11 +322,5 @@ public class ConfigManageActivity extends BaseActivity {
         String path = FileChooser.getPathFromUri(result.getData().getData());
         if (TextUtils.isEmpty(path) || dialogBinding == null) return;
         dialogBinding.url.setText("file:/" + path.replace(Path.rootPath(), ""));
-    });
-
-    private final ActivityResultLauncher<Intent> scanLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null || dialogBinding == null) return;
-        String address = result.getData().getStringExtra("address");
-        if (!TextUtils.isEmpty(address)) dialogBinding.url.setText(address);
     });
 }
