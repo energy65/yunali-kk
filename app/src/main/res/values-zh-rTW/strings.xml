@@ -159,10 +159,14 @@
     <string name="config_follow_tip">直播與點播使用相同設定來源</string>
     <string name="config_tip">點擊設定項目啟用，長按可編輯或刪除</string>
     <string name="config_switched">已切換到：%s</string>
+    <string name="push_info">使用手機掃描 QR Code，或於瀏覽器輸入網址\n<xliff:g name="name">%s</xliff:g></string>
     <string name="config_name_hint">設定名稱（選填）</string>
     <string name="config_url_hint">設定位址</string>
     <string name="config_choose_file">從檔案選擇</string>
     <string name="config_scan">掃碼新增</string>
+    <string name="push_link">推送連結</string>
+    <string name="push_name_hint">輸入名稱</string>
+    <string name="push_url_hint">輸入推送連結</string>
     <string name="device_scan">請掃描 QR Code</string>
     <string name="config_url_empty">設定位址不能為空</string>
     <string name="config_delete_title">刪除設定</string>

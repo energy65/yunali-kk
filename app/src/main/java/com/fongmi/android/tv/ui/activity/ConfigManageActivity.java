@@ -13,22 +13,30 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.viewbinding.ViewBinding;
 
+import com.fongmi.android.tv.BuildConfig;
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.api.config.LiveConfig;
 import com.fongmi.android.tv.api.config.VodConfig;
 import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.databinding.ActivityConfigManageBinding;
+import com.fongmi.android.tv.databinding.DialogConfigPushBinding;
 import com.fongmi.android.tv.databinding.DialogManageConfigBinding;
 import com.fongmi.android.tv.databinding.ItemConfigManageBinding;
 import com.fongmi.android.tv.db.AppDatabase;
+import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.impl.Callback;
+import com.fongmi.android.tv.server.Server;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.PermissionUtil;
+import com.fongmi.android.tv.utils.QRCode;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.utils.Path;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -36,9 +44,11 @@ public class ConfigManageActivity extends BaseActivity {
 
     private ActivityConfigManageBinding mBinding;
     private DialogManageConfigBinding dialogBinding;
+    private DialogConfigPushBinding pushBinding;
     private AlertDialog dialog;
     private Config editing;
     private int type = 0;
+    private boolean isTv;
 
     public static void start(Activity activity) {
         activity.startActivity(new Intent(activity, ConfigManageActivity.class));
@@ -51,6 +61,7 @@ public class ConfigManageActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        isTv = TextUtils.equals("leanback", BuildConfig.FLAVOR);
         mBinding.back.requestFocus();
         selectTab(0);
     }
@@ -178,6 +189,10 @@ public class ConfigManageActivity extends BaseActivity {
     }
 
     private void showEditDialog(Config config) {
+        if (isTv) {
+            showPushDialog(config);
+            return;
+        }
         editing = config;
         dialogBinding = DialogManageConfigBinding.inflate(getLayoutInflater());
         dialogBinding.nameLayout.setVisibility(View.VISIBLE);
@@ -195,9 +210,36 @@ public class ConfigManageActivity extends BaseActivity {
         dialog.show();
     }
 
+    private void showPushDialog(Config config) {
+        editing = config;
+        pushBinding = DialogConfigPushBinding.inflate(getLayoutInflater());
+        pushBinding.name.setText(config == null ? "" : config.getName());
+        pushBinding.url.setText(config == null ? "" : config.getUrl());
+        Server.get().start();
+        pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(3), 200, 0));
+        pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
+        dialog = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.push_link)
+                .setView(pushBinding.getRoot())
+                .setPositiveButton(R.string.dialog_positive, null)
+                .create();
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> onPushSave()));
+        dialog.show();
+    }
+
+    private void onPushSave() {
+        String name = pushBinding.name.getText().toString().trim();
+        String url = pushBinding.url.getText().toString().trim();
+        applyConfig(name, url);
+    }
+
     private void onSave() {
-        String url = dialogBinding.url.getText().toString().trim();
         String name = dialogBinding.name.getText().toString().trim();
+        String url = dialogBinding.url.getText().toString().trim();
+        applyConfig(name, url);
+    }
+
+    private void applyConfig(String name, String url) {
         if (TextUtils.isEmpty(url)) {
             Notify.show(R.string.config_url_empty);
             return;
@@ -236,10 +278,24 @@ public class ConfigManageActivity extends BaseActivity {
         PermissionUtil.requestCamera(this, allGranted -> scanLauncher.launch(new Intent(this, ScanActivity.class)));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onServerEvent(ServerEvent event) {
+        if (event.type() != ServerEvent.Type.SETTING) return;
+        if (pushBinding != null) {
+            if (!TextUtils.isEmpty(event.name())) pushBinding.name.setText(event.name());
+            if (!TextUtils.isEmpty(event.text())) pushBinding.url.setText(event.text());
+            return;
+        }
+        if (dialogBinding == null) return;
+        if (!TextUtils.isEmpty(event.name())) dialogBinding.name.setText(event.name());
+        if (!TextUtils.isEmpty(event.text())) dialogBinding.url.setText(event.text());
+    }
+
     private void dismissDialog() {
         if (dialog != null) dialog.dismiss();
         dialog = null;
         dialogBinding = null;
+        pushBinding = null;
         editing = null;
     }
 

@@ -23,6 +23,7 @@ public class ColorPickerView extends View {
     private Paint previewPaint;
     private Bitmap hueBitmap;
     private int centerX, centerY, radius;
+    private final float density = getResources().getDisplayMetrics().density;
     private float hue = 0f;
     private float saturation = 1f;
     private int listenerColor = -1;
@@ -53,8 +54,8 @@ public class ColorPickerView extends View {
         indicatorPaint.setColor(Color.WHITE);
         ringPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         ringPaint.setStyle(Paint.Style.STROKE);
-        ringPaint.setColor(Color.WHITE);
-        ringPaint.setStrokeWidth(4f);
+        ringPaint.setColor(0x66000000);
+        ringPaint.setStrokeWidth(1.5f * density);
         previewPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
@@ -102,7 +103,7 @@ public class ColorPickerView extends View {
         hueBitmap = Bitmap.createBitmap(radius * 2, radius * 2, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(hueBitmap);
         int[] colors = new int[7];
-        for (int i = 0; i < 7; i++) colors[i] = Color.HSVToColor(new float[]{i * 60f, saturation, 1f});
+        for (int i = 0; i < 7; i++) colors[i] = Color.HSVToColor(new float[]{i * 60f, 1f, 1f});
         SweepGradient sweep = new SweepGradient(radius, radius, colors, null);
         RadialGradient radial = new RadialGradient(radius, radius, radius, Color.WHITE, Color.TRANSPARENT, Shader.TileMode.CLAMP);
         huePaint.setShader(sweep);
@@ -120,15 +121,14 @@ public class ColorPickerView extends View {
         super.onDraw(canvas);
         if (hueBitmap == null) return;
         canvas.drawBitmap(hueBitmap, centerX - radius, centerY - radius, null);
-        // indicator
         double angle = Math.toRadians(hue);
         float indicatorX = centerX + (float) (Math.cos(angle) * radius * saturation);
         float indicatorY = centerY + (float) (Math.sin(angle) * radius * saturation);
-        canvas.drawCircle(indicatorX, indicatorY, 12f, indicatorPaint);
-        canvas.drawCircle(indicatorX, indicatorY, 12f, ringPaint);
-        // inner filled dot showing selected color
+        float dot = 8f * density;
+        canvas.drawCircle(indicatorX, indicatorY, dot, indicatorPaint);
+        canvas.drawCircle(indicatorX, indicatorY, dot, ringPaint);
         previewPaint.setColor(getColor());
-        canvas.drawCircle(indicatorX, indicatorY, 6f, previewPaint);
+        canvas.drawCircle(indicatorX, indicatorY, dot - 3f * density, previewPaint);
     }
 
     @SuppressLint("ClickableViewAccessibility")

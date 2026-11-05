@@ -279,34 +279,31 @@ public class ThemeSettingActivity extends BaseActivity {
 
     private void showColorPicker() {
         int initialColor = Setting.getThemeColor();
-        if (initialColor < 0) initialColor = 0xFF6750A4;
+        if (initialColor <= 0) initialColor = 0xFF6750A4;
         final int[] currentColor = {initialColor};
         DialogColorPickerBinding pBinding = DialogColorPickerBinding.inflate(getLayoutInflater());
+        float[] hsv = new float[3];
+        Color.colorToHSV(initialColor, hsv);
+        int brightness = Math.max(1, Math.round(hsv[2] * 100));
         pBinding.picker.setColor(initialColor);
-        pBinding.initialColor.setBackgroundColor(initialColor);
-        pBinding.currentColor.setBackgroundColor(currentColor[0]);
-        pBinding.brightness.setProgress(100);
-        pBinding.brightnessLabel.setText(getString(R.string.theme_brightness, 100));
+        applySwatch(pBinding.initialColor, initialColor);
+        applySwatch(pBinding.currentColor, initialColor);
+        updateBrightnessTrack(pBinding.brightness, initialColor);
+        pBinding.brightness.setProgress(brightness);
+        pBinding.brightnessLabel.setText(getString(R.string.theme_brightness, brightness));
 
         pBinding.picker.setOnColorChangeListener(color -> {
-            currentColor[0] = color;
-            float[] hsv = new float[3];
-            Color.colorToHSV(color, hsv);
-            int brightness = (int) (hsv[2] * 100);
-            pBinding.brightness.setProgress(brightness);
-            pBinding.brightnessLabel.setText(getString(R.string.theme_brightness, brightness));
-            pBinding.currentColor.setBackgroundColor(color);
+            updateBrightnessTrack(pBinding.brightness, color);
+            currentColor[0] = composeColor(color, pBinding.brightness.getProgress());
+            applySwatch(pBinding.currentColor, currentColor[0]);
         });
 
         pBinding.brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 pBinding.brightnessLabel.setText(getString(R.string.theme_brightness, progress));
-                float[] hsv = new float[3];
-                Color.colorToHSV(pBinding.picker.getColor(), hsv);
-                hsv[2] = progress / 100f;
-                currentColor[0] = Color.HSVToColor(hsv);
-                pBinding.currentColor.setBackgroundColor(currentColor[0]);
+                currentColor[0] = composeColor(pBinding.picker.getColor(), progress);
+                applySwatch(pBinding.currentColor, currentColor[0]);
             }
 
             @Override
@@ -317,7 +314,6 @@ public class ThemeSettingActivity extends BaseActivity {
         });
 
         new MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.theme_custom)
                 .setView(pBinding.getRoot())
                 .setNegativeButton(R.string.dialog_negative, null)
                 .setPositiveButton(R.string.dialog_positive, (d, w) -> {
@@ -326,6 +322,33 @@ public class ThemeSettingActivity extends BaseActivity {
                     buildThemeGrid();
                 })
                 .show();
+    }
+
+    private int composeColor(int pickerColor, int progress) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(pickerColor, hsv);
+        hsv[2] = Math.max(1, Math.min(100, progress)) / 100f;
+        return Color.HSVToColor(hsv);
+    }
+
+    private void updateBrightnessTrack(SeekBar seekBar, int color) {
+        float[] hsv = new float[3];
+        Color.colorToHSV(color, hsv);
+        hsv[2] = 1f;
+        GradientDrawable track = new GradientDrawable();
+        track.setShape(GradientDrawable.RECTANGLE);
+        track.setCornerRadius(ResUtil.dp2px(5));
+        track.setColor(Color.HSVToColor(hsv));
+        track.setSize(getResources().getDisplayMetrics().widthPixels, ResUtil.dp2px(10));
+        seekBar.setProgressDrawable(track);
+    }
+
+    private void applySwatch(View view, int color) {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setCornerRadius(ResUtil.dp2px(8));
+        drawable.setColor(color);
+        drawable.setStroke(ResUtil.dp2px(1), ContextCompat.getColor(this, R.color.white_20));
+        view.setBackground(drawable);
     }
 
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {

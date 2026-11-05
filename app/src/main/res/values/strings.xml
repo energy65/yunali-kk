@@ -160,10 +160,14 @@
     <string name="config_follow_tip">Live uses the same source as VOD</string>
     <string name="config_tip">Tap to enable, long press to edit or delete</string>
     <string name="config_switched">Switched to %s</string>
+    <string name="push_info">Scan QR Code or visit in browser\n<xliff:g name="name">%s</xliff:g></string>
     <string name="config_name_hint">Config name (optional)</string>
     <string name="config_url_hint">Config URL</string>
     <string name="config_choose_file">Choose from file</string>
     <string name="config_scan">Scan QR Code</string>
+    <string name="push_link">Push link</string>
+    <string name="push_name_hint">Enter name</string>
+    <string name="push_url_hint">Enter config URL</string>
     <string name="device_scan">Please scan QR Code</string>
     <string name="config_url_empty">Config URL cannot be empty</string>
     <string name="config_delete_title">Delete config</string>

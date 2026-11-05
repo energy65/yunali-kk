@@ -159,10 +159,14 @@
     <string name="config_follow_tip">直播与点播使用同一配置源</string>
     <string name="config_tip">点击配置项启用，长按可编辑或删除</string>
     <string name="config_switched">已切换到：%s</string>
+    <string name="push_info">使用手机扫描二维码，或于浏览器访问地址\n<xliff:g name="name">%s</xliff:g></string>
     <string name="config_name_hint">配置名称（可选）</string>
     <string name="config_url_hint">配置地址</string>
     <string name="config_choose_file">从文件选择</string>
     <string name="config_scan">扫码添加</string>
+    <string name="push_link">推送链接</string>
+    <string name="push_name_hint">输入名字</string>
+    <string name="push_url_hint">输入推送链接</string>
     <string name="device_scan">请扫描 QR Code</string>
     <string name="config_url_empty">配置地址不能为空</string>
     <string name="config_delete_title">删除配置</string>
