@@ -125,6 +125,22 @@
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
+                <TextView
+                    android:id="@+id/wallColor"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_manage_item"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="@string/wall_custom_color"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <TextView

@@ -57,6 +57,7 @@ public class CustomWallView extends FrameLayout implements DefaultLifecycleObser
     private static final int TYPE_RES = 0;
     private static final int TYPE_GIF = 1;
     private static final int TYPE_VIDEO = 2;
+    private static final int TYPE_COLOR = 3;
     private ViewWallBinding binding;
     private GifDrawable drawable;
     private PlayerView video;
@@ -105,10 +106,17 @@ public class CustomWallView extends FrameLayout implements DefaultLifecycleObser
     private void load() {
         int wall = Setting.getWall();
         int type = Setting.getWallType();
+        binding.image.setBackgroundColor(0);
         if (isBuiltIn(wall, type)) loadRes(WALL_PAPERS[wall]);
         else if (type == TYPE_VIDEO) loadVideo(FileUtil.getWall(wall));
         else if (type == TYPE_GIF) loadGif(FileUtil.getWall(wall));
+        else if (type == TYPE_COLOR) loadColor();
         else loadImage();
+    }
+
+    private void loadColor() {
+        binding.image.setImageDrawable(null);
+        binding.image.setBackgroundColor(Setting.getWallColorCustom());
     }
 
     private void theme() {
@@ -179,6 +187,7 @@ public class CustomWallView extends FrameLayout implements DefaultLifecycleObser
     private int getWallColor() {
         int wall = Setting.getWall();
         int type = Setting.getWallType();
+        if (type == TYPE_COLOR) return Setting.getWallColorCustom();
         if (isBuiltIn(wall, type)) return WALL_COLORS[wall];
         File file = FileUtil.getWallCache();
         return file.exists() ? paletteColor(file) : WALL_COLORS[1];

@@ -16,7 +16,7 @@ public class Setting {
     private static final int MIN_WALL = 0;
     private static final int MAX_WALL = 24;
     private static final int MIN_WALL_TYPE = 0;
-    private static final int MAX_WALL_TYPE = 2;
+    private static final int MAX_WALL_TYPE = 3;
     private static final int MIN_SITE_MODE = 0;
     private static final int MAX_SITE_MODE = 1;
     private static final int MIN_SYNC_MODE = 0;
@@ -72,6 +72,14 @@ public class Setting {
 
     public static void putWallType(int type) {
         Prefers.put("wall_type", Math.clamp(type, MIN_WALL_TYPE, MAX_WALL_TYPE));
+    }
+
+    public static int getWallColorCustom() {
+        return Prefers.getInt("wall_color_custom", 0xFF1A237E);
+    }
+
+    public static void putWallColorCustom(int color) {
+        Prefers.put("wall_color_custom", color);
     }
 
     public static int getThemeColor() {

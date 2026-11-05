@@ -182,6 +182,7 @@
     <string name="wall_built_in">Built-in wallpaper</string>
     <string name="wall_refresh">Refresh wallpaper</string>
     <string name="wall_custom">Custom wallpaper</string>
+    <string name="wall_custom_color">Custom color</string>
     <string name="wall_need_source">Please set a wallpaper source first</string>
     <string name="wall_custom_tip">Enter an image / GIF / video wallpaper URL</string>
     <string name="theme_section">Theme settings</string>

@@ -76,6 +76,7 @@ public class ThemeSettingActivity extends BaseActivity {
         mBinding.back.setOnClickListener(v -> finish());
         mBinding.wallRefresh.setOnClickListener(v -> refreshWall());
         mBinding.wallCustom.setOnClickListener(v -> showCustomDialog());
+        mBinding.wallColor.setOnClickListener(v -> showWallColorPicker());
         mBinding.customTheme.setOnClickListener(v -> showColorPicker());
     }
 
@@ -204,7 +205,8 @@ public class ThemeSettingActivity extends BaseActivity {
 
     private void updateWallDesc() {
         String desc;
-        if (Setting.getWall() == 0) desc = TextUtils.isEmpty(WallConfig.getDesc()) ? getString(R.string.wall_custom) : WallConfig.getDesc();
+        if (Setting.getWallType() == 3) desc = getString(R.string.wall_custom_color);
+        else if (Setting.getWall() == 0) desc = TextUtils.isEmpty(WallConfig.getDesc()) ? getString(R.string.wall_custom) : WallConfig.getDesc();
         else desc = getString(R.string.wall_built_in) + " " + Setting.getWall();
         mBinding.wallDesc.setText(getString(R.string.config_current, desc));
     }
@@ -278,8 +280,26 @@ public class ThemeSettingActivity extends BaseActivity {
     }
 
     private void showColorPicker() {
-        int initialColor = Setting.getThemeColor();
-        if (initialColor <= 0) initialColor = 0xFF6750A4;
+        int color = Setting.getThemeColor();
+        showColorPicker(color <= 0 ? 0xFF6750A4 : color, newColor -> {
+            Setting.putThemeColor(newColor);
+            RefreshEvent.theme();
+            buildThemeGrid();
+        });
+    }
+
+    private void showWallColorPicker() {
+        showColorPicker(Setting.getWallColorCustom(), newColor -> {
+            Setting.putWallColorCustom(newColor);
+            Setting.putWall(0);
+            Setting.putWallType(3);
+            ConfigEvent.wall();
+            buildWallGrid();
+            updateWallDesc();
+        });
+    }
+
+    private void showColorPicker(int initialColor, OnColorPicked listener) {
         final int[] currentColor = {initialColor};
         DialogColorPickerBinding pBinding = DialogColorPickerBinding.inflate(getLayoutInflater());
         float[] hsv = new float[3];
@@ -316,12 +336,12 @@ public class ThemeSettingActivity extends BaseActivity {
         new MaterialAlertDialogBuilder(this)
                 .setView(pBinding.getRoot())
                 .setNegativeButton(R.string.dialog_negative, null)
-                .setPositiveButton(R.string.dialog_positive, (d, w) -> {
-                    Setting.putThemeColor(currentColor[0]);
-                    RefreshEvent.theme();
-                    buildThemeGrid();
-                })
+                .setPositiveButton(R.string.dialog_positive, (d, w) -> listener.onPicked(currentColor[0]))
                 .show();
+    }
+
+    private interface OnColorPicked {
+        void onPicked(int color);
     }
 
     private int composeColor(int pickerColor, int progress) {
