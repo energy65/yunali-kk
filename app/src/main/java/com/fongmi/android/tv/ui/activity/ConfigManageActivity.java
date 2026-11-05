@@ -184,6 +184,7 @@ public class ConfigManageActivity extends BaseActivity {
         dialogBinding.name.setText(config == null ? "" : config.getName());
         dialogBinding.url.setText(config == null ? "" : config.getUrl());
         dialogBinding.choose.setOnClickListener(v -> onChoose());
+        dialogBinding.scan.setOnClickListener(v -> onScan());
         dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(config == null ? R.string.config_add : R.string.config_edit)
                 .setView(dialogBinding.getRoot())
@@ -231,6 +232,10 @@ public class ConfigManageActivity extends BaseActivity {
         PermissionUtil.requestFile(this, allGranted -> FileChooser.from(launcher).show());
     }
 
+    private void onScan() {
+        PermissionUtil.requestCamera(this, allGranted -> scanLauncher.launch(new Intent(this, ScanActivity.class)));
+    }
+
     private void dismissDialog() {
         if (dialog != null) dialog.dismiss();
         dialog = null;
@@ -252,5 +257,11 @@ public class ConfigManageActivity extends BaseActivity {
         String path = FileChooser.getPathFromUri(result.getData().getData());
         if (TextUtils.isEmpty(path) || dialogBinding == null) return;
         dialogBinding.url.setText("file:/" + path.replace(Path.rootPath(), ""));
+    });
+
+    private final ActivityResultLauncher<Intent> scanLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null || dialogBinding == null) return;
+        String address = result.getData().getStringExtra("address");
+        if (!TextUtils.isEmpty(address)) dialogBinding.url.setText(address);
     });
 }

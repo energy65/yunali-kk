@@ -162,6 +162,8 @@
     <string name="config_name_hint">設定名稱（選填）</string>
     <string name="config_url_hint">設定位址</string>
     <string name="config_choose_file">從檔案選擇</string>
+    <string name="config_scan">掃碼新增</string>
+    <string name="device_scan">請掃描 QR Code</string>
     <string name="config_url_empty">設定位址不能為空</string>
     <string name="config_delete_title">刪除設定</string>
     <string name="config_delete_message">確定刪除「%s」？</string>
@@ -178,6 +180,10 @@
     <string name="wall_need_source">請先設定桌布來源</string>
     <string name="wall_custom_tip">輸入圖片 / GIF / 影片桌布位址</string>
     <string name="theme_section">主題設定</string>
+    <string name="theme_custom">自訂顏色</string>
+    <string name="theme_brightness">亮度 %d%%</string>
+    <string name="theme_initial_color">初始顏色</string>
+    <string name="theme_current_color">當前顏色</string>
     <string name="theme_tip">自動時跟隨桌布取色，關閉時使用預設配色</string>
 
     <!-- Backup & Restore -->

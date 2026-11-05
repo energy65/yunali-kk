@@ -42,6 +42,11 @@ public class PermissionUtil {
         post(activity, () -> PermissionX.init(activity).permissions(PermissionX.permission.POST_NOTIFICATIONS).request(new PermissionCallback()));
     }
 
+    public static void requestCamera(FragmentActivity activity, Consumer<Boolean> callback) {
+        if (isGranted(activity, Manifest.permission.CAMERA)) callback.accept(true);
+        else post(activity, () -> PermissionX.init(activity).permissions(Manifest.permission.CAMERA).request(new PermissionCallback(callback)));
+    }
+
     private static void requestFile(PermissionMediator mediator, boolean requestAllFiles, Consumer<Boolean> callback) {
         PermissionCallback permissionCallback = new PermissionCallback(callback);
         if (requestAllFiles) mediator.permissions().requestManageExternalStoragePermissionNow(permissionCallback);

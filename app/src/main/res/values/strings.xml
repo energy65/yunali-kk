@@ -163,6 +163,8 @@
     <string name="config_name_hint">Config name (optional)</string>
     <string name="config_url_hint">Config URL</string>
     <string name="config_choose_file">Choose from file</string>
+    <string name="config_scan">Scan QR Code</string>
+    <string name="device_scan">Please scan QR Code</string>
     <string name="config_url_empty">Config URL cannot be empty</string>
     <string name="config_delete_title">Delete config</string>
     <string name="config_delete_message">Delete "%s"?</string>
@@ -179,6 +181,10 @@
     <string name="wall_need_source">Please set a wallpaper source first</string>
     <string name="wall_custom_tip">Enter an image / GIF / video wallpaper URL</string>
     <string name="theme_section">Theme settings</string>
+    <string name="theme_custom">Custom color</string>
+    <string name="theme_brightness">Brightness %d%%</string>
+    <string name="theme_initial_color">Initial</string>
+    <string name="theme_current_color">Current</string>
     <string name="theme_tip">Auto picks color from wallpaper; Off uses the default palette</string>
 
     <!-- Backup & Restore -->

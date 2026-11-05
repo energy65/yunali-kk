@@ -2,6 +2,7 @@ package com.fongmi.android.tv.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,12 +25,14 @@ import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.api.config.WallConfig;
 import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.databinding.ActivityThemeSettingBinding;
+import com.fongmi.android.tv.databinding.DialogColorPickerBinding;
 import com.fongmi.android.tv.databinding.DialogManageConfigBinding;
 import com.fongmi.android.tv.event.ConfigEvent;
 import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.impl.Callback;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseActivity;
+import com.fongmi.android.tv.ui.custom.ColorPickerView;
 import com.fongmi.android.tv.ui.custom.CustomWallView;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.Notify;
@@ -72,6 +76,7 @@ public class ThemeSettingActivity extends BaseActivity {
         mBinding.back.setOnClickListener(v -> finish());
         mBinding.wallRefresh.setOnClickListener(v -> refreshWall());
         mBinding.wallCustom.setOnClickListener(v -> showCustomDialog());
+        mBinding.customTheme.setOnClickListener(v -> showColorPicker());
     }
 
     private int getColumns() {
@@ -270,6 +275,57 @@ public class ThemeSettingActivity extends BaseActivity {
         if (dialog != null) dialog.dismiss();
         dialog = null;
         dialogBinding = null;
+    }
+
+    private void showColorPicker() {
+        int initialColor = Setting.getThemeColor();
+        if (initialColor < 0) initialColor = 0xFF6750A4;
+        final int[] currentColor = {initialColor};
+        DialogColorPickerBinding pBinding = DialogColorPickerBinding.inflate(getLayoutInflater());
+        pBinding.picker.setColor(initialColor);
+        pBinding.initialColor.setBackgroundColor(initialColor);
+        pBinding.currentColor.setBackgroundColor(currentColor[0]);
+        pBinding.brightness.setProgress(100);
+        pBinding.brightnessLabel.setText(getString(R.string.theme_brightness, 100));
+
+        pBinding.picker.setOnColorChangeListener(color -> {
+            currentColor[0] = color;
+            float[] hsv = new float[3];
+            Color.colorToHSV(color, hsv);
+            int brightness = (int) (hsv[2] * 100);
+            pBinding.brightness.setProgress(brightness);
+            pBinding.brightnessLabel.setText(getString(R.string.theme_brightness, brightness));
+            pBinding.currentColor.setBackgroundColor(color);
+        });
+
+        pBinding.brightness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                pBinding.brightnessLabel.setText(getString(R.string.theme_brightness, progress));
+                float[] hsv = new float[3];
+                Color.colorToHSV(pBinding.picker.getColor(), hsv);
+                hsv[2] = progress / 100f;
+                currentColor[0] = Color.HSVToColor(hsv);
+                pBinding.currentColor.setBackgroundColor(currentColor[0]);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.theme_custom)
+                .setView(pBinding.getRoot())
+                .setNegativeButton(R.string.dialog_negative, null)
+                .setPositiveButton(R.string.dialog_positive, (d, w) -> {
+                    Setting.putThemeColor(currentColor[0]);
+                    RefreshEvent.theme();
+                    buildThemeGrid();
+                })
+                .show();
     }
 
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {

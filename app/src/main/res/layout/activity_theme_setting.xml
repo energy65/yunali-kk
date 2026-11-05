@@ -150,6 +150,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp" />
 
+            <TextView
+                android:id="@+id/customTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/selector_manage_item"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="@string/theme_custom"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
