@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="24dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="24dp">
+
+    <ImageView
+        android:id="@+id/code"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:background="@drawable/selector_manage_item"
+        android:contentDescription="@string/push_link"
+        android:padding="8dp"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="2dp"
+            android:textColor="@color/white_70"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_manage_normal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="@string/push_name_hint"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxLines="1"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white_70"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_manage_normal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="top|start"
+            android:hint="@string/push_url_hint"
+            android:importantForAutofill="no"
+            android:inputType="textUri|textMultiLine"
+            android:maxLines="2"
+            android:minLines="1"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white_70"
+            android:textSize="14sp" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/received"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/shape_manage_normal"
+            android:hint="@string/push_received"
+            android:minHeight="40dp"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white_70"
+            android:textIsSelectable="true"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

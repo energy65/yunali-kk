@@ -61,7 +61,7 @@ public class ConfigManageActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        isTv = TextUtils.equals("leanback", BuildConfig.FLAVOR);
+        isTv = TextUtils.equals("leanback", BuildConfig.FLAVOR_mode);
         mBinding.back.requestFocus();
         selectTab(0);
     }
