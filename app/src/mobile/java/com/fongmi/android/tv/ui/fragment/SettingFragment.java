@@ -26,7 +26,6 @@ import com.fongmi.android.tv.ui.activity.HomeActivity;
 import com.fongmi.android.tv.ui.activity.ThemeSettingActivity;
 import com.fongmi.android.tv.ui.base.BaseFragment;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
-import com.fongmi.android.tv.ui.dialog.LiveDialog;
 import com.fongmi.android.tv.ui.dialog.RestoreDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.utils.FileUtil;
@@ -98,8 +97,6 @@ public class SettingFragment extends BaseFragment {
         mBinding.themeSetting.setOnClickListener(v -> ThemeSettingActivity.start(requireActivity()));
         mBinding.vodHome.setOnClickListener(this::onVodHome);
         mBinding.vodHistory.setOnClickListener(this::onVodHistory);
-        mBinding.liveHome.setOnClickListener(this::onLiveHome);
-        mBinding.liveHistory.setOnClickListener(this::onLiveHistory);
         mBinding.doh.setOnClickListener(this::setDoh);
         mBinding.size.setOnClickListener(this::setSize);
         mBinding.cache.setOnClickListener(this::onCache);
@@ -142,14 +139,6 @@ public class SettingFragment extends BaseFragment {
 
     private void onVodHistory(View view) {
         HistoryDialog.create().vod().show(this);
-    }
-
-    private void onLiveHome(View view) {
-        LiveDialog.show(this);
-    }
-
-    private void onLiveHistory(View view) {
-        HistoryDialog.create().live().show(this);
     }
 
     private void onPlayer(View view) {

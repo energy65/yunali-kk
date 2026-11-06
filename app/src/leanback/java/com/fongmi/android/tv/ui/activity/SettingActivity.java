@@ -24,7 +24,6 @@ import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.dialog.DohDialog;
 import com.fongmi.android.tv.ui.dialog.HistoryDialog;
-import com.fongmi.android.tv.ui.dialog.LiveDialog;
 import com.fongmi.android.tv.ui.dialog.RestoreDialog;
 import com.fongmi.android.tv.ui.dialog.SiteDialog;
 import com.fongmi.android.tv.utils.FileUtil;
@@ -111,8 +110,6 @@ public class SettingActivity extends BaseActivity implements DohDialog.Listener 
         mBinding.adultFilter.setOnClickListener(this::setAdultFilter);
         mBinding.vodHome.setOnClickListener(this::onVodHome);
         mBinding.vodHistory.setOnClickListener(this::onVodHistory);
-        mBinding.liveHome.setOnClickListener(this::onLiveHome);
-        mBinding.liveHistory.setOnClickListener(this::onLiveHistory);
         mBinding.wallDefault.setOnClickListener(this::setWallDefault);
         mBinding.wallRefresh.setOnClickListener(this::setWallRefresh);
         mBinding.wallRefresh.setOnLongClickListener(this::onWallHistory);
@@ -151,14 +148,6 @@ public class SettingActivity extends BaseActivity implements DohDialog.Listener 
 
     private void onVodHistory(View view) {
         HistoryDialog.create().vod().show(this);
-    }
-
-    private void onLiveHome(View view) {
-        LiveDialog.create().show(this);
-    }
-
-    private void onLiveHistory(View view) {
-        HistoryDialog.create().live().show(this);
     }
 
     private void onPlayer(View view) {

@@ -91,6 +91,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         layout.setPadding(0, 0, 0, 0);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshDynamicColor();
+    }
+
     private void setBackCallback() {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
