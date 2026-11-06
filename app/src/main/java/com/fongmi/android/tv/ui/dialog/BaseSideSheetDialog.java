@@ -14,7 +14,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.viewbinding.ViewBinding;
 
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.utils.Util;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.sidesheet.SideSheetDialog;
 
 public abstract class BaseSideSheetDialog extends AppCompatDialogFragment {
@@ -26,6 +29,7 @@ public abstract class BaseSideSheetDialog extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        refreshDynamicColor();
         SideSheetDialog dialog = new SideSheetDialog(requireContext());
         dialog.getBehavior().setDraggable(false);
         Window window = dialog.getWindow();
@@ -51,6 +55,11 @@ public abstract class BaseSideSheetDialog extends AppCompatDialogFragment {
     }
 
     protected void initEvent() {
+    }
+
+    protected void refreshDynamicColor() {
+        int color = Setting.getDynamicColor();
+        if (color != 0) DynamicColors.applyToActivityIfAvailable(requireActivity(), new DynamicColorsOptions.Builder().setContentBasedSource(color).build());
     }
 
     @Override

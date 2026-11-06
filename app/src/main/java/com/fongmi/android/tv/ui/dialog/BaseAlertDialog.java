@@ -9,7 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewbinding.ViewBinding;
 
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.utils.ResUtil;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public abstract class BaseAlertDialog extends DialogFragment {
@@ -21,10 +24,16 @@ public abstract class BaseAlertDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        refreshDynamicColor();
         Dialog dialog = getBuilder().create();
         initView();
         initEvent();
         return dialog;
+    }
+
+    protected void refreshDynamicColor() {
+        int color = Setting.getDynamicColor();
+        if (color != 0) DynamicColors.applyToActivityIfAvailable(requireActivity(), new DynamicColorsOptions.Builder().setContentBasedSource(color).build());
     }
 
     protected MaterialAlertDialogBuilder builder() {

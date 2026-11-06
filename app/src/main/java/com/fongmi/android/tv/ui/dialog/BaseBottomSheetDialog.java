@@ -14,11 +14,14 @@ import androidx.annotation.Nullable;
 import androidx.viewbinding.ViewBinding;
 
 import com.fongmi.android.tv.R;
+import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.fongmi.android.tv.utils.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.color.DynamicColors;
+import com.google.android.material.color.DynamicColorsOptions;
 
 public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
 
@@ -27,6 +30,7 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        refreshDynamicColor();
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
         dialog.setOnShowListener(d -> setBehavior(dialog));
         Window window = dialog.getWindow();
@@ -53,6 +57,11 @@ public abstract class BaseBottomSheetDialog extends BottomSheetDialogFragment {
     }
 
     protected void initEvent() {
+    }
+
+    protected void refreshDynamicColor() {
+        int color = Setting.getDynamicColor();
+        if (color != 0) DynamicColors.applyToActivityIfAvailable(requireActivity(), new DynamicColorsOptions.Builder().setContentBasedSource(color).build());
     }
 
     protected boolean transparent() {
