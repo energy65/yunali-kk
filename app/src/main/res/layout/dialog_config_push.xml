@@ -32,6 +32,20 @@
             android:padding="10dp"
             android:scaleType="fitCenter" />
 
+        <TextView
+            android:id="@+id/choose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shape_manage_normal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="@string/config_choose_file"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
     </LinearLayout>
 
     <EditText

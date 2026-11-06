@@ -222,6 +222,7 @@ public class ConfigManageActivity extends BaseActivity {
         pushBinding.name.setText(nameText);
         pushBinding.url.setText(urlText);
         pushBinding.received.setText(TextUtils.isEmpty(urlText) ? getString(R.string.push_received) : urlText);
+        pushBinding.choose.setOnClickListener(v -> onChoose());
         Server.get().start();
         pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
         pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
@@ -326,7 +327,13 @@ public class ConfigManageActivity extends BaseActivity {
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null || result.getData().getData() == null) return;
         String path = FileChooser.getPathFromUri(result.getData().getData());
-        if (TextUtils.isEmpty(path) || dialogBinding == null) return;
-        dialogBinding.url.setText("file:/" + path.replace(Path.rootPath(), ""));
+        if (TextUtils.isEmpty(path)) return;
+        String url = "file:/" + path.replace(Path.rootPath(), "");
+        if (pushBinding != null) {
+            pushBinding.url.setText(url);
+            pushBinding.received.setText(url);
+        } else if (dialogBinding != null) {
+            dialogBinding.url.setText(url);
+        }
     });
 }
