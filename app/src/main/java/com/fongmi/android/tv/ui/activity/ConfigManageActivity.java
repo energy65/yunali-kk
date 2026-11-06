@@ -226,6 +226,7 @@ public class ConfigManageActivity extends BaseActivity {
         Server.get().start();
         pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
         pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
+        refreshDynamicColor();
         dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.push_link)
                 .setView(pushBinding.getRoot())

@@ -21,15 +21,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.viewbinding.ViewBinding;
 
+import com.fongmi.android.tv.BuildConfig;
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.api.config.WallConfig;
 import com.fongmi.android.tv.bean.Config;
 import com.fongmi.android.tv.databinding.ActivityThemeSettingBinding;
 import com.fongmi.android.tv.databinding.DialogColorPickerBinding;
+import com.fongmi.android.tv.databinding.DialogConfigPushBinding;
 import com.fongmi.android.tv.databinding.DialogManageConfigBinding;
 import com.fongmi.android.tv.event.ConfigEvent;
 import com.fongmi.android.tv.event.RefreshEvent;
+import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.impl.Callback;
+import com.fongmi.android.tv.server.Server;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.custom.ColorPickerView;
@@ -37,9 +41,13 @@ import com.fongmi.android.tv.ui.custom.CustomWallView;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.PermissionUtil;
+import com.fongmi.android.tv.utils.QRCode;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.utils.Path;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +58,9 @@ public class ThemeSettingActivity extends BaseActivity {
 
     private ActivityThemeSettingBinding mBinding;
     private DialogManageConfigBinding dialogBinding;
+    private DialogConfigPushBinding pushBinding;
     private AlertDialog dialog;
+    private boolean isTv;
     private List<TextView> wallChecks = new ArrayList<>();
     private List<TextView> themeChecks = new ArrayList<>();
 
@@ -65,6 +75,7 @@ public class ThemeSettingActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        isTv = TextUtils.equals("leanback", BuildConfig.FLAVOR_mode);
         mBinding.back.requestFocus();
         buildWallGrid();
         buildThemeGrid();
@@ -222,10 +233,16 @@ public class ThemeSettingActivity extends BaseActivity {
     }
 
     private void showCustomDialog() {
+        refreshDynamicColor();
         dialogBinding = DialogManageConfigBinding.inflate(getLayoutInflater());
         dialogBinding.nameLayout.setVisibility(View.GONE);
         dialogBinding.url.setText(WallConfig.getUrl());
         dialogBinding.choose.setOnClickListener(v -> PermissionUtil.requestFile(this, allGranted -> FileChooser.from(launcher).show()));
+        dialogBinding.scan.setOnClickListener(v -> {
+            String url = dialogBinding.url.getText().toString().trim();
+            dismissDialog();
+            showPushDialog(url);
+        });
         dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.wall_custom)
                 .setMessage(R.string.wall_custom_tip)
@@ -237,7 +254,40 @@ public class ThemeSettingActivity extends BaseActivity {
         dialog.show();
     }
 
+    private void showPushDialog(String initialUrl) {
+        refreshDynamicColor();
+        pushBinding = DialogConfigPushBinding.inflate(getLayoutInflater());
+        pushBinding.name.setVisibility(View.GONE);
+        pushBinding.url.setText(initialUrl);
+        pushBinding.received.setText(TextUtils.isEmpty(initialUrl) ? getString(R.string.push_received) : initialUrl);
+        pushBinding.choose.setOnClickListener(v -> PermissionUtil.requestFile(this, allGranted -> FileChooser.from(launcher).show()));
+        Server.get().start();
+        pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
+        pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
+        dialog = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.push_link)
+                .setView(pushBinding.getRoot())
+                .setPositiveButton(R.string.dialog_positive, null)
+                .create();
+        dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> onSaveCustom()));
+        dialog.show();
+    }
+
     private void onSaveCustom() {
+        if (pushBinding != null) {
+            String url = pushBinding.url.getText().toString().trim();
+            if (TextUtils.isEmpty(url)) {
+                Notify.show(R.string.config_url_empty);
+                return;
+            }
+            Setting.putWall(0);
+            Setting.putWallType(0);
+            dismissDialog();
+            Config target = Config.find(url, 2);
+            target.update();
+            WallConfig.load(target, getCallback());
+            return;
+        }
         String url = dialogBinding.url.getText().toString().trim();
         if (TextUtils.isEmpty(url)) {
             Notify.show(R.string.config_url_empty);
@@ -245,10 +295,10 @@ public class ThemeSettingActivity extends BaseActivity {
         }
         Setting.putWall(0);
         Setting.putWallType(0);
-        Config config = Config.find(url, 2);
-        config.update();
         dismissDialog();
-        WallConfig.load(config, getCallback());
+        Config target = Config.find(url, 2);
+        target.update();
+        WallConfig.load(target, getCallback());
     }
 
     private Callback getCallback() {
@@ -277,6 +327,7 @@ public class ThemeSettingActivity extends BaseActivity {
         if (dialog != null) dialog.dismiss();
         dialog = null;
         dialogBinding = null;
+        pushBinding = null;
     }
 
     private void showColorPicker() {
@@ -300,6 +351,7 @@ public class ThemeSettingActivity extends BaseActivity {
     }
 
     private void showColorPicker(int initialColor, OnColorPicked listener) {
+        refreshDynamicColor();
         final int[] currentColor = {initialColor};
         DialogColorPickerBinding pBinding = DialogColorPickerBinding.inflate(getLayoutInflater());
         float[] hsv = new float[3];
@@ -371,10 +423,27 @@ public class ThemeSettingActivity extends BaseActivity {
         view.setBackground(drawable);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onServerEvent(ServerEvent event) {
+        if (event.type() != ServerEvent.Type.SETTING) return;
+        if (pushBinding != null && !TextUtils.isEmpty(event.text())) {
+            pushBinding.url.setText(event.text());
+            pushBinding.received.setText(event.text());
+        } else if (dialogBinding != null && !TextUtils.isEmpty(event.text())) {
+            dialogBinding.url.setText(event.text());
+        }
+    }
+
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
         if (result.getResultCode() != Activity.RESULT_OK || result.getData() == null || result.getData().getData() == null) return;
         String path = FileChooser.getPathFromUri(result.getData().getData());
-        if (TextUtils.isEmpty(path) || dialogBinding == null) return;
-        dialogBinding.url.setText("file:/" + path.replace(Path.rootPath(), ""));
+        if (TextUtils.isEmpty(path)) return;
+        String url = "file:/" + path.replace(Path.rootPath(), "");
+        if (pushBinding != null) {
+            pushBinding.url.setText(url);
+            pushBinding.received.setText(url);
+        } else if (dialogBinding != null) {
+            dialogBinding.url.setText(url);
+        }
     });
 }
