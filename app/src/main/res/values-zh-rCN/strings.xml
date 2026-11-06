@@ -167,6 +167,7 @@
     <string name="push_link">推送链接</string>
     <string name="push_name_hint">输入名字</string>
     <string name="push_url_hint">输入推送链接</string>
+    <string name="push_received">手机推送后在此显示地址</string>
     <string name="device_scan">请扫描 QR Code</string>
     <string name="config_url_empty">配置地址不能为空</string>
     <string name="config_delete_title">删除配置</string>

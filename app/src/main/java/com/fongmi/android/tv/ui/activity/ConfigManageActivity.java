@@ -219,6 +219,7 @@ public class ConfigManageActivity extends BaseActivity {
         pushBinding = DialogConfigPushBinding.inflate(getLayoutInflater());
         pushBinding.name.setText(name != null ? name : config == null ? "" : config.getName());
         pushBinding.url.setText(url != null ? url : config == null ? "" : config.getUrl());
+        pushBinding.received.setText(url != null ? url : config == null ? "" : config.getUrl());
         Server.get().start();
         pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(3), 200, 0));
         pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
@@ -292,7 +293,10 @@ public class ConfigManageActivity extends BaseActivity {
         if (event.type() != ServerEvent.Type.SETTING) return;
         if (pushBinding != null) {
             if (!TextUtils.isEmpty(event.name())) pushBinding.name.setText(event.name());
-            if (!TextUtils.isEmpty(event.text())) pushBinding.url.setText(event.text());
+            if (!TextUtils.isEmpty(event.text())) {
+                pushBinding.url.setText(event.text());
+                pushBinding.received.setText(event.text());
+            }
             return;
         }
         if (dialogBinding == null) return;
