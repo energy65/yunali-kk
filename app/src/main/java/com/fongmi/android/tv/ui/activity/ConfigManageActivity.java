@@ -221,7 +221,7 @@ public class ConfigManageActivity extends BaseActivity {
         pushBinding.url.setText(url != null ? url : config == null ? "" : config.getUrl());
         pushBinding.received.setText(url != null ? url : config == null ? "" : config.getUrl());
         Server.get().start();
-        pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(3), 200, 0));
+        pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
         pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
         dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.push_link)
