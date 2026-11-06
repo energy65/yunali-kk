@@ -217,9 +217,11 @@ public class ConfigManageActivity extends BaseActivity {
     private void showPushDialog(Config config, String name, String url) {
         editing = config;
         pushBinding = DialogConfigPushBinding.inflate(getLayoutInflater());
-        pushBinding.name.setText(name != null ? name : config == null ? "" : config.getName());
-        pushBinding.url.setText(url != null ? url : config == null ? "" : config.getUrl());
-        pushBinding.received.setText(url != null ? url : config == null ? "" : config.getUrl());
+        String nameText = name != null ? name : config == null ? "" : config.getName();
+        String urlText = url != null ? url : config == null ? "" : config.getUrl();
+        pushBinding.name.setText(nameText);
+        pushBinding.url.setText(urlText);
+        pushBinding.received.setText(TextUtils.isEmpty(urlText) ? getString(R.string.push_received) : urlText);
         Server.get().start();
         pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
         pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
