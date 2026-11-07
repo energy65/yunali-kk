@@ -154,6 +154,11 @@ public class ColorPickerView extends View {
                 return adjustSaturation(SATURATION_STEP);
             case KeyEvent.KEYCODE_DPAD_DOWN:
                 return adjustSaturation(-SATURATION_STEP);
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+            case KeyEvent.KEYCODE_ENTER:
+            case KeyEvent.KEYCODE_NUMPAD_ENTER:
+                performClick();
+                return true;
             default:
                 return super.onKeyDown(keyCode, event);
         }

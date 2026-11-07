@@ -63,6 +63,8 @@ public class ThemeSettingActivity extends BaseActivity {
     private boolean isTv;
     private List<TextView> wallChecks = new ArrayList<>();
     private List<TextView> themeChecks = new ArrayList<>();
+    private List<View> wallCells = new ArrayList<>();
+    private List<View> themeCells = new ArrayList<>();
     private int focusThemeIndex = -1;
 
     public static void start(Activity activity) {
@@ -118,6 +120,7 @@ public class ThemeSettingActivity extends BaseActivity {
             if (resId != 0) image.setImageResource(resId);
             else image.setBackgroundColor(CustomWallView.WALL_COLORS[i]);
             frame.addView(image);
+            frame.addView(createFocusOverlay());
             TextView check = createCheck();
             frame.addView(check);
             final int index = i;
@@ -126,7 +129,9 @@ public class ThemeSettingActivity extends BaseActivity {
             wallChecks.add(check);
         }
         layoutGrid(mBinding.gridWall, cells, columns, size, gap, R.id.back, new int[]{R.id.wallRefresh, R.id.wallCustom, R.id.wallColor});
+        wallCells = cells;
         updateWallChecks(selected);
+        wireAnchors();
     }
 
     private void updateWallChecks(int selected) {
@@ -160,6 +165,7 @@ public class ThemeSettingActivity extends BaseActivity {
             swatch.setLayoutParams(swatchParams);
             swatch.setBackground(roundRect(color, color == selected));
             frame.addView(swatch);
+            frame.addView(createFocusOverlay());
             TextView check = createCheck();
             if (color != selected) check.setVisibility(View.GONE);
             frame.addView(check);
@@ -169,18 +175,57 @@ public class ThemeSettingActivity extends BaseActivity {
             themeChecks.add(check);
         }
         layoutGrid(mBinding.gridTheme, cells, columns, size, gap, R.id.wallColor, new int[]{R.id.customTheme});
+        themeCells = cells;
         if (focusThemeIndex >= 0 && focusThemeIndex < cells.size()) {
             View target = cells.get(focusThemeIndex);
             mBinding.gridTheme.post(target::requestFocus);
         }
         focusThemeIndex = -1;
+        wireAnchors();
     }
 
     private void setCellFocusable(View view) {
-        view.setBackgroundResource(R.drawable.selector_manage_item);
         view.setClickable(true);
         view.setFocusable(true);
         view.setFocusableInTouchMode(true);
+    }
+
+    /**
+     * 焦点高亮必须盖在图片之上，否则会被铺满的缩略图遮住，遥控器移动焦点时看不到任何变化。
+     */
+    private View createFocusOverlay() {
+        View overlay = new View(this);
+        overlay.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        overlay.setBackgroundResource(R.drawable.selector_manage_item);
+        overlay.setDuplicateParentStateEnabled(true);
+        overlay.setClickable(false);
+        overlay.setFocusable(false);
+        return overlay;
+    }
+
+    private void wireAnchors() {
+        int columns = getColumns();
+        if (!wallCells.isEmpty()) {
+            mBinding.back.setNextFocusDownId(wallCells.get(0).getId());
+            wireUp(mBinding.wallRefresh, wallCells, columns, 0);
+            wireUp(mBinding.wallCustom, wallCells, columns, 1);
+            wireUp(mBinding.wallColor, wallCells, columns, 2);
+        }
+        if (!themeCells.isEmpty()) {
+            mBinding.customTheme.setNextFocusUpId(themeCells.get(themeCells.size() - 1).getId());
+            wireDown(mBinding.wallRefresh, themeCells, columns, 0);
+            wireDown(mBinding.wallCustom, themeCells, columns, 1);
+            wireDown(mBinding.wallColor, themeCells, columns, 2);
+        }
+    }
+
+    private void wireUp(View anchor, List<View> cells, int columns, int col) {
+        int lastRowStart = ((cells.size() - 1) / columns) * columns;
+        anchor.setNextFocusUpId(cells.get(Math.min(lastRowStart + col, cells.size() - 1)).getId());
+    }
+
+    private void wireDown(View anchor, List<View> cells, int columns, int col) {
+        anchor.setNextFocusDownId(cells.get(Math.min(col, cells.size() - 1)).getId());
     }
 
     /**
@@ -429,11 +474,19 @@ public class ThemeSettingActivity extends BaseActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        new MaterialAlertDialogBuilder(this)
+        AlertDialog colorDialog = new MaterialAlertDialogBuilder(this)
                 .setView(pBinding.getRoot())
                 .setNegativeButton(R.string.dialog_negative, null)
-                .setPositiveButton(R.string.dialog_positive, (d, w) -> listener.onPicked(currentColor[0]))
-                .show();
+                .setPositiveButton(R.string.dialog_positive, null)
+                .create();
+        Runnable apply = () -> {
+            listener.onPicked(currentColor[0]);
+            colorDialog.dismiss();
+        };
+        // 遥控器在选择器上按确定键，直接应用当前颜色并关闭弹窗
+        pBinding.picker.setOnClickListener(v -> apply.run());
+        colorDialog.setOnShowListener(d -> colorDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> apply.run()));
+        colorDialog.show();
     }
 
     private interface OnColorPicked {
