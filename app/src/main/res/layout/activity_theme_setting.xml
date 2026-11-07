@@ -82,11 +82,12 @@
                 android:textColor="@color/white_70"
                 android:textSize="13sp" />
 
-            <GridLayout
+            <LinearLayout
                 android:id="@+id/gridWall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:orientation="vertical" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -160,11 +161,12 @@
                 android:textColor="@color/white_70"
                 android:textSize="13sp" />
 
-            <GridLayout
+            <LinearLayout
                 android:id="@+id/gridTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp" />
+                android:layout_marginTop="12dp"
+                android:orientation="vertical" />
 
             <TextView
                 android:id="@+id/customTheme"

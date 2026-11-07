@@ -191,6 +191,7 @@
     <string name="theme_brightness">Brightness %d%%</string>
     <string name="theme_initial_color">Initial</string>
     <string name="theme_current_color">Current</string>
+    <string name="theme_picker_tip">Remote: left/right for hue, up/down for saturation</string>
     <string name="theme_tip">Auto picks color from wallpaper; Off uses the default palette</string>
 
     <!-- Backup & Restore -->

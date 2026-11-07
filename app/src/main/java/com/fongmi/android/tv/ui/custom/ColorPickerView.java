@@ -10,6 +10,7 @@ import android.graphics.RadialGradient;
 import android.graphics.SweepGradient;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,10 +18,14 @@ import androidx.annotation.Nullable;
 
 public class ColorPickerView extends View {
 
+    private static final float HUE_STEP = 4f;
+    private static final float SATURATION_STEP = 0.08f;
+
     private Paint huePaint;
     private Paint indicatorPaint;
     private Paint ringPaint;
     private Paint previewPaint;
+    private Paint focusPaint;
     private Bitmap hueBitmap;
     private int centerX, centerY, radius;
     private final float density = getResources().getDisplayMetrics().density;
@@ -57,6 +62,12 @@ public class ColorPickerView extends View {
         ringPaint.setColor(0x66000000);
         ringPaint.setStrokeWidth(1.5f * density);
         previewPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        focusPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        focusPaint.setStyle(Paint.Style.STROKE);
+        focusPaint.setColor(Color.WHITE);
+        focusPaint.setStrokeWidth(2f * density);
+        setFocusable(true);
+        setFocusableInTouchMode(true);
     }
 
     public void setColor(int color) {
@@ -129,6 +140,44 @@ public class ColorPickerView extends View {
         canvas.drawCircle(indicatorX, indicatorY, dot, ringPaint);
         previewPaint.setColor(getColor());
         canvas.drawCircle(indicatorX, indicatorY, dot - 3f * density, previewPaint);
+        if (isFocused()) canvas.drawCircle(centerX, centerY, radius + 3f * density, focusPaint);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                return adjustHue(-HUE_STEP);
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                return adjustHue(HUE_STEP);
+            case KeyEvent.KEYCODE_DPAD_UP:
+                return adjustSaturation(SATURATION_STEP);
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                return adjustSaturation(-SATURATION_STEP);
+            default:
+                return super.onKeyDown(keyCode, event);
+        }
+    }
+
+    private boolean adjustHue(float delta) {
+        hue = (hue + delta + 360f) % 360f;
+        notifyColor();
+        invalidate();
+        return true;
+    }
+
+    private boolean adjustSaturation(float delta) {
+        saturation = Math.max(0f, Math.min(1f, saturation + delta));
+        notifyColor();
+        invalidate();
+        return true;
+    }
+
+    private void notifyColor() {
+        int color = getColor();
+        if (color == listenerColor) return;
+        listenerColor = color;
+        if (listener != null) listener.onColorChanged(color);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -150,13 +199,7 @@ public class ColorPickerView extends View {
                 float angleDeg = (float) (Math.toDegrees(Math.atan2(dy, dx)));
                 if (angleDeg < 0) angleDeg += 360f;
                 hue = angleDeg;
-                // update hue bitmap if saturation changed significantly
-                float[] hsv = new float[]{hue, saturation, 1f};
-                int color = Color.HSVToColor(hsv);
-                if (color != listenerColor) {
-                    listenerColor = color;
-                    if (listener != null) listener.onColorChanged(color);
-                }
+                notifyColor();
                 invalidate();
                 return true;
             default:

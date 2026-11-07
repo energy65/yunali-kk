@@ -190,6 +190,7 @@
     <string name="theme_brightness">亮度 %d%%</string>
     <string name="theme_initial_color">初始颜色</string>
     <string name="theme_current_color">当前颜色</string>
+    <string name="theme_picker_tip">遥控器左/右调色相，上/下调饱和度</string>
     <string name="theme_tip">自动时跟随壁纸取色，关闭时使用默认配色</string>
 
     <!-- Backup & Restore -->

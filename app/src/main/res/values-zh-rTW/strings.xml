@@ -190,6 +190,7 @@
     <string name="theme_brightness">亮度 %d%%</string>
     <string name="theme_initial_color">初始顏色</string>
     <string name="theme_current_color">當前顏色</string>
+    <string name="theme_picker_tip">遙控器左/右調色相，上/下調飽和度</string>
     <string name="theme_tip">自動時跟隨桌布取色，關閉時使用預設配色</string>
 
     <!-- Backup & Restore -->

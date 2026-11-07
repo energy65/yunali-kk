@@ -10,8 +10,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -63,6 +63,7 @@ public class ThemeSettingActivity extends BaseActivity {
     private boolean isTv;
     private List<TextView> wallChecks = new ArrayList<>();
     private List<TextView> themeChecks = new ArrayList<>();
+    private int focusThemeIndex = -1;
 
     public static void start(Activity activity) {
         activity.startActivity(new Intent(activity, ThemeSettingActivity.class));
@@ -100,22 +101,16 @@ public class ThemeSettingActivity extends BaseActivity {
 
     private void buildWallGrid() {
         mBinding.gridWall.removeAllViews();
-        mBinding.gridWall.setColumnCount(getColumns());
         wallChecks = new ArrayList<>();
-        int size = ResUtil.dp2px(getColumns() >= 8 ? 64 : 52);
+        int columns = getColumns();
+        int size = ResUtil.dp2px(columns >= 8 ? 64 : 52);
         int gap = ResUtil.dp2px(8);
         int selected = Setting.getWall();
+        List<View> cells = new ArrayList<>();
         for (int i = 1; i < CustomWallView.WALL_COLORS.length; i++) {
             FrameLayout frame = new FrameLayout(this);
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = size;
-            params.height = size;
-            params.setMargins(0, 0, gap, gap);
-            frame.setLayoutParams(params);
-            frame.setBackgroundResource(R.drawable.selector_manage_item);
-            frame.setClickable(true);
-            frame.setFocusable(true);
-            frame.setFocusableInTouchMode(true);
+            frame.setId(View.generateViewId());
+            setCellFocusable(frame);
             ImageView image = new ImageView(this);
             image.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             image.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -127,9 +122,10 @@ public class ThemeSettingActivity extends BaseActivity {
             frame.addView(check);
             final int index = i;
             frame.setOnClickListener(v -> selectWall(index));
-            mBinding.gridWall.addView(frame);
+            cells.add(frame);
             wallChecks.add(check);
         }
+        layoutGrid(mBinding.gridWall, cells, columns, size, gap, R.id.back, new int[]{R.id.wallRefresh, R.id.wallCustom, R.id.wallColor});
         updateWallChecks(selected);
     }
 
@@ -147,22 +143,16 @@ public class ThemeSettingActivity extends BaseActivity {
 
     private void buildThemeGrid() {
         mBinding.gridTheme.removeAllViews();
-        mBinding.gridTheme.setColumnCount(getColumns());
         themeChecks = new ArrayList<>();
-        int size = ResUtil.dp2px(getColumns() >= 8 ? 56 : 46);
+        int columns = getColumns();
+        int size = ResUtil.dp2px(columns >= 8 ? 56 : 46);
         int gap = ResUtil.dp2px(10);
         int selected = Setting.getThemeColor();
+        List<View> cells = new ArrayList<>();
         for (int color : THEME_COLORS) {
             FrameLayout frame = new FrameLayout(this);
-            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-            params.width = size;
-            params.height = size;
-            params.setMargins(0, 0, gap, gap);
-            frame.setLayoutParams(params);
-            frame.setBackgroundResource(R.drawable.selector_manage_item);
-            frame.setClickable(true);
-            frame.setFocusable(true);
-            frame.setFocusableInTouchMode(true);
+            frame.setId(View.generateViewId());
+            setCellFocusable(frame);
             View swatch = new View(this);
             int margin = ResUtil.dp2px(3);
             FrameLayout.LayoutParams swatchParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -175,15 +165,69 @@ public class ThemeSettingActivity extends BaseActivity {
             frame.addView(check);
             final int value = color;
             frame.setOnClickListener(v -> selectTheme(value));
-            mBinding.gridTheme.addView(frame);
+            cells.add(frame);
             themeChecks.add(check);
+        }
+        layoutGrid(mBinding.gridTheme, cells, columns, size, gap, R.id.wallColor, new int[]{R.id.customTheme});
+        if (focusThemeIndex >= 0 && focusThemeIndex < cells.size()) {
+            View target = cells.get(focusThemeIndex);
+            mBinding.gridTheme.post(target::requestFocus);
+        }
+        focusThemeIndex = -1;
+    }
+
+    private void setCellFocusable(View view) {
+        view.setBackgroundResource(R.drawable.selector_manage_item);
+        view.setClickable(true);
+        view.setFocusable(true);
+        view.setFocusableInTouchMode(true);
+    }
+
+    /**
+     * 以横向行布局排列单元格，并显式指定遥控器上下左右焦点跳转，避免 GridLayout 无法用遥控器导航。
+     */
+    private void layoutGrid(LinearLayout container, List<View> cells, int columns, int size, int gap, int topAnchor, int[] bottomAnchors) {
+        int count = cells.size();
+        int lastRowStart = columns > 0 ? ((count - 1) / columns) * columns : 0;
+        LinearLayout row = null;
+        for (int i = 0; i < count; i++) {
+            int col = i % columns;
+            if (col == 0) {
+                row = new LinearLayout(this);
+                row.setOrientation(LinearLayout.HORIZONTAL);
+                row.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                container.addView(row);
+            }
+            View cell = cells.get(i);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(size, size);
+            params.setMargins(0, 0, gap, gap);
+            cell.setLayoutParams(params);
+            row.addView(cell);
+        }
+        for (int i = 0; i < count; i++) {
+            int col = i % columns;
+            View cell = cells.get(i);
+            if (col > 0) cell.setNextFocusLeftId(cells.get(i - 1).getId());
+            if (col + 1 < columns && i + 1 < count) cell.setNextFocusRightId(cells.get(i + 1).getId());
+            cell.setNextFocusUpId(i - columns >= 0 ? cells.get(i - columns).getId() : topAnchor);
+            if (i + columns < count) {
+                cell.setNextFocusDownId(cells.get(i + columns).getId());
+            } else if (i >= lastRowStart && bottomAnchors.length > 0) {
+                cell.setNextFocusDownId(bottomAnchors[Math.min(col, bottomAnchors.length - 1)]);
+            }
         }
     }
 
     private void selectTheme(int color) {
         Setting.putThemeColor(color);
         RefreshEvent.theme();
+        focusThemeIndex = indexOfTheme(color);
         buildThemeGrid();
+    }
+
+    private int indexOfTheme(int color) {
+        for (int i = 0; i < THEME_COLORS.length; i++) if (THEME_COLORS[i] == color) return i;
+        return -1;
     }
 
     private GradientDrawable roundRect(int color, boolean selected) {

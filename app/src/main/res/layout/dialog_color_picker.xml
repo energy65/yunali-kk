@@ -29,6 +29,14 @@
         android:layout_marginTop="12dp" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/theme_picker_tip"
+        android:textColor="@color/white_70"
+        android:textSize="12sp" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/brightnessLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
