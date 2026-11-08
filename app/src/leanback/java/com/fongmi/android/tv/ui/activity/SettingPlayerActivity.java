@@ -51,6 +51,7 @@ public class SettingPlayerActivity extends BaseActivity implements UaListener, S
         mBinding.mpvVulkanText.setText(Setting.getSwitch(PlayerSetting.isMpvVulkan()));
         mBinding.mpvGpuNextText.setText(Setting.getSwitch(PlayerSetting.isMpvGpuNext()));
         mBinding.backgroundText.setText(Setting.getSwitch(PlayerSetting.isBackgroundOn()));
+        mBinding.fullscreenAutoText.setText(Setting.getSwitch(PlayerSetting.isFullscreenAuto()));
         mBinding.scaleText.setText((scale = ResUtil.getStringArray(R.array.select_scale))[PlayerSetting.getScale()]);
         mBinding.captionText.setText((caption = ResUtil.getStringArray(R.array.select_caption))[PlayerSetting.isCaption() ? 1 : 0]);
     }
@@ -67,6 +68,7 @@ public class SettingPlayerActivity extends BaseActivity implements UaListener, S
         mBinding.caption.setOnLongClickListener(this::onCaption);
         mBinding.speed.setOnClickListener(this::onSpeed);
         mBinding.background.setOnClickListener(this::onBackground);
+        mBinding.fullscreenAuto.setOnClickListener(this::onFullscreenAuto);
         mBinding.adblock.setOnClickListener(this::setAdblock);
         mBinding.preload.setOnClickListener(this::onPreloadSetting);
         mBinding.decode.setOnClickListener(this::onDecodeSetting);
@@ -147,6 +149,11 @@ public class SettingPlayerActivity extends BaseActivity implements UaListener, S
     private void onBackground(View view) {
         PlayerSetting.putBackground(PlayerSetting.isBackgroundOn() ? 0 : 1);
         mBinding.backgroundText.setText(Setting.getSwitch(PlayerSetting.isBackgroundOn()));
+    }
+
+    private void onFullscreenAuto(View view) {
+        PlayerSetting.putFullscreenAuto(!PlayerSetting.isFullscreenAuto());
+        mBinding.fullscreenAutoText.setText(Setting.getSwitch(PlayerSetting.isFullscreenAuto()));
     }
 
     private void setAdblock(View view) {

@@ -124,6 +124,14 @@ public class PlayerSetting {
         Prefers.put("caption", caption);
     }
 
+    public static boolean isFullscreenAuto() {
+        return Prefers.getBoolean("fullscreen_auto");
+    }
+
+    public static void putFullscreenAuto(boolean value) {
+        Prefers.put("fullscreen_auto", value);
+    }
+
     public static float getSubtitleTextSize() {
         return Prefers.getFloat("subtitle_text_size");
     }

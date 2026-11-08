@@ -125,6 +125,7 @@ public class VideoActivity extends PlaybackActivity implements VodPlaybackHost, 
     private Runnable mR2;
     private Runnable mR3;
     private Runnable mR4;
+    private Runnable mR5;
     private Clock mClock;
     private View mFocus1;
     private View mFocus2;
@@ -294,6 +295,7 @@ public class VideoActivity extends PlaybackActivity implements VodPlaybackHost, 
         mR2 = this::updateFocus;
         mR3 = this::setTraffic;
         mR4 = this::showEmpty;
+        mR5 = this::onAutoFullscreen;
         setRecyclerView();
         setVideoView();
         setViewModel();
@@ -808,6 +810,7 @@ public class VideoActivity extends PlaybackActivity implements VodPlaybackHost, 
     }
 
     private void enterFullscreen() {
+        App.removeCallbacks(mR5);
         mFocus1 = getCurrentFocus();
         mBinding.video.requestFocus();
         mBinding.video.setForeground(null);
@@ -826,6 +829,19 @@ public class VideoActivity extends PlaybackActivity implements VodPlaybackHost, 
         setFullscreen(false);
         mFocus2 = null;
         hideInfo();
+    }
+
+    /**
+     * 播放开始后排程 10 秒自动全屏；暂停、手动全屏或销毁时取消。
+     */
+    private void setR5Callback() {
+        App.removeCallbacks(mR5);
+        if (PlayerSetting.isFullscreenAuto() && !isFullscreen()) App.post(mR5, 10000);
+    }
+
+    private void onAutoFullscreen() {
+        if (isFullscreen()) return;
+        enterFullscreen();
     }
 
     private void onContent() {
@@ -1245,8 +1261,10 @@ public class VideoActivity extends PlaybackActivity implements VodPlaybackHost, 
                 mBinding.widget.size.setText(player().getSizeText());
                 mBinding.widget.top.setVisibility(View.VISIBLE);
             }
-        } else if (isPaused()) {
-            showInfo();
+            setR5Callback();
+        } else {
+            App.removeCallbacks(mR5);
+            if (isPaused()) showInfo();
         }
     }
 
@@ -1473,7 +1491,7 @@ public class VideoActivity extends PlaybackActivity implements VodPlaybackHost, 
         saveHistory(true);
         DanmakuApi.cancel();
         RefreshEvent.keep();
-        App.removeCallbacks(mR1, mR2, mR3, mR4);
+        App.removeCallbacks(mR1, mR2, mR3, mR4, mR5);
         super.onDestroy();
     }
 }
