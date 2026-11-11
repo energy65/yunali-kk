@@ -11,10 +11,9 @@ import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.databinding.DialogUaBinding;
 import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.impl.UaListener;
-import com.fongmi.android.tv.server.Server;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.custom.CustomTextListener;
-import com.fongmi.android.tv.utils.QRCode;
+import com.fongmi.android.tv.utils.ConfigPushHelper;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.utils.Util;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -47,8 +46,8 @@ public class UaDialog extends BaseAlertDialog {
         String text = Setting.getUa();
         binding.text.setText(text);
         binding.text.setSelection(TextUtils.isEmpty(text) ? 0 : text.length());
-        binding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
-        binding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
+        binding.code.setImageBitmap(ConfigPushHelper.generateConfigQr(ConfigPushHelper.getConfigPushAddress()));
+        binding.info.setText(ResUtil.getString(R.string.push_info, ConfigPushHelper.getServerAddress()).replace("\uff0c", "\n"));
     }
 
     @Override

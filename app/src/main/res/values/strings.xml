@@ -169,6 +169,8 @@
     <string name="push_name_hint">Enter name</string>
     <string name="push_url_hint">Enter config URL</string>
     <string name="push_received">Pushed URL will appear here</string>
+    <string name="push_timeout">QR code expired, please reopen</string>
+    <string name="push_server_error">Push service failed to start, please retry</string>
     <string name="device_scan">Please scan QR Code</string>
     <string name="config_url_empty">Config URL cannot be empty</string>
     <string name="config_delete_title">Delete config</string>

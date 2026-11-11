@@ -33,15 +33,14 @@ import com.fongmi.android.tv.event.ConfigEvent;
 import com.fongmi.android.tv.event.RefreshEvent;
 import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.impl.Callback;
-import com.fongmi.android.tv.server.Server;
 import com.fongmi.android.tv.setting.Setting;
 import com.fongmi.android.tv.ui.base.BaseActivity;
 import com.fongmi.android.tv.ui.custom.ColorPickerView;
 import com.fongmi.android.tv.ui.custom.CustomWallView;
+import com.fongmi.android.tv.utils.ConfigPushHelper;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.PermissionUtil;
-import com.fongmi.android.tv.utils.QRCode;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.utils.Path;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -350,9 +349,9 @@ public class ThemeSettingActivity extends BaseActivity {
         pushBinding.url.setText(initialUrl);
         pushBinding.received.setText(TextUtils.isEmpty(initialUrl) ? getString(R.string.push_received) : initialUrl);
         pushBinding.choose.setOnClickListener(v -> PermissionUtil.requestFile(this, allGranted -> FileChooser.from(launcher).show()));
-        Server.get().start();
-        pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
-        pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
+        ConfigPushHelper.ensureServerStarted();
+        pushBinding.code.setImageBitmap(ConfigPushHelper.generateConfigQr(ConfigPushHelper.getConfigPushAddress()));
+        pushBinding.info.setText(ResUtil.getString(R.string.push_info, ConfigPushHelper.getServerAddress()).replace("\uff0c", "\n"));
         dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.push_link)
                 .setView(pushBinding.getRoot())

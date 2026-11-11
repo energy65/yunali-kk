@@ -159,10 +159,14 @@ public class LiveConfig extends BaseConfig {
     }
 
     private void parseDepot(Config config, JsonObject object) throws Throwable {
+        if (!object.has("urls") || !object.get("urls").isJsonArray()) throw new Exception(Depot.ERROR_INVALID);
         List<Depot> items = Depot.arrayFrom(object.getAsJsonArray("urls").toString());
         List<Config> configs = new ArrayList<>();
-        for (Depot item : items) configs.add(Config.find(item, LIVE));
-        if (configs.isEmpty()) throw new Exception("Depot urls is empty");
+        for (Depot item : items) {
+            if (TextUtils.isEmpty(item.getUrl())) continue;
+            configs.add(Config.find(item, LIVE));
+        }
+        if (configs.isEmpty()) throw new Exception(Depot.ERROR_EMPTY);
         load(this.config = configs.get(0));
         Config.delete(config.getUrl());
     }

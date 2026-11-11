@@ -10,8 +10,7 @@ import androidx.viewbinding.ViewBinding;
 import com.fongmi.android.tv.databinding.DialogMpvConfBinding;
 import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.player.mpv.MpvConfigFiles;
-import com.fongmi.android.tv.server.Server;
-import com.fongmi.android.tv.utils.QRCode;
+import com.fongmi.android.tv.utils.ConfigPushHelper;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,7 +38,7 @@ public class MpvConfDialog extends BaseAlertDialog {
     @Override
     protected void initView() {
         setText(MpvConfigFiles.read());
-        binding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
+        binding.code.setImageBitmap(ConfigPushHelper.generateConfigQr(ConfigPushHelper.getConfigPushAddress()));
     }
 
     @Override

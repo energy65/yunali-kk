@@ -89,6 +89,12 @@ android {
         disable 'ExpiredTargetSdkVersion'
     }
 
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
+
     compileOptions {
         coreLibraryDesugaringEnabled = true
         sourceCompatibility JavaVersion.VERSION_17
@@ -151,6 +157,7 @@ dependencies {
     leanbackImplementation libs.androidautosize
     mobileImplementation libs.biometric
     implementation libs.zxing.android.embedded
+    testImplementation libs.junit
     annotationProcessor libs.room.compiler
     annotationProcessor libs.eventbus.annotation.processor
     annotationProcessor libs.glide.compiler

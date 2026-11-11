@@ -3,6 +3,8 @@ package com.fongmi.android.tv.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -14,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import androidx.viewbinding.ViewBinding;
 
 import com.fongmi.android.tv.BuildConfig;
+import com.fongmi.android.tv.Constant;
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.api.config.LiveConfig;
 import com.fongmi.android.tv.api.config.VodConfig;
@@ -25,12 +28,11 @@ import com.fongmi.android.tv.databinding.ItemConfigManageBinding;
 import com.fongmi.android.tv.db.AppDatabase;
 import com.fongmi.android.tv.event.ServerEvent;
 import com.fongmi.android.tv.impl.Callback;
-import com.fongmi.android.tv.server.Server;
 import com.fongmi.android.tv.ui.base.BaseActivity;
+import com.fongmi.android.tv.utils.ConfigPushHelper;
 import com.fongmi.android.tv.utils.FileChooser;
 import com.fongmi.android.tv.utils.Notify;
 import com.fongmi.android.tv.utils.PermissionUtil;
-import com.fongmi.android.tv.utils.QRCode;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.github.catvod.utils.Path;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -49,6 +51,8 @@ public class ConfigManageActivity extends BaseActivity {
     private Config editing;
     private int type = 0;
     private boolean isTv;
+    private final Handler pushHandler = new Handler(Looper.getMainLooper());
+    private final Runnable pushTimeoutRunnable = this::onPushTimeout;
 
     public static void start(Activity activity) {
         activity.startActivity(new Intent(activity, ConfigManageActivity.class));
@@ -223,9 +227,12 @@ public class ConfigManageActivity extends BaseActivity {
         pushBinding.url.setText(urlText);
         pushBinding.received.setText(TextUtils.isEmpty(urlText) ? getString(R.string.push_received) : urlText);
         pushBinding.choose.setOnClickListener(v -> onChoose());
-        Server.get().start();
-        pushBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(4), 200, 0));
-        pushBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()).replace("\uff0c", "\n"));
+        if (!ConfigPushHelper.ensureServerStarted()) {
+            Notify.show(R.string.push_server_error);
+        }
+        String address = ConfigPushHelper.getConfigPushAddress();
+        pushBinding.code.setImageBitmap(ConfigPushHelper.generateConfigQr(address));
+        pushBinding.info.setText(ResUtil.getString(R.string.push_info, ConfigPushHelper.getServerAddress()).replace("\uff0c", "\n"));
         refreshDynamicColor();
         dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(R.string.push_link)
@@ -234,6 +241,13 @@ public class ConfigManageActivity extends BaseActivity {
                 .create();
         dialog.setOnShowListener(d -> dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> onPushSave()));
         dialog.show();
+        pushHandler.removeCallbacks(pushTimeoutRunnable);
+        pushHandler.postDelayed(pushTimeoutRunnable, Constant.PUSH_TIMEOUT_MS);
+    }
+
+    private void onPushTimeout() {
+        if (pushBinding == null) return;
+        Notify.show(R.string.push_timeout);
     }
 
     private void toPushDialog() {
@@ -295,6 +309,7 @@ public class ConfigManageActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onServerEvent(ServerEvent event) {
         if (event.type() != ServerEvent.Type.SETTING) return;
+        pushHandler.removeCallbacks(pushTimeoutRunnable);
         if (pushBinding != null) {
             if (!TextUtils.isEmpty(event.name())) pushBinding.name.setText(event.name());
             if (!TextUtils.isEmpty(event.text())) {
@@ -309,6 +324,7 @@ public class ConfigManageActivity extends BaseActivity {
     }
 
     private void dismissDialog() {
+        pushHandler.removeCallbacks(pushTimeoutRunnable);
         if (dialog != null) dialog.dismiss();
         dialog = null;
         dialogBinding = null;

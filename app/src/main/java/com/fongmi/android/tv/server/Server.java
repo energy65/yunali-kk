@@ -1,11 +1,15 @@
 package com.fongmi.android.tv.server;
 
+import android.util.Log;
+
 import com.fongmi.android.tv.service.PlaybackService;
 import com.fongmi.android.tv.utils.Task;
 import com.github.catvod.Proxy;
 import com.github.catvod.utils.Util;
 
 public class Server {
+
+    private static final String TAG = "Server";
 
     private volatile PlaybackService service;
     private volatile Nano nano;
@@ -42,18 +46,26 @@ public class Server {
         return "http://" + (local ? "127.0.0.1" : Util.getIp()) + ":" + Proxy.getPort();
     }
 
-    public synchronized void start() {
-        if (nano != null) return;
+    public boolean isRunning() {
+        return nano != null;
+    }
+
+    public synchronized boolean start() {
+        if (nano != null) return true;
         for (int i = 9978; i < 9999; i++) {
             try {
                 nano = new Nano(i);
                 nano.start(500);
                 Proxy.set(i);
-                break;
+                Log.i(TAG, "Server started on port " + i);
+                return true;
             } catch (Throwable e) {
+                Log.w(TAG, "Failed to start server on port " + i + ": " + e.getMessage());
                 nano = null;
             }
         }
+        Log.e(TAG, "Failed to start server on all ports");
+        return false;
     }
 
     public void stop() {

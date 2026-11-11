@@ -9,11 +9,12 @@ import android.view.View;
 
 import androidx.viewbinding.ViewBinding;
 
+import com.fongmi.android.tv.Constant;
 import com.fongmi.android.tv.R;
 import com.fongmi.android.tv.databinding.ActivityPushBinding;
 import com.fongmi.android.tv.server.Server;
 import com.fongmi.android.tv.ui.base.BaseActivity;
-import com.fongmi.android.tv.utils.QRCode;
+import com.fongmi.android.tv.utils.ConfigPushHelper;
 import com.fongmi.android.tv.utils.ResUtil;
 import com.fongmi.android.tv.utils.Sniffer;
 import com.fongmi.android.tv.utils.Util;
@@ -23,7 +24,7 @@ public class PushActivity extends BaseActivity {
     private ActivityPushBinding mBinding;
 
     public static void start(Activity activity) {
-        start(activity, 2);
+        start(activity, Constant.PUSH_TAB_PUSH);
     }
 
     public static void start(Activity activity, int tab) {
@@ -33,7 +34,7 @@ public class PushActivity extends BaseActivity {
     }
 
     private int getTab() {
-        return getIntent().getIntExtra("tab", 2);
+        return getIntent().getIntExtra("tab", Constant.PUSH_TAB_PUSH);
     }
 
     @Override
@@ -43,8 +44,10 @@ public class PushActivity extends BaseActivity {
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        mBinding.code.setImageBitmap(QRCode.getBitmap(Server.get().getAddress(getTab()), 250, 1));
-        mBinding.info.setText(ResUtil.getString(R.string.push_info, Server.get().getAddress()));
+        ConfigPushHelper.ensureServerStarted();
+        String address = Server.get().getAddress(getTab());
+        mBinding.code.setImageBitmap(ConfigPushHelper.generatePushQr(address));
+        mBinding.info.setText(ResUtil.getString(R.string.push_info, ConfigPushHelper.getServerAddress()));
     }
 
     @Override
