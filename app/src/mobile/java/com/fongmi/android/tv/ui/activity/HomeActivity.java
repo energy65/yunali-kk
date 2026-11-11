@@ -80,6 +80,8 @@ public class HomeActivity extends BaseActivity implements NavigationBarView.OnIt
         orientation = getResources().getConfiguration().orientation;
         mBinding.navigation.setOnItemSelectedListener(this);
         PermissionUtil.requestNotify(this);
+        // 启动时统一请求文件（所有文件访问）权限，避免加载本地配置时再弹窗
+        PermissionUtil.requestFile(this, granted -> {});
         initFragment(savedInstanceState);
         initConfig();
     }

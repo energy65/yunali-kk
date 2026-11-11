@@ -119,6 +119,8 @@ public class HomeActivity extends BaseActivity implements TypeAdapter.OnClickLis
     protected void initView(Bundle savedInstanceState) {
         mResult = Result.empty();
         PermissionUtil.requestNotify(this);
+        // 启动时统一请求文件（所有文件访问）权限，避免加载本地配置时再弹窗
+        PermissionUtil.requestFile(this, granted -> {});
         DLNARendererService.start(this);
         setToolbar();
         setRecyclerView();
